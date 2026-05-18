@@ -5,6 +5,36 @@ oscap_required_packages:
   - openscap-utils
   - scap-security-guide
 
+cis_enable_level2: false
+oscap_content_path: /usr/share/xml/scap/ssg/content/ssg-ol10-ds.xml
+oscap_datastream_path_override: ""
+oscap_profile_id: ""
+oscap_tailoring_path: ""
+oscap_fail_when_cis_profile_missing: true
+oscap_validate_datastream: true
+oscap_enable_timer: true
+oscap_use_cron: false
+oscap_timer_on_calendar: "Sun *-*-* 02:00:00"
+oscap_cron_minute: "0"
+oscap_cron_hour: "2"
+oscap_cron_weekday: "0"
+oscap_report_dir: /var/log/oscap
+oscap_manifest_path: /var/log/oscap/latest.env
+oscap_retention_days: 30
+oscap_run_immediate_scan: false
+oscap_generate_ansible_fix: true
+oscap_generate_bash_fix: true
+oscap_apply_remediation_during_scan: false
+oscap_collect_artifacts: false
+oscap_local_artifact_dir: ""
+oscap_additional_eval_args: []
+oscap_profile_candidates_level1:
+  - xccdf_org.ssgproject.content_profile_cis_server_l1
+  - xccdf_org.ssgproject.content_profile_cis
+oscap_profile_candidates_level2:
+  - xccdf_org.ssgproject.content_profile_cis_server_l2
+  - xccdf_org.ssgproject.content_profile_cis_workstation_l2
+
 oscap_scan_script_path: /usr/local/sbin/oscap-cis-scan
 oscap_systemd_service_name: oscap-cis-scan.service
 oscap_systemd_timer_name: oscap-cis-scan.timer
