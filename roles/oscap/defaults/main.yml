@@ -11,6 +11,7 @@ oscap_datastream_path_override: ""
 oscap_profile_id: ""
 oscap_tailoring_path: ""
 oscap_fail_when_cis_profile_missing: true
+oscap_non_cis_fallback_enabled: true
 oscap_validate_datastream: true
 oscap_enable_timer: true
 oscap_use_cron: false
@@ -34,6 +35,11 @@ oscap_profile_candidates_level1:
 oscap_profile_candidates_level2:
   - xccdf_org.ssgproject.content_profile_cis_server_l2
   - xccdf_org.ssgproject.content_profile_cis_workstation_l2
+oscap_fallback_profile_candidates:
+  - xccdf_org.ssgproject.content_profile_pci-dss
+  - xccdf_org.ssgproject.content_profile_stig
+  - xccdf_org.ssgproject.content_profile_stig_gui
+  - xccdf_org.ssgproject.content_profile_ospp
 
 oscap_scan_script_path: /usr/local/sbin/oscap-cis-scan
 oscap_systemd_service_name: oscap-cis-scan.service

@@ -10,36 +10,42 @@ Proyecto Ansible listo para entornos reales orientado al endurecimiento CIS de O
 - `audit`
 - `oscap`
 
-## Qué hace este proyecto
+## Que hace este proyecto
 
 - Aplica por defecto controles orientados a CIS Nivel 1.
 - Permite activar controles adicionales de Nivel 2 con `cis_enable_level2: true`.
 - Usa `authselect` de forma segura para los controles PAM en Oracle Linux 10.
 - Integra OpenSCAP con `scap-security-guide`.
-- Programa escaneos periódicos con `systemd timer` por defecto, o con `cron` si se prefiere.
+- Programa escaneos periodicos con `systemd timer` por defecto, o con `cron` si se prefiere.
 - Genera informes HTML y XML en `/var/log/oscap` sobre el host auditado.
-- Genera remediaciones en formato Ansible y Bash a partir de los resultados de auditoría.
-- Trae automáticamente los artefactos de auditoría al propio repositorio, dentro de `artifacts/`.
+- Genera remediaciones en formato Ansible y Bash a partir de los resultados de auditoria.
+- Trae automaticamente los artefactos de auditoria al propio repositorio, dentro de `artifacts/`.
 
 ## Nota importante sobre OpenSCAP en Oracle Linux 10
 
-Oracle documenta `openscap`, `openscap-utils` y `scap-security-guide` para Oracle Linux 10. Aun así, la documentación pública de Oracle para OL10 no deja completamente garantizado que todos los paquetes `ssg-ol10-ds.xml` incluyan perfiles CIS específicos de Oracle Linux. Por eso este proyecto:
+Oracle documenta `openscap`, `openscap-utils` y `scap-security-guide` para Oracle Linux 10. Aun asi, la documentacion publica de Oracle para OL10 no deja completamente garantizado que todos los paquetes `ssg-ol10-ds.xml` incluyan perfiles CIS especificos de Oracle Linux. Por eso este proyecto:
 
-- endurece el sistema directamente con Ansible a una línea base orientada a CIS
+- endurece el sistema directamente con Ansible a una linea base orientada a CIS
 - intenta autodetectar perfiles CIS en OpenSCAP cuando existen
-- falla de forma clara si no encuentra un perfil CIS y `oscap_fail_when_cis_profile_missing` sigue a `true`
-- permite usar contenido SCAP externo con `oscap_datastream_path_override` y `oscap_profile_id`
+- si el datastream oficial de OL10 no trae CIS, puede usar un perfil de fallback no-CIS como `pci-dss` o `stig`
+- permite forzar CIS estricto usando contenido SCAP externo con `oscap_datastream_path_override` y `oscap_profile_id`
 
-## Estructura de ejecución recomendada
+Si quieres comportamiento estricto y fallo inmediato cuando no exista CIS:
 
-El flujo operativo queda así:
+- deja `oscap_fail_when_cis_profile_missing: true`
+- cambia `oscap_non_cis_fallback_enabled: false`
+- proporciona un datastream externo con perfil CIS valido
+
+## Estructura de ejecucion recomendada
+
+El flujo operativo queda asi:
 
 1. Endurecimiento base del sistema.
-2. Auditoría inicial.
-3. Remediación.
-4. Post-auditoría para comprobar el estado tras la remediación.
+2. Auditoria inicial.
+3. Remediacion.
+4. Post-auditoria para comprobar el estado tras la remediacion.
 
-## Instalación de colecciones
+## Instalacion de colecciones
 
 ```bash
 ansible-galaxy collection install -r collections/requirements.yml
@@ -51,9 +57,9 @@ ansible-galaxy collection install -r collections/requirements.yml
 ansible-playbook playbooks/hardening.yml
 ```
 
-## Auditoría inicial
+## Auditoria inicial
 
-Ejecuta OpenSCAP, deja los resultados en el host remoto y además copia los artefactos al repositorio:
+Ejecuta OpenSCAP, deja los resultados en el host remoto y ademas copia los artefactos al repositorio:
 
 ```bash
 ansible-playbook playbooks/auditoria.yml
@@ -76,13 +82,13 @@ Contenido esperado:
 - informe HTML
 - resultados XML
 - log de consola de OpenSCAP
-- remediación Ansible generada
-- remediación Bash generada
-- `latest.env` con el manifiesto del último escaneo
+- remediacion Ansible generada
+- remediacion Bash generada
+- `latest.env` con el manifiesto del ultimo escaneo
 
-## Remediación
+## Remediacion
 
-Ejecuta el escaneo con `--remediate` y guarda también los artefactos localmente:
+Ejecuta el escaneo con `--remediate` y guarda tambien los artefactos localmente:
 
 ```bash
 ansible-playbook playbooks/remediacion.yml
@@ -100,9 +106,9 @@ Los artefactos locales quedan en:
 artifacts/remediacion/<host>/
 ```
 
-## Post-auditoría
+## Post-auditoria
 
-Lanza un nuevo escaneo después de la remediación para verificar el estado final:
+Lanza un nuevo escaneo despues de la remediacion para verificar el estado final:
 
 ```bash
 ansible-playbook playbooks/post-auditoria.yml
@@ -122,7 +128,7 @@ artifacts/post-auditoria/<host>/
 
 ## Variables importantes
 
-Configúralas en [`group_vars/all.yml`](./group_vars/all.yml):
+Configuralas en [`group_vars/all.yml`](./group_vars/all.yml):
 
 - `cis_enable_level2`
 - `cis_install_security_updates_automatically`
@@ -132,28 +138,29 @@ Configúralas en [`group_vars/all.yml`](./group_vars/all.yml):
 - `oscap_profile_id`
 - `oscap_datastream_path_override`
 - `oscap_tailoring_path`
+- `oscap_non_cis_fallback_enabled`
 - `oscap_apply_remediation_during_scan`
 - `oscap_collect_artifacts`
 - `oscap_local_artifact_dir`
 - `oscap_manifest_path`
 
-## Cómo funciona la recogida de artefactos
+## Como funciona la recogida de artefactos
 
-Cuando se ejecuta una auditoría inmediata:
+Cuando se ejecuta una auditoria inmediata:
 
 - el wrapper de OpenSCAP escribe informes en `/var/log/oscap`
-- genera un manifiesto `latest.env` con las rutas del último escaneo
+- genera un manifiesto `latest.env` con las rutas del ultimo escaneo
 - Ansible descarga esos artefactos y los deja en `artifacts/...` dentro del repositorio
 
-Esto te da tres evidencias separadas y fáciles de revisar:
+Esto te da tres evidencias separadas y faciles de revisar:
 
-- auditoría inicial
-- remediación
-- post-auditoría
+- auditoria inicial
+- remediacion
+- post-auditoria
 
 ## Consideraciones operativas
 
 - El código está pensado para Oracle Linux 10.
-- Algunos controles pueden requerir reinicio o validación adicional según el entorno.
-- La remediación automática de OpenSCAP debe probarse antes en entornos no productivos.
-- Si el contenido SCAP de Oracle Linux 10 no trae un perfil CIS usable, debes proporcionar uno externo.
+- Algunos controles pueden requerir reinicio o validacion adicional segun el entorno.
+- La remediacion automatica de OpenSCAP debe probarse antes en entornos no productivos.
+- Si el contenido SCAP de Oracle Linux 10 no trae un perfil CIS usable, debes proporcionar uno externo para cumplimiento CIS estricto.

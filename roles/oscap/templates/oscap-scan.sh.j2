@@ -7,6 +7,7 @@ configured_profile="{{ oscap_profile_id }}"
 configured_tailoring="{{ oscap_tailoring_path }}"
 validate_datastream="{{ 'true' if oscap_validate_datastream | bool else 'false' }}"
 fail_when_profile_missing="{{ 'true' if oscap_fail_when_cis_profile_missing | bool else 'false' }}"
+non_cis_fallback_enabled="{{ 'true' if oscap_non_cis_fallback_enabled | bool else 'false' }}"
 generate_ansible_fix="{{ 'true' if oscap_generate_ansible_fix | bool else 'false' }}"
 generate_bash_fix="{{ 'true' if oscap_generate_bash_fix | bool else 'false' }}"
 apply_remediation="{{ 'true' if oscap_apply_remediation_during_scan | bool else 'false' }}"
@@ -22,6 +23,7 @@ ansible_fix="$report_dir/oscap-remediation-${timestamp}.yml"
 bash_fix="$report_dir/oscap-remediation-${timestamp}.sh"
 console_log="$report_dir/oscap-console-${timestamp}.log"
 manifest_file="{{ oscap_manifest_path }}"
+profile_source="explicit"
 
 mkdir -p "$report_dir"
 mkdir -p "$(dirname "$manifest_file")"
@@ -36,6 +38,7 @@ if [[ "$validate_datastream" == "true" ]]; then
 fi
 
 if [[ -z "$profile" ]]; then
+  profile_source="cis-auto"
   declare -a candidates=(
 {% if cis_enable_level2 | bool %}
 {% for item in oscap_profile_candidates_level2 %}
@@ -51,6 +54,27 @@ if [[ -z "$profile" ]]; then
   for candidate in "${candidates[@]}"; do
     if oscap info "$content" 2>/dev/null | grep -Fq "Id: ${candidate}"; then
       profile="$candidate"
+      break
+    fi
+  done
+fi
+
+if [[ -z "$profile" && "$non_cis_fallback_enabled" == "true" ]]; then
+  declare -a fallback_candidates=(
+{% for item in oscap_fallback_profile_candidates %}
+    "{{ item }}"
+{% endfor %}
+  )
+
+  for candidate in "${fallback_candidates[@]}"; do
+    if oscap info "$content" 2>/dev/null | grep -Fq "Id: ${candidate}"; then
+      profile="$candidate"
+      profile_source="fallback"
+      {
+        echo "WARNING: No CIS profile was found in $content."
+        echo "WARNING: Falling back to non-CIS profile: $candidate"
+        echo "WARNING: Provide oscap_profile_id and oscap_datastream_path_override for strict CIS scanning."
+      } >>"$console_log"
       break
     fi
   done
@@ -113,6 +137,7 @@ ln -sfn "$(basename "$console_log")" "$report_dir/latest.log"
 cat >"$manifest_file" <<EOF
 TIMESTAMP=$timestamp
 PROFILE=$profile
+PROFILE_SOURCE=$profile_source
 SCAN_RC=$scan_rc
 HTML_REPORT=$html_report
 XML_RESULTS=$xml_results
