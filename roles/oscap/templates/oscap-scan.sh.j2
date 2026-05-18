@@ -21,8 +21,10 @@ xml_results="$report_dir/oscap-results-${timestamp}.xml"
 ansible_fix="$report_dir/oscap-remediation-${timestamp}.yml"
 bash_fix="$report_dir/oscap-remediation-${timestamp}.sh"
 console_log="$report_dir/oscap-console-${timestamp}.log"
+manifest_file="{{ oscap_manifest_path }}"
 
 mkdir -p "$report_dir"
+mkdir -p "$(dirname "$manifest_file")"
 
 if [[ ! -r "$content" ]]; then
   echo "OpenSCAP datastream not found or unreadable: $content" | tee -a "$console_log" >&2
@@ -107,6 +109,17 @@ fi
 ln -sfn "$(basename "$html_report")" "$report_dir/latest.html"
 ln -sfn "$(basename "$xml_results")" "$report_dir/latest.xml"
 ln -sfn "$(basename "$console_log")" "$report_dir/latest.log"
+
+cat >"$manifest_file" <<EOF
+TIMESTAMP=$timestamp
+PROFILE=$profile
+SCAN_RC=$scan_rc
+HTML_REPORT=$html_report
+XML_RESULTS=$xml_results
+CONSOLE_LOG=$console_log
+ANSIBLE_FIX=$([[ -s "$ansible_fix" ]] && printf '%s' "$ansible_fix")
+BASH_FIX=$([[ -s "$bash_fix" ]] && printf '%s' "$bash_fix")
+EOF
 
 find "$report_dir" -maxdepth 1 -type f -mtime +"$retention_days" \
   \( -name 'oscap-report-*.html' -o -name 'oscap-results-*.xml' -o -name 'oscap-console-*.log' -o -name 'oscap-remediation-*.yml' -o -name 'oscap-remediation-*.sh' \) \

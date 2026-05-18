@@ -8,5 +8,7 @@
     oscap_apply_remediation_during_scan: true
     oscap_generate_ansible_fix: true
     oscap_generate_bash_fix: true
+    oscap_collect_artifacts: true
+    oscap_local_artifact_dir: "{{ playbook_dir }}/../artifacts/remediacion"
   roles:
     - role: oscap

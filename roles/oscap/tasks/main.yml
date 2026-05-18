@@ -110,3 +110,93 @@
   tags:
     - oscap
     - scan
+
+- name: Read OpenSCAP execution manifest
+  ansible.builtin.slurp:
+    src: "{{ oscap_manifest_path }}"
+  register: oscap_manifest_raw
+  when:
+    - oscap_run_immediate_scan | bool
+    - oscap_collect_artifacts | bool
+    - oscap_local_artifact_dir | length > 0
+  tags:
+    - oscap
+    - artifacts
+
+- name: Parse OpenSCAP execution manifest
+  ansible.builtin.set_fact:
+    oscap_manifest_content: "{{ oscap_manifest_raw.content | b64decode }}"
+    oscap_manifest_map: >-
+      {{
+        dict(
+          (
+            oscap_manifest_raw.content
+            | b64decode
+            | split('\n')
+            | select('match', '^[A-Z_]+=')
+            | map('split', '=', 1)
+          )
+        )
+      }}
+  when:
+    - oscap_run_immediate_scan | bool
+    - oscap_collect_artifacts | bool
+    - oscap_local_artifact_dir | length > 0
+  tags:
+    - oscap
+    - artifacts
+
+- name: Ensure local artifact directory exists
+  ansible.builtin.file:
+    path: "{{ oscap_local_artifact_dir }}/{{ inventory_hostname }}"
+    state: directory
+    mode: "0755"
+  delegate_to: localhost
+  become: false
+  when:
+    - oscap_run_immediate_scan | bool
+    - oscap_collect_artifacts | bool
+    - oscap_local_artifact_dir | length > 0
+  tags:
+    - oscap
+    - artifacts
+
+- name: Copy OpenSCAP manifest to the local artifacts directory
+  ansible.builtin.copy:
+    dest: "{{ oscap_local_artifact_dir }}/{{ inventory_hostname }}/latest.env"
+    content: "{{ oscap_manifest_content }}"
+    mode: "0644"
+  delegate_to: localhost
+  become: false
+  when:
+    - oscap_run_immediate_scan | bool
+    - oscap_collect_artifacts | bool
+    - oscap_local_artifact_dir | length > 0
+  tags:
+    - oscap
+    - artifacts
+
+- name: Fetch OpenSCAP output artifacts
+  ansible.builtin.fetch:
+    src: "{{ item }}"
+    dest: "{{ oscap_local_artifact_dir }}/{{ inventory_hostname }}/"
+    flat: true
+  loop: >-
+    {{
+      [
+        oscap_manifest_map.HTML_REPORT | default(''),
+        oscap_manifest_map.XML_RESULTS | default(''),
+        oscap_manifest_map.CONSOLE_LOG | default(''),
+        oscap_manifest_map.ANSIBLE_FIX | default(''),
+        oscap_manifest_map.BASH_FIX | default('')
+      ]
+      | reject('equalto', '')
+      | list
+    }}
+  when:
+    - oscap_run_immediate_scan | bool
+    - oscap_collect_artifacts | bool
+    - oscap_local_artifact_dir | length > 0
+  tags:
+    - oscap
+    - artifacts

@@ -1,11 +1,11 @@
 ---
-- name: Run an immediate OpenSCAP CIS scan
+- name: Run a post-remediation OpenSCAP CIS scan
   hosts: ol10_cis
   become: true
   gather_facts: true
   vars:
     oscap_run_immediate_scan: true
     oscap_collect_artifacts: true
-    oscap_local_artifact_dir: "{{ playbook_dir }}/../artifacts/auditoria"
+    oscap_local_artifact_dir: "{{ playbook_dir }}/../artifacts/post-auditoria"
   roles:
     - role: oscap
