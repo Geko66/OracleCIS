@@ -1,0 +1,25 @@
+---
+ssh_required_packages:
+  - openssh-server
+
+ssh_cis_settings:
+  AllowAgentForwarding: "no"
+  AllowTcpForwarding: "no"
+  Banner: /etc/issue.net
+  ClientAliveCountMax: "0"
+  ClientAliveInterval: "300"
+  HostbasedAuthentication: "no"
+  IgnoreRhosts: "yes"
+  LoginGraceTime: "60"
+  LogLevel: VERBOSE
+  MaxAuthTries: "4"
+  MaxSessions: "10"
+  MaxStartups: "10:30:60"
+  PermitEmptyPasswords: "no"
+  PermitRootLogin: "{{ 'yes' if cis_allow_root_ssh | bool else 'no' }}"
+  PermitUserEnvironment: "no"
+  PubkeyAuthentication: "yes"
+  X11Forwarding: "no"
+
+ssh_level2_settings:
+  GSSAPIAuthentication: "no"

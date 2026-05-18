@@ -1,0 +1,23 @@
+---
+- name: Apply Oracle Linux 10 CIS hardening
+  hosts: ol10_cis
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Assert the target is Oracle Linux 10
+      ansible.builtin.assert:
+        that:
+          - ansible_distribution == 'OracleLinux'
+          - ansible_distribution_major_version | int == 10
+        fail_msg: This project only supports Oracle Linux 10 targets.
+        success_msg: Oracle Linux 10 target confirmed.
+
+  roles:
+    - role: common
+    - role: users
+    - role: ssh
+    - role: firewall
+    - role: selinux
+    - role: audit
+    - role: oscap

@@ -1,0 +1,112 @@
+---
+- name: Install OpenSCAP packages
+  ansible.builtin.package:
+    name: "{{ oscap_required_packages }}"
+    state: present
+  tags:
+    - oscap
+    - packages
+
+- name: Ensure OpenSCAP report directory exists
+  ansible.builtin.file:
+    path: "{{ oscap_report_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+  tags:
+    - oscap
+    - config
+
+- name: Deploy OpenSCAP scan wrapper
+  ansible.builtin.template:
+    src: oscap-scan.sh.j2
+    dest: "{{ oscap_scan_script_path }}"
+    owner: root
+    group: root
+    mode: "0750"
+  tags:
+    - oscap
+    - config
+
+- name: Deploy OpenSCAP systemd service
+  ansible.builtin.template:
+    src: oscap-cis-scan.service.j2
+    dest: "/etc/systemd/system/{{ oscap_systemd_service_name }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: not oscap_use_cron | bool
+  notify: Reload systemd
+  tags:
+    - oscap
+    - schedule
+
+- name: Deploy OpenSCAP systemd timer
+  ansible.builtin.template:
+    src: oscap-cis-scan.timer.j2
+    dest: "/etc/systemd/system/{{ oscap_systemd_timer_name }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: not oscap_use_cron | bool
+  notify: Reload systemd
+  tags:
+    - oscap
+    - schedule
+
+- name: Reload systemd before managing OpenSCAP timer
+  ansible.builtin.meta: flush_handlers
+
+- name: Remove cron schedule when systemd timer is used
+  ansible.builtin.file:
+    path: "{{ oscap_cron_file }}"
+    state: absent
+  when: not oscap_use_cron | bool
+  tags:
+    - oscap
+    - schedule
+
+- name: Enable and start OpenSCAP timer
+  ansible.builtin.service:
+    name: "{{ oscap_systemd_timer_name }}"
+    enabled: "{{ oscap_enable_timer | bool }}"
+    state: "{{ 'started' if oscap_enable_timer | bool else 'stopped' }}"
+  when: not oscap_use_cron | bool
+  tags:
+    - oscap
+    - schedule
+
+- name: Deploy OpenSCAP cron schedule
+  ansible.builtin.template:
+    src: oscap-cis-scan.cron.j2
+    dest: "{{ oscap_cron_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: oscap_use_cron | bool
+  tags:
+    - oscap
+    - schedule
+
+- name: Disable OpenSCAP timer when cron is selected
+  ansible.builtin.service:
+    name: "{{ oscap_systemd_timer_name }}"
+    enabled: false
+    state: stopped
+  when: oscap_use_cron | bool
+  failed_when: false
+  tags:
+    - oscap
+    - schedule
+
+- name: Run an immediate OpenSCAP scan
+  ansible.builtin.command:
+    cmd: "{{ oscap_scan_script_path }}"
+  register: oscap_immediate_scan
+  changed_when: oscap_apply_remediation_during_scan | bool
+  failed_when: oscap_immediate_scan.rc not in [0, 2]
+  when: oscap_run_immediate_scan | bool
+  tags:
+    - oscap
+    - scan

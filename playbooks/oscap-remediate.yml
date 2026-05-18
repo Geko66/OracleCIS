@@ -1,0 +1,12 @@
+---
+- name: Run an immediate OpenSCAP scan with remediation enabled
+  hosts: ol10_cis
+  become: true
+  gather_facts: true
+  vars:
+    oscap_run_immediate_scan: true
+    oscap_apply_remediation_during_scan: true
+    oscap_generate_ansible_fix: true
+    oscap_generate_bash_fix: true
+  roles:
+    - role: oscap

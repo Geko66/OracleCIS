@@ -1,0 +1,29 @@
+---
+- name: Install OpenSSH server
+  ansible.builtin.package:
+    name: "{{ ssh_required_packages }}"
+    state: present
+  tags:
+    - ssh
+    - packages
+
+- name: Ensure sshd is enabled and running
+  ansible.builtin.service:
+    name: sshd
+    enabled: true
+    state: started
+  tags:
+    - ssh
+    - service
+
+- name: Deploy CIS SSH hardening drop-in
+  ansible.builtin.template:
+    src: 99-cis-hardening.conf.j2
+    dest: /etc/ssh/sshd_config.d/99-cis-hardening.conf
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Restart sshd
+  tags:
+    - ssh
+    - config

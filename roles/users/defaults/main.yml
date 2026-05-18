@@ -1,0 +1,9 @@
+---
+users_required_packages:
+  - authselect
+  - libpwquality
+  - pam
+
+users_required_authselect_features:
+  - with-faillock
+  - with-pwhistory

@@ -1,0 +1,157 @@
+---
+- name: Install firewalld
+  ansible.builtin.package:
+    name: "{{ firewall_required_packages }}"
+    state: present
+  tags:
+    - firewall
+    - packages
+
+- name: Ensure firewalld is enabled and running
+  ansible.builtin.service:
+    name: firewalld
+    enabled: true
+    state: started
+  tags:
+    - firewall
+    - service
+
+- name: Inspect firewalld default zone
+  ansible.builtin.command:
+    cmd: firewall-cmd --get-default-zone
+  register: firewall_default_zone
+  changed_when: false
+  tags:
+    - firewall
+    - config
+
+- name: Set firewalld default zone
+  ansible.builtin.command:
+    cmd: firewall-cmd --set-default-zone={{ cis_firewalld_zone }}
+  when: firewall_default_zone.stdout != cis_firewalld_zone
+  changed_when: true
+  notify: Reload firewalld
+  tags:
+    - firewall
+    - config
+
+- name: Inspect permanent zone target
+  ansible.builtin.command:
+    cmd: firewall-cmd --permanent --zone={{ cis_firewalld_zone }} --get-target
+  register: firewall_zone_target
+  changed_when: false
+  tags:
+    - firewall
+    - config
+
+- name: Set firewalld zone target
+  ansible.builtin.command:
+    cmd: firewall-cmd --permanent --zone={{ cis_firewalld_zone }} --set-target={{ cis_firewalld_target }}
+  when: firewall_zone_target.stdout != cis_firewalld_target
+  changed_when: true
+  notify: Reload firewalld
+  tags:
+    - firewall
+    - config
+
+- name: Inspect runtime firewalld services
+  ansible.builtin.command:
+    cmd: firewall-cmd --zone={{ cis_firewalld_zone }} --query-service={{ item }}
+  register: firewall_runtime_services
+  failed_when: false
+  changed_when: false
+  loop: "{{ cis_firewalld_services }}"
+  loop_control:
+    label: "{{ item }}"
+  tags:
+    - firewall
+    - services
+
+- name: Allow runtime firewalld services
+  ansible.builtin.command:
+    cmd: firewall-cmd --zone={{ cis_firewalld_zone }} --add-service={{ item.item }}
+  when: item.stdout != "yes"
+  changed_when: true
+  loop: "{{ firewall_runtime_services.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  tags:
+    - firewall
+    - services
+
+- name: Inspect permanent firewalld services
+  ansible.builtin.command:
+    cmd: firewall-cmd --permanent --zone={{ cis_firewalld_zone }} --query-service={{ item }}
+  register: firewall_permanent_services
+  failed_when: false
+  changed_when: false
+  loop: "{{ cis_firewalld_services }}"
+  loop_control:
+    label: "{{ item }}"
+  tags:
+    - firewall
+    - services
+
+- name: Allow permanent firewalld services
+  ansible.builtin.command:
+    cmd: firewall-cmd --permanent --zone={{ cis_firewalld_zone }} --add-service={{ item.item }}
+  when: item.stdout != "yes"
+  changed_when: true
+  loop: "{{ firewall_permanent_services.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  notify: Reload firewalld
+  tags:
+    - firewall
+    - services
+
+- name: Inspect runtime firewalld ports
+  ansible.builtin.command:
+    cmd: firewall-cmd --zone={{ cis_firewalld_zone }} --query-port={{ item }}
+  register: firewall_runtime_ports
+  failed_when: false
+  changed_when: false
+  loop: "{{ cis_firewalld_ports }}"
+  loop_control:
+    label: "{{ item }}"
+  tags:
+    - firewall
+    - ports
+
+- name: Allow runtime firewalld ports
+  ansible.builtin.command:
+    cmd: firewall-cmd --zone={{ cis_firewalld_zone }} --add-port={{ item.item }}
+  when: item.stdout != "yes"
+  changed_when: true
+  loop: "{{ firewall_runtime_ports.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  tags:
+    - firewall
+    - ports
+
+- name: Inspect permanent firewalld ports
+  ansible.builtin.command:
+    cmd: firewall-cmd --permanent --zone={{ cis_firewalld_zone }} --query-port={{ item }}
+  register: firewall_permanent_ports
+  failed_when: false
+  changed_when: false
+  loop: "{{ cis_firewalld_ports }}"
+  loop_control:
+    label: "{{ item }}"
+  tags:
+    - firewall
+    - ports
+
+- name: Allow permanent firewalld ports
+  ansible.builtin.command:
+    cmd: firewall-cmd --permanent --zone={{ cis_firewalld_zone }} --add-port={{ item.item }}
+  when: item.stdout != "yes"
+  changed_when: true
+  loop: "{{ firewall_permanent_ports.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  notify: Reload firewalld
+  tags:
+    - firewall
+    - ports

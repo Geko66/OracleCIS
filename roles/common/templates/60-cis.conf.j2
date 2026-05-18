@@ -1,0 +1,5 @@
+# Managed by Ansible: Oracle Linux 10 CIS hardening
+{% set merged_sysctl = common_sysctl_settings | combine(common_level2_sysctl_settings if cis_enable_level2 | bool else {}, recursive=True) %}
+{% for key, value in merged_sysctl | dictsort %}
+{{ key }} = {{ value }}
+{% endfor %}

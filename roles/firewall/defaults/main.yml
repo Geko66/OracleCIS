@@ -1,0 +1,3 @@
+---
+firewall_required_packages:
+  - firewalld

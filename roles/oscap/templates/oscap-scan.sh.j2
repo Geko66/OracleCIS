@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+report_dir="{{ oscap_report_dir }}"
+default_content="{{ oscap_datastream_path_override if oscap_datastream_path_override | length > 0 else oscap_content_path }}"
+configured_profile="{{ oscap_profile_id }}"
+configured_tailoring="{{ oscap_tailoring_path }}"
+validate_datastream="{{ 'true' if oscap_validate_datastream | bool else 'false' }}"
+fail_when_profile_missing="{{ 'true' if oscap_fail_when_cis_profile_missing | bool else 'false' }}"
+generate_ansible_fix="{{ 'true' if oscap_generate_ansible_fix | bool else 'false' }}"
+generate_bash_fix="{{ 'true' if oscap_generate_bash_fix | bool else 'false' }}"
+apply_remediation="{{ 'true' if oscap_apply_remediation_during_scan | bool else 'false' }}"
+retention_days="{{ oscap_retention_days }}"
+
+timestamp="$(date +%Y%m%dT%H%M%S)"
+content="${OSCAP_CONTENT:-$default_content}"
+profile="${OSCAP_PROFILE:-$configured_profile}"
+tailoring_file="${OSCAP_TAILORING_FILE:-$configured_tailoring}"
+html_report="$report_dir/oscap-report-${timestamp}.html"
+xml_results="$report_dir/oscap-results-${timestamp}.xml"
+ansible_fix="$report_dir/oscap-remediation-${timestamp}.yml"
+bash_fix="$report_dir/oscap-remediation-${timestamp}.sh"
+console_log="$report_dir/oscap-console-${timestamp}.log"
+
+mkdir -p "$report_dir"
+
+if [[ ! -r "$content" ]]; then
+  echo "OpenSCAP datastream not found or unreadable: $content" | tee -a "$console_log" >&2
+  exit 66
+fi
+
+if [[ "$validate_datastream" == "true" ]]; then
+  oscap ds sds-validate "$content" >>"$console_log" 2>&1
+fi
+
+if [[ -z "$profile" ]]; then
+  declare -a candidates=(
+{% if cis_enable_level2 | bool %}
+{% for item in oscap_profile_candidates_level2 %}
+    "{{ item }}"
+{% endfor %}
+{% else %}
+{% for item in oscap_profile_candidates_level1 %}
+    "{{ item }}"
+{% endfor %}
+{% endif %}
+  )
+
+  for candidate in "${candidates[@]}"; do
+    if oscap info "$content" 2>/dev/null | grep -Fq "Id: ${candidate}"; then
+      profile="$candidate"
+      break
+    fi
+  done
+fi
+
+if [[ -z "$profile" ]]; then
+  if [[ "$fail_when_profile_missing" == "true" ]]; then
+    {
+      echo "No CIS profile could be auto-detected in $content."
+      echo "Provide oscap_profile_id and/or oscap_datastream_path_override when using external CIS content."
+      oscap info "$content" || true
+    } | tee -a "$console_log" >&2
+    exit 64
+  fi
+
+  profile="$(oscap info "$content" | awk '/^Id: / { print $2; exit }')"
+fi
+
+declare -a cmd=(
+  oscap
+  xccdf
+  eval
+  --profile "$profile"
+  --results "$xml_results"
+  --report "$html_report"
+  --oval-results
+)
+
+if [[ -n "$tailoring_file" ]]; then
+  cmd+=(--tailoring-file "$tailoring_file")
+fi
+
+if [[ "$apply_remediation" == "true" ]]; then
+  cmd+=(--remediate)
+fi
+
+{% for arg in oscap_additional_eval_args %}
+cmd+=("{{ arg }}")
+{% endfor %}
+
+cmd+=("$content")
+
+set +e
+"${cmd[@]}" >"$console_log" 2>&1
+scan_rc=$?
+set -e
+
+if [[ -s "$xml_results" && "$generate_ansible_fix" == "true" ]]; then
+  oscap xccdf generate fix --profile "$profile" --fix-type ansible --output "$ansible_fix" "$xml_results" >>"$console_log" 2>&1 || true
+fi
+
+if [[ -s "$xml_results" && "$generate_bash_fix" == "true" ]]; then
+  oscap xccdf generate fix --profile "$profile" --fix-type bash --output "$bash_fix" "$xml_results" >>"$console_log" 2>&1 || true
+fi
+
+ln -sfn "$(basename "$html_report")" "$report_dir/latest.html"
+ln -sfn "$(basename "$xml_results")" "$report_dir/latest.xml"
+ln -sfn "$(basename "$console_log")" "$report_dir/latest.log"
+
+find "$report_dir" -maxdepth 1 -type f -mtime +"$retention_days" \
+  \( -name 'oscap-report-*.html' -o -name 'oscap-results-*.xml' -o -name 'oscap-console-*.log' -o -name 'oscap-remediation-*.yml' -o -name 'oscap-remediation-*.sh' \) \
+  -delete
+
+exit "$scan_rc"

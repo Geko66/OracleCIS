@@ -1,0 +1,209 @@
+---
+- name: Install authentication hardening packages
+  ansible.builtin.package:
+    name: "{{ users_required_packages }}"
+    state: present
+  tags:
+    - users
+    - auth
+
+- name: Harden password aging and defaults in login.defs
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: "^{{ item.key }}\\s+"
+    line: "{{ item.key }} {{ item.value }}"
+    create: true
+    mode: "0644"
+  loop:
+    - { key: "PASS_MAX_DAYS", value: "{{ cis_password_max_days }}" }
+    - { key: "PASS_MIN_DAYS", value: "{{ cis_password_min_days }}" }
+    - { key: "PASS_WARN_AGE", value: "{{ cis_password_warn_age }}" }
+    - { key: "UMASK", value: "027" }
+    - { key: "ENCRYPT_METHOD", value: "YESCRYPT" }
+  tags:
+    - users
+    - passwords
+
+- name: Set inactive password lockout period
+  ansible.builtin.lineinfile:
+    path: /etc/default/useradd
+    regexp: "^INACTIVE="
+    line: "INACTIVE={{ cis_password_inactive_lock }}"
+    create: true
+    mode: "0644"
+  tags:
+    - users
+    - passwords
+
+- name: Deploy password quality policy
+  ansible.builtin.copy:
+    dest: /etc/security/pwquality.conf.d/99-cis.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      minlen = {{ cis_password_minlen }}
+      minclass = {{ cis_password_minclass }}
+      dictcheck = 1
+      enforce_for_root
+      retry = 3
+  tags:
+    - users
+    - passwords
+
+- name: Deploy faillock policy
+  ansible.builtin.copy:
+    dest: /etc/security/faillock.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      deny = {{ cis_faillock_deny }}
+      fail_interval = {{ cis_faillock_fail_interval }}
+      unlock_time = {{ cis_faillock_unlock_time }}
+      even_deny_root
+      root_unlock_time = {{ cis_faillock_unlock_time }}
+      audit
+      silent
+  tags:
+    - users
+    - passwords
+
+- name: Deploy password history policy
+  ansible.builtin.copy:
+    dest: /etc/security/pwhistory.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      remember = {{ cis_password_remember }}
+      enforce_for_root
+  when: cis_password_remember | int > 0
+  tags:
+    - users
+    - passwords
+
+- name: Inspect authselect feature support
+  ansible.builtin.command:
+    cmd: authselect show {{ cis_authselect_profile }}
+  register: users_authselect_show
+  changed_when: false
+  tags:
+    - users
+    - authselect
+
+- name: Determine available authselect features
+  ansible.builtin.set_fact:
+    users_available_authselect_features: >-
+      {{
+        users_authselect_show.stdout_lines
+        | select('match', '^with-')
+        | map('regex_replace', '::$', '')
+        | list
+      }}
+    users_requested_authselect_features: >-
+      {{
+        users_required_authselect_features
+        | intersect(
+            users_authselect_show.stdout_lines
+            | select('match', '^with-')
+            | map('regex_replace', '::$', '')
+            | list
+          )
+      }}
+  tags:
+    - users
+    - authselect
+
+- name: Require pwhistory support when strict mode is enabled
+  ansible.builtin.fail:
+    msg: >-
+      The selected authselect profile ({{ cis_authselect_profile }}) does not
+      expose with-pwhistory, so password history cannot be enforced safely
+      through authselect on this host.
+  when:
+    - cis_authselect_feature_strict | bool
+    - cis_password_remember | int > 0
+    - "'with-pwhistory' not in users_available_authselect_features"
+  tags:
+    - users
+    - authselect
+
+- name: Inspect current authselect profile
+  ansible.builtin.command:
+    cmd: authselect current
+  register: users_authselect_current
+  changed_when: false
+  tags:
+    - users
+    - authselect
+
+- name: Apply authselect profile and supported hardening features
+  ansible.builtin.command:
+    argv: "{{ ['authselect', 'select', cis_authselect_profile] + users_requested_authselect_features + ['--force'] }}"
+  when: >-
+    ('Profile ID: ' ~ cis_authselect_profile) not in users_authselect_current.stdout
+    or
+    (
+      users_requested_authselect_features
+      | reject('in', users_authselect_current.stdout)
+      | list
+      | length > 0
+    )
+  changed_when: true
+  tags:
+    - users
+    - authselect
+
+- name: Ensure local administrator groups exist
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ cis_local_admin_groups }}"
+  tags:
+    - users
+    - accounts
+
+- name: Manage local users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment | default(omit) }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    groups: "{{ (item.groups | default(cis_local_admin_groups)) | join(',') }}"
+    append: true
+    create_home: true
+    password_lock: "{{ item.password_lock | default(false) }}"
+    expires: "{{ item.expires | default(omit) }}"
+    uid: "{{ item.uid | default(omit) }}"
+    state: present
+  loop: "{{ cis_local_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+  tags:
+    - users
+    - accounts
+
+- name: Deploy authorized keys for managed local users
+  ansible.posix.authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
+    state: present
+    exclusive: false
+  loop: "{{ cis_local_users | subelements('ssh_authorized_keys', skip_missing=True) }}"
+  loop_control:
+    label: "{{ item.0.name }}"
+  tags:
+    - users
+    - ssh-keys
+
+- name: Deploy shell umask policy
+  ansible.builtin.copy:
+    dest: /etc/profile.d/cis-umask.sh
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      umask 027
+  tags:
+    - users
+    - shell

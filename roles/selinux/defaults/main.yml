@@ -1,0 +1,6 @@
+---
+selinux_required_packages:
+  - libselinux
+  - policycoreutils
+
+selinux_booleans: []

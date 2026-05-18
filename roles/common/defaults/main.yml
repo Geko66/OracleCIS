@@ -1,0 +1,47 @@
+---
+common_base_packages:
+  - aide
+  - chrony
+  - dnf-automatic
+  - libpwquality
+  - rsyslog
+  - sudo
+
+common_services:
+  - chronyd
+  - crond
+  - rsyslog
+
+common_banner_text: |
+  Authorized uses only. All activity on this system may be monitored,
+  recorded, and reported to security personnel. Use of this system
+  indicates consent to monitoring and enforcement actions.
+
+common_sysctl_settings:
+  fs.suid_dumpable: "0"
+  kernel.dmesg_restrict: "1"
+  kernel.kptr_restrict: "2"
+  kernel.randomize_va_space: "2"
+  net.ipv4.conf.all.accept_redirects: "0"
+  net.ipv4.conf.all.accept_source_route: "0"
+  net.ipv4.conf.all.log_martians: "1"
+  net.ipv4.conf.all.rp_filter: "1"
+  net.ipv4.conf.all.secure_redirects: "0"
+  net.ipv4.conf.default.accept_redirects: "0"
+  net.ipv4.conf.default.accept_source_route: "0"
+  net.ipv4.conf.default.log_martians: "1"
+  net.ipv4.conf.default.rp_filter: "1"
+  net.ipv4.conf.default.secure_redirects: "0"
+  net.ipv4.icmp_echo_ignore_broadcasts: "1"
+  net.ipv4.icmp_ignore_bogus_error_responses: "1"
+  net.ipv4.ip_forward: "0"
+  net.ipv4.tcp_syncookies: "1"
+  net.ipv6.conf.all.accept_ra: "0"
+  net.ipv6.conf.all.accept_redirects: "0"
+  net.ipv6.conf.all.accept_source_route: "0"
+  net.ipv6.conf.default.accept_ra: "0"
+  net.ipv6.conf.default.accept_redirects: "0"
+  net.ipv6.conf.default.accept_source_route: "0"
+
+common_level2_sysctl_settings:
+  net.ipv4.tcp_timestamps: "0"

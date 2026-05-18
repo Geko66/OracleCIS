@@ -1,0 +1,11 @@
+[Unit]
+Description=Scheduled OpenSCAP CIS compliance scan for Oracle Linux 10
+
+[Timer]
+OnCalendar={{ oscap_timer_on_calendar }}
+Persistent=true
+RandomizedDelaySec=15m
+Unit={{ oscap_systemd_service_name }}
+
+[Install]
+WantedBy=timers.target

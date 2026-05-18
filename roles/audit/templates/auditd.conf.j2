@@ -1,0 +1,4 @@
+# Managed by Ansible: Oracle Linux 10 CIS audit daemon configuration
+{% for key, value in auditd_conf | dictsort %}
+{{ key }} = {{ value }}
+{% endfor %}

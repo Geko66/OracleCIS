@@ -1,0 +1,11 @@
+# Managed by Ansible: Oracle Linux 10 CIS SSH hardening
+{% set merged_ssh_settings = ssh_cis_settings | combine(ssh_level2_settings if cis_enable_level2 | bool else {}, recursive=True) %}
+{% for key, value in merged_ssh_settings | dictsort %}
+{{ key }} {{ value }}
+{% endfor %}
+{% if cis_ssh_allow_users | length > 0 %}
+AllowUsers {{ cis_ssh_allow_users | join(' ') }}
+{% endif %}
+{% if cis_ssh_allow_groups | length > 0 %}
+AllowGroups {{ cis_ssh_allow_groups | join(' ') }}
+{% endif %}

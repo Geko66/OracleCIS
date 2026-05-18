@@ -1,0 +1,9 @@
+---
+- name: Run an immediate OpenSCAP CIS scan
+  hosts: ol10_cis
+  become: true
+  gather_facts: true
+  vars:
+    oscap_run_immediate_scan: true
+  roles:
+    - role: oscap

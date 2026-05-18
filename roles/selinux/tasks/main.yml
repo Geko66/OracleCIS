@@ -1,0 +1,73 @@
+---
+- name: Install SELinux management packages
+  ansible.builtin.package:
+    name: "{{ selinux_required_packages }}"
+    state: present
+  tags:
+    - selinux
+    - packages
+
+- name: Ensure SELinux configuration file is present
+  ansible.builtin.file:
+    path: /etc/selinux
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  tags:
+    - selinux
+    - config
+
+- name: Configure SELinux mode
+  ansible.builtin.lineinfile:
+    path: /etc/selinux/config
+    regexp: "^SELINUX="
+    line: "SELINUX={{ cis_selinux_state }}"
+    create: true
+    mode: "0644"
+  tags:
+    - selinux
+    - config
+
+- name: Configure SELinux policy
+  ansible.builtin.lineinfile:
+    path: /etc/selinux/config
+    regexp: "^SELINUXTYPE="
+    line: "SELINUXTYPE={{ cis_selinux_policy }}"
+    create: true
+    mode: "0644"
+  tags:
+    - selinux
+    - config
+
+- name: Inspect current SELinux mode
+  ansible.builtin.command:
+    cmd: getenforce
+  register: selinux_current_mode
+  changed_when: false
+  failed_when: false
+  tags:
+    - selinux
+    - runtime
+
+- name: Enforce SELinux at runtime when possible
+  ansible.builtin.command:
+    cmd: setenforce 1
+  when:
+    - cis_selinux_state == 'enforcing'
+    - selinux_current_mode.stdout not in ['Enforcing', 'Disabled']
+  changed_when: true
+  tags:
+    - selinux
+    - runtime
+
+- name: Apply persistent SELinux booleans
+  ansible.builtin.command:
+    cmd: setsebool -P {{ item.name }} {{ 1 if item.state | bool else 0 }}
+  loop: "{{ selinux_booleans }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: true
+  tags:
+    - selinux
+    - booleans

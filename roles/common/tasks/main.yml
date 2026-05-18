@@ -1,0 +1,155 @@
+---
+- name: Install baseline security packages
+  ansible.builtin.package:
+    name: "{{ common_base_packages }}"
+    state: present
+  tags:
+    - common
+    - packages
+
+- name: Ensure baseline services are enabled and running
+  ansible.builtin.service:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop: "{{ common_services }}"
+  tags:
+    - common
+    - services
+
+- name: Enforce DNF package signature verification
+  ansible.builtin.lineinfile:
+    path: /etc/dnf/dnf.conf
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+    create: true
+    mode: "0644"
+  loop:
+    - { key: "gpgcheck", value: "1" }
+    - { key: "localpkg_gpgcheck", value: "1" }
+    - { key: "clean_requirements_on_remove", value: "True" }
+  tags:
+    - common
+    - dnf
+
+- name: Configure automatic security update policy
+  ansible.builtin.ini_file:
+    path: /etc/dnf/automatic.conf
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: "0644"
+  loop:
+    - { section: "commands", option: "upgrade_type", value: "security" }
+    - { section: "commands", option: "download_updates", value: "yes" }
+    - { section: "commands", option: "apply_updates", value: "{{ 'yes' if cis_install_security_updates_automatically | bool else 'no' }}" }
+    - { section: "emitters", option: "emit_via", value: "motd" }
+    - { section: "base", option: "random_sleep", value: "0" }
+  tags:
+    - common
+    - dnf
+
+- name: Manage dnf-automatic timer state
+  ansible.builtin.service:
+    name: dnf-automatic.timer
+    enabled: "{{ cis_install_security_updates_automatically | bool }}"
+    state: "{{ 'started' if cis_install_security_updates_automatically | bool else 'stopped' }}"
+  tags:
+    - common
+    - dnf
+
+- name: Deploy login banners
+  ansible.builtin.template:
+    src: banner.j2
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - /etc/issue
+    - /etc/issue.net
+    - /etc/motd
+  tags:
+    - common
+    - banners
+
+- name: Deploy persistent journald directory
+  ansible.builtin.file:
+    path: /var/log/journal
+    state: directory
+    owner: root
+    group: systemd-journal
+    mode: "2755"
+  tags:
+    - common
+    - logging
+
+- name: Deploy CIS sysctl profile
+  ansible.builtin.template:
+    src: 60-cis.conf.j2
+    dest: /etc/sysctl.d/60-cis.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Apply sysctl settings
+  tags:
+    - common
+    - sysctl
+
+- name: Deploy sudo hardening rules
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/99-cis-hardening
+    owner: root
+    group: root
+    mode: "0440"
+    validate: /usr/sbin/visudo -cf %s
+    content: |
+      Defaults logfile="{{ cis_sudo_logfile }}"
+      Defaults{{ ' use_pty' if cis_sudo_use_pty | bool else ' !use_pty' }}
+      Defaults timestamp_timeout=5
+  tags:
+    - common
+    - sudo
+
+- name: Deploy systemd coredump hardening
+  ansible.builtin.file:
+    path: /etc/systemd/coredump.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  tags:
+    - common
+    - coredump
+
+- name: Configure systemd coredump hardening
+  ansible.builtin.copy:
+    dest: /etc/systemd/coredump.conf.d/99-cis.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      [Coredump]
+      ProcessSizeMax=0
+      Storage=none
+  tags:
+    - common
+    - coredump
+
+- name: Initialize AIDE database when requested
+  ansible.builtin.command:
+    cmd: aide --init
+  when: cis_aide_init_database | bool
+  changed_when: true
+  tags:
+    - common
+    - aide
+
+- name: Install initialized AIDE database
+  ansible.builtin.command:
+    cmd: mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+  when: cis_aide_init_database | bool
+  changed_when: true
+  tags:
+    - common
+    - aide

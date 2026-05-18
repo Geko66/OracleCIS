@@ -1,0 +1,38 @@
+# Managed by Ansible: Oracle Linux 10 CIS audit rules
+-D
+-b {{ audit_backlog_limit }}
+-f 1
+
+-w /etc/group -p wa -k identity
+-w /etc/gshadow -p wa -k identity
+-w /etc/passwd -p wa -k identity
+-w /etc/security/opasswd -p wa -k identity
+-w /etc/shadow -p wa -k identity
+-w /etc/sudoers -p wa -k scope
+-w /etc/sudoers.d/ -p wa -k scope
+-w /var/log/lastlog -p wa -k logins
+-w /var/log/wtmp -p wa -k logins
+-w /var/run/faillock -p wa -k logins
+-w /var/log/btmp -p wa -k logins
+-w {{ cis_sudo_logfile }} -p wa -k sudo_log
+
+-a always,exit -F arch=b32 -S adjtimex,settimeofday,clock_settime -k time-change
+-a always,exit -F arch=b64 -S adjtimex,settimeofday,clock_settime -k time-change
+-a always,exit -F arch=b32 -S sethostname,setdomainname -k system-locale
+-a always,exit -F arch=b64 -S sethostname,setdomainname -k system-locale
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat,chown,fchown,fchownat,lchown,setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -k perm_mod
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat,chown,fchown,fchownat,lchown,setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -F auid>=1000 -F auid!=unset -k perm_mod
+-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -k mounts
+-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -k mounts
+-a always,exit -F arch=b32 -S init_module,finit_module,delete_module -k modules
+-a always,exit -F arch=b64 -S init_module,finit_module,delete_module -k modules
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F auid>=1000 -F auid!=unset -k user_emulation
+-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -F auid>=1000 -F auid!=unset -k user_emulation
+
+{% for path in audit_privileged_paths | sort %}
+-a always,exit -F path={{ path }} -F perm=x -F auid>=1000 -F auid!=unset -k privileged
+{% endfor %}
+{% if audit_set_immutable | bool %}
+
+-e 2
+{% endif %}

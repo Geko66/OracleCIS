@@ -1,0 +1,11 @@
+---
+oscap_required_packages:
+  - openscap
+  - openscap-engine-sce
+  - openscap-utils
+  - scap-security-guide
+
+oscap_scan_script_path: /usr/local/sbin/oscap-cis-scan
+oscap_systemd_service_name: oscap-cis-scan.service
+oscap_systemd_timer_name: oscap-cis-scan.timer
+oscap_cron_file: /etc/cron.d/oscap-cis-scan

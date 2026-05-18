@@ -1,0 +1,79 @@
+---
+- name: Install audit packages
+  ansible.builtin.package:
+    name: "{{ audit_required_packages }}"
+    state: present
+  tags:
+    - audit
+    - packages
+
+- name: Ensure auditd is enabled and running
+  ansible.builtin.service:
+    name: auditd
+    enabled: true
+    state: started
+  tags:
+    - audit
+    - service
+
+- name: Deploy auditd.conf
+  ansible.builtin.template:
+    src: auditd.conf.j2
+    dest: /etc/audit/auditd.conf
+    owner: root
+    group: root
+    mode: "0640"
+  notify: Restart auditd
+  tags:
+    - audit
+    - config
+
+- name: Inspect current kernel audit arguments
+  ansible.builtin.command:
+    cmd: grubby --info=ALL
+  register: audit_grubby_info
+  changed_when: false
+  tags:
+    - audit
+    - boot
+
+- name: Enable kernel auditing at boot
+  ansible.builtin.command:
+    argv:
+      - grubby
+      - --update-kernel
+      - ALL
+      - "--args=audit=1 audit_backlog_limit={{ audit_backlog_limit }}"
+  when: "'audit=1' not in audit_grubby_info.stdout or ('audit_backlog_limit=' ~ audit_backlog_limit) not in audit_grubby_info.stdout"
+  changed_when: true
+  tags:
+    - audit
+    - boot
+
+- name: Discover privileged binaries
+  ansible.builtin.shell: >-
+    find /usr/bin /usr/sbin -xdev -type f
+    \( -perm -4000 -o -perm -2000 \) | sort -u
+  args:
+    executable: /bin/bash
+  register: audit_privileged_binaries
+  changed_when: false
+  tags:
+    - audit
+    - rules
+
+- name: Deploy audit rules
+  ansible.builtin.template:
+    src: 99-cis.rules.j2
+    dest: /etc/audit/rules.d/99-cis.rules
+    owner: root
+    group: root
+    mode: "0640"
+  vars:
+    audit_privileged_paths: "{{ audit_privileged_binaries.stdout_lines }}"
+  notify:
+    - Load audit rules
+    - Restart auditd
+  tags:
+    - audit
+    - rules
