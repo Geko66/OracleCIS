@@ -1124,7 +1124,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -1173,7 +1173,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -1222,7 +1222,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -1273,7 +1273,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -1322,7 +1322,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -1371,7 +1371,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -1420,7 +1420,7 @@
            [ -n "$l_option_value" ] && \
            a_output+=(" - \"$l_option\" is set to: \"$l_option_value\"" \
            " in: \"$l_file\"")
-           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac
+           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            if [ "${#a_output[@]}" -le "0" ]; then
            l_file="$(readlink -e /etc/"$l_conf_file" |
@@ -1472,7 +1472,7 @@
            [ -n "$l_option_value" ] && \
            a_output+=(" - \"$l_option\" is set to: \"$l_option_value\"" \
            " in: \"$l_file\"")
-           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac
+           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            if [ "${#a_output[@]}" -le "0" ]; then
            l_file="$(readlink -e /etc/"$l_conf_file" |
@@ -3093,7 +3093,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3142,7 +3142,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3191,7 +3191,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3240,7 +3240,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3289,7 +3289,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3338,7 +3338,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3387,7 +3387,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3436,7 +3436,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3485,7 +3485,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3534,7 +3534,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3583,7 +3583,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3632,7 +3632,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3681,7 +3681,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3730,7 +3730,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3779,7 +3779,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3828,7 +3828,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3877,7 +3877,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3926,7 +3926,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -3975,7 +3975,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -4024,7 +4024,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -4073,7 +4073,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -4122,7 +4122,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -4171,7 +4171,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -4220,7 +4220,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -4269,7 +4269,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -6256,7 +6256,7 @@
            [ -n "$l_option_value" ] && \
            a_output+=(" - \"$l_option\" is set to: \"$l_option_value\"" \
            " in: \"$l_file\"")
-           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac
+           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            if [ "${#a_output[@]}" -le "0" ]; then
            l_file="$(readlink -e /etc/"$l_conf_file" |
@@ -6304,7 +6304,7 @@
            [ -n "$l_option_value" ] && \
            a_output+=(" - \"$l_option\" is set to: \"$l_option_value\"" \
            " in: \"$l_file\"")
-           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac
+           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            if [ "${#a_output[@]}" -le "0" ]; then
            l_file="$(readlink -e /etc/"$l_conf_file" |
@@ -6352,7 +6352,7 @@
            [ -n "$l_option_value" ] && \
            a_output+=(" - \"$l_option\" is set to: \"$l_option_value\"" \
            " in: \"$l_file\"")
-           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac
+           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            if [ "${#a_output[@]}" -le "0" ]; then
            l_file="$(readlink -e /etc/"$l_conf_file" |
@@ -6416,7 +6416,7 @@
            gawk '/\['"$l_block"'\]/{a=1;next}/\[/{a=0}a' "$l_file" \
            2>/dev/null | grep -Poi -- \
            '^\h*(URL|ServerKeyFile|ServerCertificateFile|TrustedCertificateFile)\h*=\h*\H+\b'
-           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac
+           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
           }
 
@@ -6547,7 +6547,7 @@
            [ -n "$l_option_value" ] && \
            a_output+=(" - \"$l_option\" is set to: \"$l_option_value\"" \
            " in: \"$l_file\"")
-           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac
+           done < <("$l_analyze_cmd" cat-config "$l_conf_file" | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            if [ "${#a_output[@]}" -le "0" ]; then
            l_file="$(readlink -e /etc/"$l_conf_file" |
@@ -7801,7 +7801,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -7954,7 +7954,7 @@
            l_file="$(readlink -e "${l_fname//# /}")"
            [ -n "$l_file" ] && ! grep -Psiq -- '(^|\h+)'"$l_file"'\b' \
            <<< "${a_files[*]}" && a_files+=("$l_file")
-           done < <("$l_systemdsysctl" --cat-config | tac
+           done < <("$l_systemdsysctl" --cat-config | tac |
            grep -Pio -- '^\h*#\h*\/[^#\n\r\h]+\.conf\b')
            for l_file in "${a_files[@]}"; do
            l_opt="$(grep -Poi '^\h*'"$l_grep"'\h*=\h*\H+\b' "$l_file" | tail -n 1)"
@@ -9434,4 +9434,6 @@
       register: audit_6_3_4_10
       changed_when: false
       failed_when: false
+
+
 
