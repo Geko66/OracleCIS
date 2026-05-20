@@ -5816,7 +5816,7 @@
            elif systemctl is-active --quiet systemd-journald; then
            l_output="$l_output\n - journald is in use\n- follow the recommendations in Configure journald subsection only"
            else
-           echo -e â€œunable to determine system loggingâ€
+           echo -e "unable to determine system logging"
            l_output2="$l_output2\n - unable to determine system logging\n- Configure only ONE system logging: rsyslog OR journald"
            fi
            if [ -z "$l_output2" ]; then # Provide audit results
