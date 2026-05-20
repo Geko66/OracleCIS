@@ -84,6 +84,15 @@ Alias equivalente:
 ansible-playbook playbooks/oscap-scan.yml
 ```
 
+Para la auditoria CIS basada en `playbooks/audit.yml`, el playbook ahora genera tambien artefactos locales en HTML y JSON:
+
+```text
+artifacts/audit-report/<host>/latest.html
+artifacts/audit-report/<host>/latest.json
+```
+
+El HTML muestra un dashboard con estados `pass`, `fail`, `review` y `error`.
+
 Los artefactos locales quedan en:
 
 ```text

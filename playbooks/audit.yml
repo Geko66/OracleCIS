@@ -335,41 +335,14 @@
       ansible.builtin.shell:
         cmd: |
           {% raw %}
-          # findmnt -Dkerno fstype | sort -u
-
           #!/usr/bin/env bash
 
           {
+           a_output=() a_output2=() a_output3=() a_module=()
            l_search="$(readlink -e /usr/lib/modules/ || readlink -e /lib/modules/)"
-           a_module=() 
-           while IFS= read -r -d $'\0' l_module_dir; do
-           if [ ! "$(basename "$l_module_dir")" = "nls" ]; then
-           while IFS= read -r -d $'\0' l_module_file; do
-           l_mname="$(basename "$l_module_file" | cut -d'.' -f1)"
-           if [ -f "$l_module_file" ] && ! grep -Psiq -- '\b'"$l_mname"'\b' \
-           <<< "${a_module[*]}"; then
-           a_module+=("$l_mname")
-           fi
-           done < <(find -L "$l_module_dir" -mindepth 1 -maxdepth 1 -type f -print0)
-           fi
-           done < <(find "$l_search"/**/kernel/fs/ -mindepth 1 -maxdepth 1 -type d ! -empty -print0)
-           printf '%s\n' "" "${a_module[@]}"
-          }
-
-          # lsmod
-
-          # modprobe --showconfig | grep -Pi -- '^\h*(blacklist|install)\h+'
-
-          #!/usr/bin/env bash
-
-          {
-           a_check=() a_output=() a_module=() a_output2=() a_output3=()
-           l_search="$(readlink -e /usr/lib/modules/ || readlink -e /lib/modules/)"
-           IFS=$'\n' read -r -d '' -a a_mounted < <(findmnt -Dkerno fstype \
-           | sort -u && printf '\0' )
-           IFS=$'\n' read -r -d '' -a a_lsmod < <(lsmod | awk '{print $1}' && printf '\0' )
-           IFS=$'\n' read -r -d '' -a a_showconfig < <(modprobe --showconfig
-           grep -Pi -- '^\h*(blacklist|install)\h+' && printf '\0')
+           l_mounted="$(findmnt -Dkerno fstype | sort -u 2>/dev/null || true)"
+           l_lsmod="$(lsmod | awk 'NR > 1 {print $1}' 2>/dev/null || true)"
+           l_showconfig="$(modprobe --showconfig 2>/dev/null || true)"
            while IFS= read -r -d $'\0' l_module_dir; do
            if [ ! "$(basename "$l_module_dir")" = "nls" ]; then
            while IFS= read -r -d $'\0' l_module_file; do
@@ -381,12 +354,12 @@
            fi
            done < <(find "$l_search"/**/kernel/fs/ -mindepth 1 -maxdepth 1 -type d ! -empty -print0)
            for l_module in "${a_module[@]}"; do
-           if grep -Psoiq -- '\b'"$l_module"'\b' <<< "${a_mounted[*]}"; then
+           if grep -Psoiq -- '\b'"$l_module"'\b' <<< "$l_mounted"; then
            a_output+=(" - \"$l_module\"")
-           elif grep -Psoiq -- '\b'"$l_module"'\b' <<< "${a_lsmod[*]}"; then
+           elif grep -Psoiq -- '\b'"$l_module"'\b' <<< "$l_lsmod"; then
            a_output2+=(" - \"$l_module\"")
-           elif ! grep -Psioq -- '\binstall\h+'"${l_module//-/_}"'\h+\H+\b' <<< "${a_showconfig[*]}" |
-           ! grep -Psioq -- '\bblacklist\h+'"${l_module//-/_}"'\b' <<< "${a_showconfig[*]}"; then
+           elif ! grep -Psioq -- '\binstall\h+'"${l_module//-/_}"'\h+\H+\b' <<< "$l_showconfig" && \
+           ! grep -Psioq -- '\bblacklist\h+'"${l_module//-/_}"'\b' <<< "$l_showconfig"; then
            a_output3+=(" - \"$l_module\"")
            fi
            done
@@ -1087,7 +1060,13 @@
       ansible.builtin.shell:
         cmd: |
           {% raw %}
-          grep -Psi -- '^\h*\*\h+hard\h+core\b' /etc/security/limits.conf /etc/security/limits.d/*
+          shopt -s nullglob
+          a_limit_files=()
+          [ -f /etc/security/limits.conf ] && a_limit_files+=("/etc/security/limits.conf")
+          for l_limit_file in /etc/security/limits.d/*; do
+          [ -f "$l_limit_file" ] && a_limit_files+=("$l_limit_file")
+          done
+          [ "${#a_limit_files[@]}" -gt 0 ] && grep -Psi -- '^\h*\*\h+hard\h+core\b' "${a_limit_files[@]}"
           {% endraw %}
       args:
         executable: /bin/bash
@@ -4678,13 +4657,24 @@
       ansible.builtin.shell:
         cmd: |
           {% raw %}
+          l_banner_file="$(sshd -T | awk '$1 == "banner" {print $2}')"
+
           sshd -T | grep -Pi -- '^banner\h+\/\H+'
 
           sshd -T -C user=sshuser | grep -Pi -- '^banner\h+\/\H+'
 
-          [ -e "$(sshd -T | awk '$1 == "banner" {print $2}')" ] && cat "$(sshd -T | awk '$1 == "banner" {print $2}')"
+          [ -n "$l_banner_file" ] && [ -e "$l_banner_file" ] && cat "$l_banner_file"
 
-          grep -Psi -- "(\\\v|\\\r|\\\m|\\\s|\b$(grep '^ID=' /etc/os-release | cut -d= -f2 | sed -e 's/"//g')\b)" "$(sshd -T | awk '$1 == "banner" {print $2}')"
+          [ -n "$l_banner_file" ] && [ -e "$l_banner_file" ] && \
+          grep -Psi -- '(\\v|\\r|\\m|\\s)' "$l_banner_file"
+
+          if [ -n "$l_banner_file" ] && [ -e "$l_banner_file" ]; then
+          while IFS= read -r l_os_value; do
+          [ -n "$l_os_value" ] || continue
+          grep -Fqi -- "$l_os_value" "$l_banner_file" && \
+          printf 'Banner contains OS information: %s\n' "$l_os_value"
+          done < <(awk -F= '/^(ID|VERSION|PRETTY_NAME|CPE_NAME)=/ {gsub(/"/, "", $2); print $2}' /etc/os-release)
+          fi
           {% endraw %}
       args:
         executable: /bin/bash
@@ -5138,7 +5128,7 @@
       ansible.builtin.shell:
         cmd: |
           {% raw %}
-          grep -P -- '\b(pam_pwquality\.so|pam_pwhistory\.so|pam_faillock\.so|pam_unix\.so)\b' /etc/authselect/"$(head -1 /etc/authselect/authselect.conf)"/{system,password}-auth
+          grep -P -- '\b(pam_pwquality\.so|pam_pwhistory\.so|pam_faillock\.so|pam_unix\.so)\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
           {% endraw %}
       args:
         executable: /bin/bash
@@ -5414,7 +5404,13 @@
       ansible.builtin.shell:
         cmd: |
           {% raw %}
-          grep -Psi -- '^\h*enforce_for_root\b' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
+          shopt -s nullglob
+          a_pwquality_files=()
+          [ -f /etc/security/pwquality.conf ] && a_pwquality_files+=("/etc/security/pwquality.conf")
+          for l_pwquality_file in /etc/security/pwquality.conf.d/*.conf; do
+          [ -f "$l_pwquality_file" ] && a_pwquality_files+=("$l_pwquality_file")
+          done
+          [ "${#a_pwquality_files[@]}" -gt 0 ] && grep -Psi -- '^\h*enforce_for_root\b' "${a_pwquality_files[@]}"
           {% endraw %}
       args:
         executable: /bin/bash
@@ -7697,15 +7693,13 @@
       ansible.builtin.shell:
         cmd: |
           {% raw %}
-          # grep ^repo_gpgcheck /etc/dnf/dnf.conf
-
-          # REPO_URL="fedoraproject.org"
-
-          # for repo in $(grep -l "repo_gpgcheck=0" /etc/yum.repos.d/* ); do
-           if ! grep "${REPO_URL}" "${repo}" &>/dev/null; then
-           echo "${repo}"
-           fi
+          shopt -s nullglob
+          a_repo_files=()
+          [ -f /etc/dnf/dnf.conf ] && a_repo_files+=("/etc/dnf/dnf.conf")
+          for l_repo_file in /etc/yum.repos.d/*.repo; do
+          [ -f "$l_repo_file" ] && a_repo_files+=("$l_repo_file")
           done
+          [ "${#a_repo_files[@]}" -gt 0 ] && grep -Psi -- '^\h*repo_gpgcheck\h*=\h*1\b' "${a_repo_files[@]}"
           {% endraw %}
       args:
         executable: /bin/bash
@@ -9379,6 +9373,7 @@
            l_maxperm="$( printf '%o' $(( 0777 & ~$l_perm_mask )) )"
            a_audit_tools=("/sbin/auditctl" "/sbin/aureport" "/sbin/ausearch" "/sbin/autrace" "/sbin/auditd" "/sbin/augenrules")
            for l_audit_tool in "${a_audit_tools[@]}"; do
+           [ -e "$l_audit_tool" ] || continue
            l_mode="$(stat -Lc '%#a' "$l_audit_tool")"
            if [ $(( "$l_mode" & "$l_perm_mask" )) -gt 0 ]; then
            l_output2="$l_output2\n - Audit tool \"$l_audit_tool\" is mode: \"$l_mode\" and should be mode: \"$l_maxperm\" or more restrictive"
@@ -9411,7 +9406,13 @@
         msg: Ensure audit tools owner is configured [6.3.4.9]
     - name: Execute audit commands for 6.3.4.9
       ansible.builtin.shell:
-        cmd: "stat -Lc \"%n %U\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/augenrules | awk '$2 != \"root\" {print}'"
+        cmd: |
+          {% raw %}
+          for l_audit_tool in /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/augenrules; do
+          [ -e "$l_audit_tool" ] || continue
+          stat -Lc "%n %U" "$l_audit_tool"
+          done | awk '$2 != "root" {print}'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_4_9
@@ -9428,12 +9429,165 @@
         msg: Ensure audit tools group owner is configured [6.3.4.10]
     - name: Execute audit commands for 6.3.4.10
       ansible.builtin.shell:
-        cmd: "stat -Lc \"%n %G\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/augenrules | awk '$2 != \"root\" {print}'"
+        cmd: |
+          {% raw %}
+          for l_audit_tool in /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/augenrules; do
+          [ -e "$l_audit_tool" ] || continue
+          stat -Lc "%n %G" "$l_audit_tool"
+          done | awk '$2 != "root" {print}'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_4_10
       changed_when: false
       failed_when: false
+
+  - name: Set audit report artifact paths
+    ansible.builtin.set_fact:
+      audit_report_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
+      audit_report_artifact_dir: "{{ playbook_dir }}/../artifacts/audit-report/{{ inventory_hostname }}"
+      audit_report_json_path: "{{ playbook_dir }}/../artifacts/audit-report/{{ inventory_hostname }}/audit-{{ ansible_date_time.iso8601_basic_short }}.json"
+      audit_report_html_path: "{{ playbook_dir }}/../artifacts/audit-report/{{ inventory_hostname }}/audit-{{ ansible_date_time.iso8601_basic_short }}.html"
+
+  - name: Ensure audit report artifact directory exists
+    ansible.builtin.file:
+      path: "{{ audit_report_artifact_dir }}"
+      state: directory
+      mode: "0755"
+    delegate_to: localhost
+    become: false
+
+  - name: Extract audit control metadata from the playbook
+    ansible.builtin.shell:
+      cmd: |
+        awk '
+          /msg: .* \[[0-9.]+\]$/ {
+            line=$0
+            sub(/^[[:space:]]*msg: /, "", line)
+            control=line
+            sub(/^.* \[/, "", control)
+            sub(/\]$/, "", control)
+            title=line
+            sub(/ \[[0-9.]+\]$/, "", title)
+            pending_title=title
+            pending_control=control
+            next
+          }
+          /^[[:space:]]*register: audit_/ && pending_control != "" {
+            printf "%s\t%s\t%s\n", $2, pending_control, pending_title
+            pending_title=""
+            pending_control=""
+          }
+        ' "{{ playbook_dir }}/audit.yml"
+    register: audit_metadata_raw
+    changed_when: false
+    delegate_to: localhost
+    become: false
+
+  - name: Build audit control metadata map
+    ansible.builtin.set_fact:
+      audit_control_metadata: "{{ audit_control_metadata | default({}) | combine({ parts[0]: {'control_id': parts[1], 'title': parts[2]} }) }}"
+    vars:
+      parts: "{{ item.split('\t') }}"
+    loop: "{{ audit_metadata_raw.stdout_lines }}"
+    when: item | length > 0
+
+  - name: Build structured audit results
+    ansible.builtin.set_fact:
+      audit_report_items: "{{ (audit_report_items | default([])) + [audit_report_item] }}"
+    vars:
+      audit_meta: "{{ audit_control_metadata.get(item.key, {}) }}"
+      audit_stdout: "{{ item.value.stdout | default('') }}"
+      audit_stderr: "{{ item.value.stderr | default('') }}"
+      audit_rc: "{{ item.value.rc | default(0) | int }}"
+      audit_status: >-
+        {% if audit_stderr is search('syntax error|cannot statx|No such file or directory') or audit_rc >= 2 %}
+        error
+        {% elif audit_stdout is search('\\*\\* FAIL \\*\\*') %}
+        fail
+        {% elif audit_stdout is search('\\*\\* PASS \\*\\*') %}
+        pass
+        {% elif audit_rc == 0 and (audit_stderr | length == 0) %}
+        pass
+        {% else %}
+        review
+        {% endif %}
+      audit_summary: >-
+        {% if audit_stdout | length > 0 %}
+        {{ audit_stdout | regex_replace('\r?\n+', ' ') | trim | truncate(180, True) }}
+        {% elif audit_stderr | length > 0 %}
+        {{ audit_stderr | regex_replace('\r?\n+', ' ') | trim | truncate(180, True) }}
+        {% elif audit_rc != 0 %}
+        Command returned rc={{ audit_rc }} without textual output.
+        {% else %}
+        Command completed without textual output.
+        {% endif %}
+      audit_report_item:
+        register_name: "{{ item.key }}"
+        control_id: "{{ audit_meta.control_id | default(item.key | regex_replace('^audit_', '') | regex_replace('_', '.')) }}"
+        title: "{{ audit_meta.title | default(item.key) }}"
+        rc: "{{ audit_rc }}"
+        status: "{{ audit_status | trim }}"
+        summary: "{{ audit_summary | trim }}"
+        stdout: "{{ audit_stdout }}"
+        stderr: "{{ audit_stderr }}"
+        cmd: "{{ item.value.cmd | default('') }}"
+        start: "{{ item.value.start | default('') }}"
+        end: "{{ item.value.end | default('') }}"
+        delta: "{{ item.value.delta | default('') }}"
+    loop: "{{ vars | dict2items | selectattr('key', 'match', '^audit_[0-9_]+$') | sort(attribute='key') }}"
+
+  - name: Build audit report summary
+    ansible.builtin.set_fact:
+      audit_report_summary:
+        generated_at: "{{ ansible_date_time.iso8601 }}"
+        inventory_hostname: "{{ inventory_hostname }}"
+        total: "{{ audit_report_items | length }}"
+        pass: "{{ audit_report_items | selectattr('status', 'equalto', 'pass') | list | length }}"
+        fail: "{{ audit_report_items | selectattr('status', 'equalto', 'fail') | list | length }}"
+        review: "{{ audit_report_items | selectattr('status', 'equalto', 'review') | list | length }}"
+        error: "{{ audit_report_items | selectattr('status', 'equalto', 'error') | list | length }}"
+
+  - name: Write structured audit JSON report
+    ansible.builtin.copy:
+      dest: "{{ audit_report_json_path }}"
+      content: "{{ {'summary': audit_report_summary, 'items': audit_report_items} | to_nice_json }}"
+      mode: "0644"
+    delegate_to: localhost
+    become: false
+
+  - name: Render audit HTML report
+    ansible.builtin.template:
+      src: templates/cis-audit-report.html.j2
+      dest: "{{ audit_report_html_path }}"
+      mode: "0644"
+    delegate_to: localhost
+    become: false
+
+  - name: Update latest audit JSON report
+    ansible.builtin.copy:
+      src: "{{ audit_report_json_path }}"
+      dest: "{{ audit_report_artifact_dir }}/latest.json"
+      remote_src: true
+      mode: "0644"
+    delegate_to: localhost
+    become: false
+
+  - name: Update latest audit HTML report
+    ansible.builtin.copy:
+      src: "{{ audit_report_html_path }}"
+      dest: "{{ audit_report_artifact_dir }}/latest.html"
+      remote_src: true
+      mode: "0644"
+    delegate_to: localhost
+    become: false
+
+  - name: Show generated audit report paths
+    ansible.builtin.debug:
+      msg:
+        - "Audit JSON report: {{ audit_report_json_path }}"
+        - "Audit HTML report: {{ audit_report_html_path }}"
+        - "Latest HTML report: {{ audit_report_artifact_dir }}/latest.html"
 
 
 
