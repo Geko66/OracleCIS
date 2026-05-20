@@ -18,7 +18,8 @@
         msg: Ensure cramfs kernel module is not available [1.1.1.1]
     - name: Execute audit commands for 1.1.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -45,6 +46,7 @@
           # blacklist cramfs
 
           # install cramfs /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_1
@@ -61,7 +63,8 @@
         msg: Ensure freevxfs kernel module is not available [1.1.1.2]
     - name: Execute audit commands for 1.1.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -88,6 +91,7 @@
           # blacklist freevxfs
 
           # install freevxfs /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_2
@@ -104,7 +108,8 @@
         msg: Ensure hfs kernel module is not available [1.1.1.3]
     - name: Execute audit commands for 1.1.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -131,6 +136,7 @@
           # blacklist hfs
 
           # install hfs /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_3
@@ -147,7 +153,8 @@
         msg: Ensure hfsplus kernel module is not available [1.1.1.4]
     - name: Execute audit commands for 1.1.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -174,6 +181,7 @@
           # blacklist hfsplus
 
           # install hfsplus /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_4
@@ -190,7 +198,8 @@
         msg: Ensure jffs2 kernel module is not available [1.1.1.5]
     - name: Execute audit commands for 1.1.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -217,6 +226,7 @@
           # blacklist jffs2
 
           # install jffs2 /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_5
@@ -233,7 +243,8 @@
         msg: Ensure firewire-core kernel module is not available [1.1.1.9]
     - name: Execute audit commands for 1.1.1.9
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -260,6 +271,7 @@
           # blacklist firewire_core
 
           # install firewire_core /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_9
@@ -276,7 +288,8 @@
         msg: Ensure usb-storage kernel module is not available [1.1.1.10]
     - name: Execute audit commands for 1.1.1.10
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -303,6 +316,7 @@
           # blacklist usb_storage
 
           # install usb_storage /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_10
@@ -319,7 +333,8 @@
         msg: Ensure unused filesystems kernel modules are not available [1.1.1.11]
     - name: Execute audit commands for 1.1.1.11
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # findmnt -Dkerno fstype | sort -u
 
           #!/usr/bin/env bash
@@ -382,6 +397,7 @@
            [ "${#a_output3[@]}" -gt 0 ] && printf '%s\n' "" \
            "- There are \"${#a_output3[@]}\" Kernel modules currently loadable:" "${a_output3[@]}"
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_11
@@ -398,10 +414,12 @@
         msg: Ensure /tmp is tmpfs or a separate partition [1.1.2.1.1]
     - name: Execute audit commands for 1.1.2.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /tmp
 
           systemctl is-enabled tmp.mount
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_1_1
@@ -418,8 +436,10 @@
         msg: Ensure nodev option set on /tmp partition [1.1.2.1.2]
     - name: Execute audit commands for 1.1.2.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /tmp | grep -v nodev
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_1_2
@@ -436,8 +456,10 @@
         msg: Ensure nosuid option set on /tmp partition [1.1.2.1.3]
     - name: Execute audit commands for 1.1.2.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /tmp | grep -v nosuid
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_1_3
@@ -454,8 +476,10 @@
         msg: Ensure noexec option set on /tmp partition [1.1.2.1.4]
     - name: Execute audit commands for 1.1.2.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /tmp | grep -v noexec
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_1_4
@@ -472,8 +496,10 @@
         msg: Ensure /dev/shm is tmpfs or a separate partition [1.1.2.2.1]
     - name: Execute audit commands for 1.1.2.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /dev/shm
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_2_1
@@ -490,8 +516,10 @@
         msg: Ensure nodev option set on /dev/shm partition [1.1.2.2.2]
     - name: Execute audit commands for 1.1.2.2.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /dev/shm | grep -v 'nodev'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_2_2
@@ -508,8 +536,10 @@
         msg: Ensure nosuid option set on /dev/shm partition [1.1.2.2.3]
     - name: Execute audit commands for 1.1.2.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /dev/shm | grep -v 'nosuid'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_2_3
@@ -526,8 +556,10 @@
         msg: Ensure noexec option set on /dev/shm partition [1.1.2.2.4]
     - name: Execute audit commands for 1.1.2.2.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /dev/shm | grep -v 'noexec'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_2_4
@@ -612,8 +644,10 @@
         msg: Ensure nodev option set on /var/tmp partition [1.1.2.5.2]
     - name: Execute audit commands for 1.1.2.5.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/tmp | grep -v nodev
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_5_2
@@ -630,8 +664,10 @@
         msg: Ensure nosuid option set on /var/tmp partition [1.1.2.5.3]
     - name: Execute audit commands for 1.1.2.5.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/tmp | grep -v nosuid
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_5_3
@@ -648,8 +684,10 @@
         msg: Ensure noexec option set on /var/tmp partition [1.1.2.5.4]
     - name: Execute audit commands for 1.1.2.5.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/tmp | grep -v noexec
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_5_4
@@ -666,8 +704,10 @@
         msg: Ensure nodev option set on /var/log partition [1.1.2.6.2]
     - name: Execute audit commands for 1.1.2.6.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/log | grep -v nodev
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_6_2
@@ -684,8 +724,10 @@
         msg: Ensure nosuid option set on /var/log partition [1.1.2.6.3]
     - name: Execute audit commands for 1.1.2.6.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/log | grep -v nosuid
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_6_3
@@ -702,8 +744,10 @@
         msg: Ensure noexec option set on /var/log partition [1.1.2.6.4]
     - name: Execute audit commands for 1.1.2.6.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/log | grep -v noexec
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_6_4
@@ -720,8 +764,10 @@
         msg: Ensure nodev option set on /var/log/audit partition [1.1.2.7.2]
     - name: Execute audit commands for 1.1.2.7.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/log/audit | grep -v nodev
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_7_2
@@ -738,8 +784,10 @@
         msg: Ensure nosuid option set on /var/log/audit partition [1.1.2.7.3]
     - name: Execute audit commands for 1.1.2.7.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/log/audit | grep -v nosuid
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_7_3
@@ -756,8 +804,10 @@
         msg: Ensure noexec option set on /var/log/audit partition [1.1.2.7.4]
     - name: Execute audit commands for 1.1.2.7.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/log/audit | grep -v noexec
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_7_4
@@ -774,12 +824,14 @@
         msg: Ensure GPG keys are configured [1.2.1.1]
     - name: Execute audit commands for 1.2.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -r gpgkey /etc/yum.repos.d/* /etc/dnf/dnf.conf
 
           # for RPM_PACKAGE in $(rpm -q gpg-pubkey); do
 
           for PACKAGE in $(find /etc/pki/rpm-gpg/ -type f -exec rpm -qf {} \; | sort -u); do rpm -q --queryformat "%{NAME}-%{VERSION} %{PACKAGER} %{SUMMARY}\\n" "${PACKAGE}"; done
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_2_1_1
@@ -796,10 +848,12 @@
         msg: Ensure gpgcheck is configured [1.2.1.2]
     - name: Execute audit commands for 1.2.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*gpgcheck\h*=\h*(1|true|yes)\b' /etc/dnf/dnf.conf
 
           grep -Pris -- '^\h*gpgcheck\h*=\h*(0|[2-9]|[1-9][0-9]+|false|no)\b' /etc/yum.repos.d/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_2_1_2
@@ -816,10 +870,12 @@
         msg: Ensure package manager repositories are configured [1.2.1.4]
     - name: Execute audit commands for 1.2.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           dnf repolist
 
           cat /etc/yum.repos.d/*.repo
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_2_1_4
@@ -836,8 +892,10 @@
         msg: Ensure updates, patches, and additional security software are installed [1.2.2.1]
     - name: Execute audit commands for 1.2.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           dnf check-update
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_2_2_1
@@ -854,8 +912,10 @@
         msg: Ensure SELinux is installed [1.3.1.1]
     - name: Execute audit commands for 1.3.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q libselinux
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_3_1_1
@@ -872,10 +932,12 @@
         msg: Ensure SELinux is not disabled in bootloader configuration [1.3.1.2]
     - name: Execute audit commands for 1.3.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grubby --info=ALL | grep -Po '(selinux|enforcing)=0\b'
 
           grep -Prs -- '^\h*([^#\n\r]+\h+)?kernelopts=([^#\n\r]+\h+)?(selinux|enforcing)=0\b' /boot/grub2 /boot/efi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_3_1_2
@@ -892,8 +954,10 @@
         msg: Ensure SELinux policy is configured [1.3.1.3]
     - name: Execute audit commands for 1.3.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*SELINUXTYPE\h*=\h*(targeted|mls)\b' /etc/selinux/config
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_3_1_3
@@ -910,10 +974,12 @@
         msg: Ensure the SELinux mode is not disabled [1.3.1.4]
     - name: Execute audit commands for 1.3.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*SELINUX=(enforcing|permissive)\b' /etc/selinux/config
 
           getenforce
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_3_1_4
@@ -930,8 +996,10 @@
         msg: Ensure the MCS Translation Service (mcstrans) is not installed [1.3.1.7]
     - name: Execute audit commands for 1.3.1.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q mcstrans
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_3_1_7
@@ -948,8 +1016,10 @@
         msg: Ensure SETroubleshoot is not installed [1.3.1.8]
     - name: Execute audit commands for 1.3.1.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q setroubleshoot
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_3_1_8
@@ -966,7 +1036,8 @@
         msg: Ensure bootloader password is set [1.4.1]
     - name: Execute audit commands for 1.4.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -977,6 +1048,7 @@
           }
 
           # GRUB2_PASSWORD=grub.pbkdf2.sha512
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_4_1
@@ -993,8 +1065,10 @@
         msg: Ensure access to bootloader config is configured [1.4.2]
     - name: Execute audit commands for 1.4.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           find -L /boot/grub2/ -mindepth 1 -maxdepth 1 -type f -exec stat -Lc '%n:%#a:%U:%G' {} +
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_4_2
@@ -1011,8 +1085,10 @@
         msg: Ensure core file size is configured [1.5.1]
     - name: Execute audit commands for 1.5.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*\*\h+hard\h+core\b' /etc/security/limits.conf /etc/security/limits.d/*
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_1
@@ -1029,7 +1105,8 @@
         msg: Ensure fs.protected_hardlinks is configured [1.5.2]
     - name: Execute audit commands for 1.5.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl fs.protected_hardlinks
 
           #!/usr/bin/env bash
@@ -1060,6 +1137,7 @@
           }
 
           # - "fs.protected_hardlinks = 1" is set in: "/etc/sysctl.d/60-fs_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_2
@@ -1076,7 +1154,8 @@
         msg: Ensure fs.suid_dumpable is configured [1.5.4]
     - name: Execute audit commands for 1.5.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl fs.suid_dumpable
 
           #!/usr/bin/env bash
@@ -1107,6 +1186,7 @@
           }
 
           # - "fs.suid_dumpable = 0" is set in: "/etc/sysctl.d/60-fs_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_4
@@ -1123,7 +1203,8 @@
         msg: Ensure kernel.dmesg_restrict is configured [1.5.5]
     - name: Execute audit commands for 1.5.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl kernel.dmesg_restrict
 
           #!/usr/bin/env bash
@@ -1156,6 +1237,7 @@
           }
 
           # - "kernel.dmesg_restrict" is set to: "1" in: "/etc/sysctl.d/60-kernel_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_5
@@ -1172,7 +1254,8 @@
         msg: Ensure kernel.kptr_restrict is configured [1.5.6]
     - name: Execute audit commands for 1.5.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl kernel.kptr_restrict
 
           #!/usr/bin/env bash
@@ -1203,6 +1286,7 @@
           }
 
           # - "kernel.kptr_restrict" is set to: "1" in: "/etc/sysctl.d/60-kernel_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_6
@@ -1219,7 +1303,8 @@
         msg: Ensure kernel.yama.ptrace_scope is configured [1.5.7]
     - name: Execute audit commands for 1.5.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl kernel.yama.ptrace_scope
 
           #!/usr/bin/env bash
@@ -1250,6 +1335,7 @@
           }
 
           # - "kernel.yama.ptrace_scope" is set to: "1" in: "/etc/sysctl.d/60-kernel_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_7
@@ -1266,7 +1352,8 @@
         msg: Ensure kernel.randomize_va_space is configured [1.5.8]
     - name: Execute audit commands for 1.5.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl kernel.randomize_va_space
 
           #!/usr/bin/env bash
@@ -1299,6 +1386,7 @@
           }
 
           # - "kernel.randomize_va_space" is set to: "2" in: "/etc/sysctl.d/60-kernel_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_8
@@ -1315,7 +1403,8 @@
         msg: Ensure systemd-coredump ProcessSizeMax is configured [1.5.9]
     - name: Execute audit commands for 1.5.9
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1347,6 +1436,7 @@
           }
 
           # - "ProcessSizeMax" is set to: "0" in: "/etc/systemd/coredump.conf.d/60-coredump.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_9
@@ -1363,7 +1453,8 @@
         msg: Ensure systemd-coredump Storage is configured [1.5.10]
     - name: Execute audit commands for 1.5.10
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           #!/usr/bin/env bash
@@ -1397,6 +1488,7 @@
           }
 
           # - "Storage" is set to: "none" in: "/etc/systemd/coredump.conf.d/60-coredump.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_10
@@ -1430,10 +1522,12 @@
         msg: Ensure system wide crypto policy disables sha1 hash and signature support [1.6.2]
     - name: Execute audit commands for 1.6.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           gawk -F= '($1~/^\s*(hash|sign)\s*$/ && $2~/SHA1/ && $2!~/^\s*\-\s*([^#\n\r]+)?SHA1/){print}' /etc/crypto-policies/state/CURRENT.pol
 
           grep -Psi -- '^\h*sha1_in_certs\h*=\h*' /etc/crypto-policies/state/CURRENT.pol
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_6_2
@@ -1467,10 +1561,12 @@
         msg: Ensure system wide crypto policy disables cbc for ssh [1.6.4]
     - name: Execute audit commands for 1.6.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*cipher\h*=\h*([^#\n\r]+)?-CBC\b' /etc/crypto-policies/state/CURRENT.pol
 
           grep -Pi -- '^\h*cipher@(lib|open)ssh(-server|-client)?\h*=\h*([^#\n\r]+)?-CBC\b' /etc/crypto-policies/state/CURRENT.pol
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_6_4
@@ -1487,7 +1583,8 @@
         msg: Ensure /etc/motd is configured [1.7.1]
     - name: Execute audit commands for 1.7.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1513,6 +1610,7 @@
            echo -e "\n- Audit Result:\n ** FAIL **\n - Reason(s) for audit failure:\n$l_output2\n"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_7_1
@@ -1529,10 +1627,12 @@
         msg: Ensure /etc/issue is configured [1.7.2]
     - name: Execute audit commands for 1.7.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           cat /etc/issue
 
           grep -Psi "(\\\v|\\\r|\\\m|\\\s|\b$(grep '^ID=' /etc/os-release | cut -d= -f2 | sed -e 's/"//g')\b)" /etc/issue
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_7_2
@@ -1549,10 +1649,12 @@
         msg: Ensure /etc/issue.net is configured [1.7.3]
     - name: Execute audit commands for 1.7.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           cat /etc/issue.net
 
           grep -Psi "(\\\v|\\\r|\\\m|\\\s|\b$(grep '^ID=' /etc/os-release | cut -d= -f2 | sed -e 's/"//g')\b)" /etc/issue.net
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_7_3
@@ -1569,8 +1671,10 @@
         msg: Ensure access to /etc/motd is configured [1.7.4]
     - name: Execute audit commands for 1.7.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           [ -e /etc/motd ] && stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: { %g/ %G)' /etc/motd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_7_4
@@ -1587,8 +1691,10 @@
         msg: Ensure access to /etc/issue is configured [1.7.5]
     - name: Execute audit commands for 1.7.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: { %g/ %G)' /etc/issue
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_7_5
@@ -1605,8 +1711,10 @@
         msg: Ensure access to /etc/issue.net is configured [1.7.6]
     - name: Execute audit commands for 1.7.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: { %g/ %G)' /etc/issue.net
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_7_6
@@ -1623,7 +1731,8 @@
         msg: Ensure GDM login banner is configured [1.8.1]
     - name: Execute audit commands for 1.8.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           gsettings writable org.gnome.login-screen banner-message-enable
 
           gsettings writable org.gnome.login-screen banner-message-text
@@ -1631,6 +1740,7 @@
           gsettings get org.gnome.login-screen banner-message-enable
 
           gsettings get org.gnome.login-screen banner-message-text
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_8_1
@@ -1647,10 +1757,12 @@
         msg: Ensure GDM disable-user-list is configured [1.8.2]
     - name: Execute audit commands for 1.8.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           gsettings writable org.gnome.login-screen disable-user-list
 
           gsettings get org.gnome.login-screen disable-user-list
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_8_2
@@ -1667,7 +1779,8 @@
         msg: Ensure GDM screen lock is configured [1.8.3]
     - name: Execute audit commands for 1.8.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           gsettings writable org.gnome.desktop.session idle-delay
 
           gsettings writable org.gnome.desktop.screensaver lock-delay
@@ -1675,6 +1788,7 @@
           gsettings get org.gnome.desktop.screensaver lock-delay
 
           gsettings get org.gnome.desktop.session idle-delay
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_8_3
@@ -1691,7 +1805,8 @@
         msg: Ensure GDM automount is configured [1.8.4]
     - name: Execute audit commands for 1.8.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           gsettings writable org.gnome.desktop.media-handling automount
 
           gsettings writable org.gnome.desktop.media-handling automount-open
@@ -1699,6 +1814,7 @@
           gsettings get org.gnome.desktop.media-handling automount
 
           gsettings get org.gnome.desktop.media-handling automount-open
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_8_4
@@ -1715,10 +1831,12 @@
         msg: Ensure GDM autorun-never is configured [1.8.5]
     - name: Execute audit commands for 1.8.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           gsettings writable org.gnome.desktop.media-handling autorun-never
 
           gsettings get org.gnome.desktop.media-handling autorun-never
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_8_5
@@ -1735,12 +1853,14 @@
         msg: Ensure autofs services are not in use [2.1.1]
     - name: Execute audit commands for 2.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q autofs
 
           systemctl is-enabled autofs.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active autofs.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_1
@@ -1757,12 +1877,14 @@
         msg: Ensure avahi daemon services are not in use [2.1.2]
     - name: Execute audit commands for 2.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q avahi
 
           systemctl is-enabled avahi-daemon.socket avahi-daemon.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active avahi-daemon.socket avahi-daemon.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_2
@@ -1779,10 +1901,12 @@
         msg: Ensure dhcp server services are not in use [2.1.4]
     - name: Execute audit commands for 2.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q kea
 
           systemctl show kea-dhcp-ddns.service kea-dhcp4.service kea-dhcp6.service -p UnitFileState,ActiveState | grep -Pi '=(enabled|active)'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_4
@@ -1799,12 +1923,14 @@
         msg: Ensure dns server services are not in use [2.1.5]
     - name: Execute audit commands for 2.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q bind
 
           systemctl is-enabled named.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active named.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_5
@@ -1821,12 +1947,14 @@
         msg: Ensure dnsmasq services are not in use [2.1.6]
     - name: Execute audit commands for 2.1.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q dnsmasq
 
           systemctl is-enabled dnsmasq.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active dnsmasq.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_6
@@ -1843,12 +1971,14 @@
         msg: Ensure ftp server services are not in use [2.1.7]
     - name: Execute audit commands for 2.1.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q vsftpd
 
           systemctl is-enabled vsftpd.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active vsftpd.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_7
@@ -1865,12 +1995,14 @@
         msg: Ensure message access server services are not in use [2.1.8]
     - name: Execute audit commands for 2.1.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q dovecot cyrus-imapd
 
           systemctl is-enabled dovecot.socket dovecot.service cyrus-imapd.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active dovecot.socket dovecot.service cyrus-imapd.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_8
@@ -1887,12 +2019,14 @@
         msg: Ensure network file system services are not in use [2.1.9]
     - name: Execute audit commands for 2.1.9
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q nfs-utils
 
           systemctl is-enabled nfs-server.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active nfs-server.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_9
@@ -1909,12 +2043,14 @@
         msg: Ensure print server services are not in use [2.1.10]
     - name: Execute audit commands for 2.1.10
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q cups
 
           systemctl is-enabled cups.socket cups.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active cups.socket cups.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_10
@@ -1931,12 +2067,14 @@
         msg: Ensure rpcbind services are not in use [2.1.11]
     - name: Execute audit commands for 2.1.11
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q rpcbind
 
           systemctl is-enabled rpcbind.socket rpcbind.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active rpcbind.socket rpcbind.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_11
@@ -1953,12 +2091,14 @@
         msg: Ensure rsync services are not in use [2.1.12]
     - name: Execute audit commands for 2.1.12
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q rsync-daemon
 
           systemctl is-enabled rsyncd.socket rsyncd.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active rsyncd.socket rsyncd.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_12
@@ -1975,12 +2115,14 @@
         msg: Ensure samba file server services are not in use [2.1.13]
     - name: Execute audit commands for 2.1.13
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q samba
 
           systemctl is-enabled smb.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active smb.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_13
@@ -1997,12 +2139,14 @@
         msg: Ensure snmp services are not in use [2.1.14]
     - name: Execute audit commands for 2.1.14
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q net-snmp
 
           systemctl is-enabled snmpd.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active snmpd.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_14
@@ -2019,10 +2163,12 @@
         msg: Ensure telnet server services are not in use [2.1.15]
     - name: Execute audit commands for 2.1.15
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           systemctl is-enabled telnet.socket 2>/dev/null | grep 'enabled'
 
           systemctl is-active telnet.socket 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_15
@@ -2039,12 +2185,14 @@
         msg: Ensure tftp server services are not in use [2.1.16]
     - name: Execute audit commands for 2.1.16
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q tftp-server
 
           systemctl is-enabled tftp.socket tftp.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active tftp.socket tftp.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_16
@@ -2061,12 +2209,14 @@
         msg: Ensure web proxy server services are not in use [2.1.17]
     - name: Execute audit commands for 2.1.17
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q squid
 
           systemctl is-enabled squid.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active squid.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_17
@@ -2083,12 +2233,14 @@
         msg: Ensure web server services are not in use [2.1.18]
     - name: Execute audit commands for 2.1.18
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q httpd nginx
 
           systemctl show httpd.socket httpd.service -p UnitFileState,ActiveState | grep -Pi '=(enabled|active)'
 
           systemctl show nginx.service -p UnitFileState,ActiveState | grep -Pi '=(enabled|active)'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_18
@@ -2105,7 +2257,8 @@
         msg: Ensure mail transfer agents are configured for local-only mode [2.1.21]
     - name: Execute audit commands for 2.1.21
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2142,6 +2295,7 @@
            [ "${#a_output[@]}" -gt 0 ] && printf '%s\n' "- Correctly set:" "${a_output[@]}"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_21
@@ -2175,8 +2329,10 @@
         msg: Ensure ftp client is not installed [2.2.1]
     - name: Execute audit commands for 2.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q ftp
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_2_1
@@ -2193,8 +2349,10 @@
         msg: Ensure telnet client is not installed [2.2.3]
     - name: Execute audit commands for 2.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q telnet
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_2_3
@@ -2211,8 +2369,10 @@
         msg: Ensure tftp client is not installed [2.2.4]
     - name: Execute audit commands for 2.2.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q tftp
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_2_4
@@ -2229,8 +2389,10 @@
         msg: Ensure time synchronization is in use [2.3.1]
     - name: Execute audit commands for 2.3.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q chrony
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_3_1
@@ -2247,7 +2409,8 @@
         msg: Ensure chrony is configured [2.3.2]
     - name: Execute audit commands for 2.3.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2279,6 +2442,7 @@
            printf '%s\n' "" "- Audit Result:" " ** FAIL **" " - Reason(s) for audit failure:" "${a_output2[@]}"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_3_2
@@ -2295,8 +2459,10 @@
         msg: Ensure chrony is not run as the root user [2.3.3]
     - name: Execute audit commands for 2.3.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*OPTIONS=\"?\h*([^#\n\r]+\h+)?-u\h+root\b' /etc/sysconfig/chronyd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_3_3
@@ -2313,10 +2479,12 @@
         msg: Ensure cron daemon is enabled and active [2.4.1.1]
     - name: Execute audit commands for 2.4.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           systemctl list-unit-files | awk '$1~/^crond?\.service/{print $2}'
 
           systemctl list-units | awk '$1~/^crond?\.service/{print $3}'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_1_1
@@ -2333,8 +2501,10 @@
         msg: Ensure access to /etc/crontab is configured [2.4.1.2]
     - name: Execute audit commands for 2.4.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/crontab
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_1_2
@@ -2351,8 +2521,10 @@
         msg: Ensure access to /etc/cron.hourly is configured [2.4.1.3]
     - name: Execute audit commands for 2.4.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/cron.hourly/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_1_3
@@ -2369,8 +2541,10 @@
         msg: Ensure access to /etc/cron.daily is configured [2.4.1.4]
     - name: Execute audit commands for 2.4.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/cron.daily/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_1_4
@@ -2387,8 +2561,10 @@
         msg: Ensure access to /etc/cron.weekly is configured [2.4.1.5]
     - name: Execute audit commands for 2.4.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/cron.weekly/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_1_5
@@ -2405,8 +2581,10 @@
         msg: Ensure access to /etc/cron.monthly is configured [2.4.1.6]
     - name: Execute audit commands for 2.4.1.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/cron.monthly/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_1_6
@@ -2423,8 +2601,10 @@
         msg: Ensure access to /etc/cron.yearly is configured [2.4.1.7]
     - name: Execute audit commands for 2.4.1.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/cron.yearly/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_1_7
@@ -2441,8 +2621,10 @@
         msg: Ensure access to /etc/cron.d is configured [2.4.1.8]
     - name: Execute audit commands for 2.4.1.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/cron.d/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_1_8
@@ -2459,10 +2641,12 @@
         msg: Ensure access to crontab is configured [2.4.1.9]
     - name: Execute audit commands for 2.4.1.9
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%a/%A) Owner: (%U) Group: (%G)' /etc/cron.allow
 
           [ -e "/etc/cron.deny" ] && stat -Lc 'Access: (%a/%A) Owner: (%U) Group: (%G)' /etc/cron.deny
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_1_9
@@ -2479,10 +2663,12 @@
         msg: Ensure access to at is configured [2.4.2.1]
     - name: Execute audit commands for 2.4.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%a/%A) Owner: (%U) Group: (%G)' /etc/at.allow
 
           [ -e "/etc/at.deny" ] && stat -Lc 'Access: (%a/%A) Owner: (%U) Group: (%G)' /etc/at.deny
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_4_2_1
@@ -2499,7 +2685,8 @@
         msg: Ensure IPv6 status is identified [3.1.1]
     - name: Execute audit commands for 3.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2512,6 +2699,7 @@
            [ -z "$l_output" ] && l_output="- IPv6 is enabled"
            echo -e "\n$l_output\n"
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_1_1
@@ -2528,7 +2716,8 @@
         msg: Ensure wireless interfaces are not available [3.1.2]
     - name: Execute audit commands for 3.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2574,6 +2763,7 @@
            [ -n "$l_output" ] && echo -e "\n- Correctly set:\n$l_output\n"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_1_2
@@ -2590,12 +2780,14 @@
         msg: Ensure bluetooth services are not in use [3.1.3]
     - name: Execute audit commands for 3.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q bluez
 
           systemctl is-enabled bluetooth.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active bluetooth.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_1_3
@@ -2612,7 +2804,8 @@
         msg: Ensure atm kernel module is not available [3.2.1]
     - name: Execute audit commands for 3.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2639,6 +2832,7 @@
           # blacklist atm
 
           # install atm /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_2_1
@@ -2655,7 +2849,8 @@
         msg: Ensure can kernel module is not available [3.2.2]
     - name: Execute audit commands for 3.2.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2682,6 +2877,7 @@
           # blacklist can
 
           # install can /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_2_2
@@ -2698,7 +2894,8 @@
         msg: Ensure dccp kernel module is not available [3.2.3]
     - name: Execute audit commands for 3.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2725,6 +2922,7 @@
           # blacklist dccp
 
           # install dccp /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_2_3
@@ -2741,7 +2939,8 @@
         msg: Ensure tipc kernel module is not available [3.2.4]
     - name: Execute audit commands for 3.2.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2768,6 +2967,7 @@
           # blacklist tipc
 
           # install tipc /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_2_4
@@ -2784,7 +2984,8 @@
         msg: Ensure rds kernel module is not available [3.2.5]
     - name: Execute audit commands for 3.2.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2811,6 +3012,7 @@
           # blacklist rds
 
           # install rds /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_2_5
@@ -2827,7 +3029,8 @@
         msg: Ensure sctp kernel module is not available [3.2.6]
     - name: Execute audit commands for 3.2.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2854,6 +3057,7 @@
           # blacklist sctp
 
           # install sctp /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_2_6
@@ -2870,7 +3074,8 @@
         msg: Ensure net.ipv4.conf.all.forwarding is configured [3.3.1.2]
     - name: Execute audit commands for 3.3.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.all.forwarding
 
           #!/usr/bin/env bash
@@ -2901,6 +3106,7 @@
           }
 
           # - "net.ipv4.conf.all.forwarding = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_2
@@ -2917,7 +3123,8 @@
         msg: Ensure net.ipv4.conf.default.forwarding is configured [3.3.1.3]
     - name: Execute audit commands for 3.3.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.default.forwarding
 
           #!/usr/bin/env bash
@@ -2948,6 +3155,7 @@
           }
 
           # - "net.ipv4.conf.default.forwarding = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_3
@@ -2964,7 +3172,8 @@
         msg: Ensure net.ipv4.conf.all.send_redirects is configured [3.3.1.4]
     - name: Execute audit commands for 3.3.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.all.send_redirects
 
           #!/usr/bin/env bash
@@ -2995,6 +3204,7 @@
           }
 
           # - "net.ipv4.conf.all.send_redirects = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_4
@@ -3011,7 +3221,8 @@
         msg: Ensure net.ipv4.conf.default.send_redirects is configured [3.3.1.5]
     - name: Execute audit commands for 3.3.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.default.send_redirects
 
           #!/usr/bin/env bash
@@ -3042,6 +3253,7 @@
           }
 
           # - "net.ipv4.conf.default.send_redirects = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_5
@@ -3058,7 +3270,8 @@
         msg: Ensure net.ipv4.icmp_ignore_bogus_error_responses is configured [3.3.1.6]
     - name: Execute audit commands for 3.3.1.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.icmp_ignore_bogus_error_responses
 
           #!/usr/bin/env bash
@@ -3089,6 +3302,7 @@
           }
 
           # - "net.ipv4.icmp_ignore_bogus_error_responses = 1" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_6
@@ -3105,7 +3319,8 @@
         msg: Ensure net.ipv4.icmp_echo_ignore_broadcasts is configured [3.3.1.7]
     - name: Execute audit commands for 3.3.1.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.icmp_echo_ignore_broadcasts
 
           #!/usr/bin/env bash
@@ -3136,6 +3351,7 @@
           }
 
           # - "net.ipv4.icmp_echo_ignore_broadcasts = 1" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_7
@@ -3152,7 +3368,8 @@
         msg: Ensure net.ipv4.conf.all.accept_redirects is configured [3.3.1.8]
     - name: Execute audit commands for 3.3.1.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.all.accept_redirects
 
           #!/usr/bin/env bash
@@ -3183,6 +3400,7 @@
           }
 
           # - "net.ipv4.conf.all.accept_redirects = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_8
@@ -3199,7 +3417,8 @@
         msg: Ensure net.ipv4.conf.default.accept_redirects is configured [3.3.1.9]
     - name: Execute audit commands for 3.3.1.9
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.default.accept_redirects
 
           #!/usr/bin/env bash
@@ -3230,6 +3449,7 @@
           }
 
           # - "net.ipv4.conf.default.accept_redirects = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_9
@@ -3246,7 +3466,8 @@
         msg: Ensure net.ipv4.conf.all.secure_redirects is configured [3.3.1.10]
     - name: Execute audit commands for 3.3.1.10
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.all.secure_redirects
 
           #!/usr/bin/env bash
@@ -3277,6 +3498,7 @@
           }
 
           # - "net.ipv4.conf.all.secure_redirects = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_10
@@ -3293,7 +3515,8 @@
         msg: Ensure net.ipv4.conf.default.secure_redirects is configured [3.3.1.11]
     - name: Execute audit commands for 3.3.1.11
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.default.secure_redirects
 
           #!/usr/bin/env bash
@@ -3324,6 +3547,7 @@
           }
 
           # - "net.ipv4.conf.default.secure_redirects = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_11
@@ -3340,7 +3564,8 @@
         msg: Ensure net.ipv4.conf.all.rp_filter is configured [3.3.1.12]
     - name: Execute audit commands for 3.3.1.12
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.all.rp_filter
 
           #!/usr/bin/env bash
@@ -3371,6 +3596,7 @@
           }
 
           # - "net.ipv4.conf.all.rp_filter = 1" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_12
@@ -3387,7 +3613,8 @@
         msg: Ensure net.ipv4.conf.default.rp_filter is configured [3.3.1.13]
     - name: Execute audit commands for 3.3.1.13
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.default.rp_filter
 
           #!/usr/bin/env bash
@@ -3418,6 +3645,7 @@
           }
 
           # - "net.ipv4.conf.default.rp_filter = 1" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_13
@@ -3434,7 +3662,8 @@
         msg: Ensure net.ipv4.conf.all.accept_source_route is configured [3.3.1.14]
     - name: Execute audit commands for 3.3.1.14
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.all.accept_source_route
 
           #!/usr/bin/env bash
@@ -3465,6 +3694,7 @@
           }
 
           # - "net.ipv4.conf.all.accept_source_route = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_14
@@ -3481,7 +3711,8 @@
         msg: Ensure net.ipv4.conf.default.accept_source_route is configured [3.3.1.15]
     - name: Execute audit commands for 3.3.1.15
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.default.accept_source_route
 
           #!/usr/bin/env bash
@@ -3512,6 +3743,7 @@
           }
 
           # - "net.ipv4.conf.default.accept_source_route = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_15
@@ -3528,7 +3760,8 @@
         msg: Ensure net.ipv4.conf.all.log_martians is configured [3.3.1.16]
     - name: Execute audit commands for 3.3.1.16
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.all.log_martians
 
           #!/usr/bin/env bash
@@ -3559,6 +3792,7 @@
           }
 
           # - "net.ipv4.conf.all.log_martians = 1" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_16
@@ -3575,7 +3809,8 @@
         msg: Ensure net.ipv4.conf.default.log_martians is configured [3.3.1.17]
     - name: Execute audit commands for 3.3.1.17
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.conf.default.log_martians
 
           #!/usr/bin/env bash
@@ -3606,6 +3841,7 @@
           }
 
           # - "net.ipv4.conf.default.log_martians = 1" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_17
@@ -3622,7 +3858,8 @@
         msg: Ensure net.ipv4.tcp_syncookies is configured [3.3.1.18]
     - name: Execute audit commands for 3.3.1.18
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.tcp_syncookies
 
           #!/usr/bin/env bash
@@ -3653,6 +3890,7 @@
           }
 
           # - "net.ipv4.tcp_syncookies = 1" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_18
@@ -3669,7 +3907,8 @@
         msg: Ensure  net.ipv6.conf.all.forwarding is configured [3.3.2.1]
     - name: Execute audit commands for 3.3.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv6.conf.all.forwarding
 
           #!/usr/bin/env bash
@@ -3700,6 +3939,7 @@
           }
 
           # - "net.ipv6.conf.all.forwarding = 0" is set in: "/etc/sysctl.d/60-ipv6_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_2_1
@@ -3716,7 +3956,8 @@
         msg: Ensure  net.ipv6.conf.default.forwarding is configured [3.3.2.2]
     - name: Execute audit commands for 3.3.2.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv6.conf.default.forwarding
 
           #!/usr/bin/env bash
@@ -3747,6 +3988,7 @@
           }
 
           # - "net.ipv6.conf.default.forwarding = 0" is set in: "/etc/sysctl.d/60-ipv6_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_2_2
@@ -3763,7 +4005,8 @@
         msg: Ensure net.ipv6.conf.all.accept_redirects is configured [3.3.2.3]
     - name: Execute audit commands for 3.3.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv6.conf.all.accept_redirects
 
           #!/usr/bin/env bash
@@ -3794,6 +4037,7 @@
           }
 
           # - "net.ipv6.conf.all.accept_redirects = 0" is set in: "/etc/sysctl.d/60-ipv6_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_2_3
@@ -3810,7 +4054,8 @@
         msg: Ensure net.ipv6.conf.default.accept_redirects is configured [3.3.2.4]
     - name: Execute audit commands for 3.3.2.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv6.conf.default.accept_redirects
 
           #!/usr/bin/env bash
@@ -3841,6 +4086,7 @@
           }
 
           # - "net.ipv6.conf.default.accept_redirects = 0" is set in: "/etc/sysctl.d/60-ipv6_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_2_4
@@ -3857,7 +4103,8 @@
         msg: Ensure net.ipv6.conf.all.accept_source_route is configured [3.3.2.5]
     - name: Execute audit commands for 3.3.2.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv6.conf.all.accept_source_route
 
           #!/usr/bin/env bash
@@ -3888,6 +4135,7 @@
           }
 
           # - "net.ipv6.conf.all.accept_source_route = 0" is set in: "/etc/sysctl.d/60-ipv6_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_2_5
@@ -3904,7 +4152,8 @@
         msg: Ensure net.ipv6.conf.default.accept_source_route is configured [3.3.2.6]
     - name: Execute audit commands for 3.3.2.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv6.conf.default.accept_source_route
 
           #!/usr/bin/env bash
@@ -3935,6 +4184,7 @@
           }
 
           # - "net.ipv6.conf.default.accept_source_route = 0" is set in: "/etc/sysctl.d/60-ipv6_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_2_6
@@ -3951,7 +4201,8 @@
         msg: Ensure net.ipv6.conf.all.accept_ra is configured [3.3.2.7]
     - name: Execute audit commands for 3.3.2.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv6.conf.all.accept_ra
 
           #!/usr/bin/env bash
@@ -3982,6 +4233,7 @@
           }
 
           # - "net.ipv6.conf.all.accept_ra = 0" is set in: "/etc/sysctl.d/60-ipv6_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_2_7
@@ -3998,7 +4250,8 @@
         msg: Ensure net.ipv6.conf.default.accept_ra is configured [3.3.2.8]
     - name: Execute audit commands for 3.3.2.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv6.conf.default.accept_ra
 
           #!/usr/bin/env bash
@@ -4029,6 +4282,7 @@
           }
 
           # - "net.ipv6.conf.default.accept_ra = 0" is set in: "/etc/sysctl.d/60-ipv6_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_2_8
@@ -4045,8 +4299,10 @@
         msg: Ensure firewalld is installed [4.1.1]
     - name: Execute audit commands for 4.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q firewalld
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_4_1_1
@@ -4063,8 +4319,10 @@
         msg: Ensure firewalld backend is configured [4.1.2]
     - name: Execute audit commands for 4.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- 'FirewallBackend\h*=\h*nftables\b' /etc/firewalld/firewalld.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_4_1_2
@@ -4081,10 +4339,12 @@
         msg: Ensure firewalld.service is configured [4.1.3]
     - name: Execute audit commands for 4.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           systemctl is-enabled firewalld.service
 
           systemctl is-active firewalld.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_4_1_3
@@ -4101,7 +4361,8 @@
         msg: Ensure firewalld active zone target is configured [4.1.4]
     - name: Execute audit commands for 4.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           {
            a_output=() a_output2=()
            while IFS= read -r l_zone; do
@@ -4126,6 +4387,7 @@
            done < <(firewall-cmd --get-active-zones | awk '$1!~/interface/{print}')
            printf '%s\n' "" "${a_output2[@]}" "" "${a_output[@]}" ""
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_4_1_4
@@ -4142,10 +4404,12 @@
         msg: Ensure firewalld loopback traffic is configured [4.1.5]
     - name: Execute audit commands for 4.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           firewall-cmd --get-zone-of-interface=lo
 
           firewall-cmd --list-all --zone="$(firewall-cmd --get-zone-of-interface=lo | xargs)"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_4_1_5
@@ -4162,7 +4426,8 @@
         msg: Ensure firewalld loopback source address traffic is configured [4.1.6]
     - name: Execute audit commands for 4.1.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4178,6 +4443,7 @@
           # rule family="ipv4" source address="127.0.0.1" destination NOT address="127.0.0.1" drop
 
           # rule family="ipv6" source address="::1" destination NOT address="::1" drop
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_4_1_6
@@ -4211,7 +4477,8 @@
         msg: Ensure access to /etc/ssh/sshd_config is configured [5.1.1]
     - name: Execute audit commands for 5.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4244,6 +4511,7 @@
            [ "${#a_output[@]}" -gt 0 ] && printf '%s\n' "" "- Correctly set:" "${a_output[@]}" ""
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_1
@@ -4260,7 +4528,8 @@
         msg: Ensure access to SSH private host key files is configured [5.1.2]
     - name: Execute audit commands for 5.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4310,6 +4579,7 @@
            printf '%s\n' "" "- Correctly set:" "${a_output[@]}" ""
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_2
@@ -4326,7 +4596,8 @@
         msg: Ensure access to SSH public host key files is configured [5.1.3]
     - name: Execute audit commands for 5.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4366,6 +4637,7 @@
            [ "${#a_output[@]}" -gt 0 ] && printf '%s\n' "" "- Correctly set:" "${a_output[@]}" ""
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_3
@@ -4382,10 +4654,12 @@
         msg: Ensure sshd access is configured [5.1.4]
     - name: Execute audit commands for 5.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep -Pi -- '^\h*(allow|deny)(users|groups)\h+\H+'
 
           sshd -T -C user=sshuser | grep -Pi -- '^\h*(allow|deny)(users|groups)\h+\H+'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_4
@@ -4402,7 +4676,8 @@
         msg: Ensure sshd Banner is configured [5.1.5]
     - name: Execute audit commands for 5.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep -Pi -- '^banner\h+\/\H+'
 
           sshd -T -C user=sshuser | grep -Pi -- '^banner\h+\/\H+'
@@ -4410,6 +4685,7 @@
           [ -e "$(sshd -T | awk '$1 == "banner" {print $2}')" ] && cat "$(sshd -T | awk '$1 == "banner" {print $2}')"
 
           grep -Psi -- "(\\\v|\\\r|\\\m|\\\s|\b$(grep '^ID=' /etc/os-release | cut -d= -f2 | sed -e 's/"//g')\b)" "$(sshd -T | awk '$1 == "banner" {print $2}')"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_5
@@ -4426,8 +4702,10 @@
         msg: Ensure sshd Ciphers are configured [5.1.6]
     - name: Execute audit commands for 5.1.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep -Pi -- '^ciphers\h+\"?([^#\n\r]+,)?((3des|aes(128|192|256))-cbc)\b'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_6
@@ -4444,10 +4722,12 @@
         msg: Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured [5.1.7]
     - name: Execute audit commands for 5.1.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep -Pi -- '(clientaliveinterval|clientalivecountmax)'
 
           sshd -T -C user=sshuser | grep -Pi -- '(clientaliveinterval|clientalivecountmax)'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_7
@@ -4464,10 +4744,12 @@
         msg: Ensure sshd HostbasedAuthentication is disabled [5.1.10]
     - name: Execute audit commands for 5.1.10
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep hostbasedauthentication
 
           sshd -T -C user=sshuser | grep hostbasedauthentication
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_10
@@ -4484,8 +4766,10 @@
         msg: Ensure sshd IgnoreRhosts is enabled [5.1.11]
     - name: Execute audit commands for 5.1.11
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep ignorerhosts
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_11
@@ -4502,8 +4786,10 @@
         msg: Ensure sshd KexAlgorithms is configured [5.1.12]
     - name: Execute audit commands for 5.1.12
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep -Pi -- 'kexalgorithms\h+([^#\n\r]+,)?(diffie-hellman-group1-sha1|diffie-hellman-group14-sha1|diffie-hellman-group-exchange-sha1)\b'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_12
@@ -4520,8 +4806,10 @@
         msg: Ensure sshd LoginGraceTime is configured [5.1.13]
     - name: Execute audit commands for 5.1.13
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep logingracetime
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_13
@@ -4538,10 +4826,12 @@
         msg: Ensure sshd LogLevel is configured [5.1.14]
     - name: Execute audit commands for 5.1.14
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep loglevel
 
           sshd -T -C user=sshuser | grep loglevel
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_14
@@ -4558,8 +4848,10 @@
         msg: Ensure sshd MACs are configured [5.1.15]
     - name: Execute audit commands for 5.1.15
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep -Pi -- 'macs\h+([^#\n\r]+,)?(hmac-md5|hmac-md5-96|hmac-sha1-96|umac-64@openssh.com|hmac-md5-etm@openssh.com|hmac-md5-96-etm@openssh\.com|hmac-sha1-etm@openssh\.com|hmac-sha1-96-etm@openssh\.com|umac-64-etm@openssh\.com|umac-128-etm@openssh\.com)\b'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_15
@@ -4576,10 +4868,12 @@
         msg: Ensure sshd MaxAuthTries is configured [5.1.16]
     - name: Execute audit commands for 5.1.16
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep maxauthtries
 
           sshd -T -C user=sshuser | grep maxauthtries
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_16
@@ -4613,10 +4907,12 @@
         msg: Ensure sshd MaxSessions is configured [5.1.18]
     - name: Execute audit commands for 5.1.18
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep -i maxsessions
 
           sshd -T -C user=sshuser | grep maxsessions
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_18
@@ -4633,10 +4929,12 @@
         msg: Ensure sshd PermitEmptyPasswords is disabled [5.1.19]
     - name: Execute audit commands for 5.1.19
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep permitemptypasswords
 
           sshd -T -C user=sshuser | grep permitemptypasswords
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_19
@@ -4653,10 +4951,12 @@
         msg: Ensure sshd PermitRootLogin is disabled [5.1.20]
     - name: Execute audit commands for 5.1.20
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep permitrootlogin
 
           sshd -T -C user=sshuser | grep permitrootlogin
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_20
@@ -4673,8 +4973,10 @@
         msg: Ensure sshd PermitUserEnvironment is disabled [5.1.21]
     - name: Execute audit commands for 5.1.21
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep permituserenvironment
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_21
@@ -4691,8 +4993,10 @@
         msg: Ensure sshd UsePAM is enabled [5.1.22]
     - name: Execute audit commands for 5.1.22
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep -i usepam
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_22
@@ -4709,8 +5013,10 @@
         msg: Ensure sudo is installed [5.2.1]
     - name: Execute audit commands for 5.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           dnf list sudo
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_2_1
@@ -4727,10 +5033,12 @@
         msg: Ensure sudo commands use pty [5.2.2]
     - name: Execute audit commands for 5.2.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -rPi -- '^\h*Defaults\h+([^#\n\r]+,\h*)?use_pty\b' /etc/sudoers*
 
           grep -rPi -- '^\h*Defaults\h+([^#\n\r]+,\h*)?!use_pty\b' /etc/sudoers*
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_2_2
@@ -4747,8 +5055,10 @@
         msg: Ensure sudo log file exists [5.2.3]
     - name: Execute audit commands for 5.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -rPsi "^\h*Defaults\h+([^#]+,\h*)?logfile\h*=\h*(\"|\')?\H+(\"|\')?(,\h*\H+\h*)*\h*(#.*)?$" /etc/sudoers*
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_2_3
@@ -4782,10 +5092,12 @@
         msg: Ensure sudo timestamp_timeout is configured [5.2.6]
     - name: Execute audit commands for 5.2.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -roP "timestamp_timeout=\K[0-9]*" /etc/sudoers*
 
           sudo -V | grep "Authentication timestamp timeout:"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_2_6
@@ -4802,10 +5114,12 @@
         msg: Ensure access to the su command is restricted [5.2.7]
     - name: Execute audit commands for 5.2.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi '^\h*auth\h+(?:required|requisite)\h+pam_wheel\.so\h+(?:[^#\n\r]+\h+)?((?!\2)(use_uid\b|group=\H+\b))\h+(?:[^#\n\r]+\h+)?((?!\1)(use_uid\b|group=\H+\b))(\h+.*)?$' /etc/pam.d/su
 
           # grep <group_name> /etc/group
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_2_7
@@ -4822,8 +5136,10 @@
         msg: Ensure active authselect profile includes pam modules [5.3.1.1]
     - name: Execute audit commands for 5.3.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '\b(pam_pwquality\.so|pam_pwhistory\.so|pam_faillock\.so|pam_unix\.so)\b' /etc/authselect/"$(head -1 /etc/authselect/authselect.conf)"/{system,password}-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_1_1
@@ -4840,8 +5156,10 @@
         msg: Ensure pam_faillock module is enabled [5.3.1.2]
     - name: Execute audit commands for 5.3.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '\bpam_faillock.so\b' /etc/pam.d/{password,system}-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_1_2
@@ -4858,8 +5176,10 @@
         msg: Ensure pam_pwquality module is enabled [5.3.1.3]
     - name: Execute audit commands for 5.3.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '\bpam_pwquality\.so\b' /etc/pam.d/{password,system}-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_1_3
@@ -4876,8 +5196,10 @@
         msg: Ensure pam_pwhistory module is enabled [5.3.1.4]
     - name: Execute audit commands for 5.3.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '\bpam_pwhistory\.so\b' /etc/pam.d/{password,system}-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_1_4
@@ -4894,8 +5216,10 @@
         msg: Ensure pam_unix module is enabled [5.3.1.5]
     - name: Execute audit commands for 5.3.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '\bpam_unix\.so\b' /etc/pam.d/{password,system}-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_1_5
@@ -4912,10 +5236,12 @@
         msg: Ensure password failed attempts lockout is configured [5.3.2.1.1]
     - name: Execute audit commands for 5.3.2.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*deny\h*=\h*[1-5]\b' /etc/security/faillock.conf
 
           grep -Pi -- '^\h*auth\h+(requisite|required|sufficient)\h+pam_faillock\.so\h+([^#\n\r]+\h+)?deny\h*=\h*(0|[6-9]|[1-9][0-9]+)\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_1_1
@@ -4932,10 +5258,12 @@
         msg: Ensure password unlock time is configured [5.3.2.1.2]
     - name: Execute audit commands for 5.3.2.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*unlock_time\h*=\h*(0|9[0-9][0-9]|[1-9][0-9]{3,})\b' /etc/security/faillock.conf
 
           grep -Pi -- '^\h*auth\h+(requisite|required|sufficient)\h+pam_faillock\.so\h+([^#\n\r]+\h+)?unlock_time\h*=\h*([1-9]|[1-9][0-9]|[1-8][0-9][0-9])\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_1_2
@@ -4952,10 +5280,12 @@
         msg: Ensure password number of changed characters is configured [5.3.2.2.1]
     - name: Execute audit commands for 5.3.2.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*difok\h*=\h*([2-9]|[1-9][0-9]+)\b' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
 
           grep -Psi -- '^\h*password\h+(requisite|required|sufficient)\h+pam_pwquality\.so\h+([^#\n\r]+\h+)?difok\h*=\h*([0-1])\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_2_1
@@ -4972,10 +5302,12 @@
         msg: Ensure password length is configured [5.3.2.2.2]
     - name: Execute audit commands for 5.3.2.2.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*minlen\h*=\h*(1[4-9]|[2-9][0-9]|[1-9][0-9]{2,})\b' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
 
           grep -Psi -- '^\h*password\h+(requisite|required|sufficient)\h+pam_pwquality\.so\h+([^#\n\r]+\h+)?minlen\h*=\h*([0-9]|1[0-3])\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_2_2
@@ -4992,10 +5324,12 @@
         msg: Ensure password complexity is configured [5.3.2.2.3]
     - name: Execute audit commands for 5.3.2.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*(minclass|[dulo]credit)\b' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
 
           grep -Psi -- '^\h*password\h+(requisite|required|sufficient)\h+pam_pwquality\.so\h+([^#\n\r]+\h+)?(minclass=[0-3]|[dulo]credit=[^-]\d*)\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_2_3
@@ -5012,10 +5346,12 @@
         msg: Ensure password same consecutive characters is configured [5.3.2.2.4]
     - name: Execute audit commands for 5.3.2.2.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*maxrepeat\h*=\h*[1-3]\b' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
 
           grep -Psi -- '^\h*password\h+(requisite|required|sufficient)\h+pam_pwquality\.so\h+([^#\n\r]+\h+)?maxrepeat\h*=\h*(0|[4-9]|[1-9][0-9]+)\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_2_4
@@ -5032,10 +5368,12 @@
         msg: Ensure password maximum sequential characters is configured [5.3.2.2.5]
     - name: Execute audit commands for 5.3.2.2.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*maxsequence\h*=\h*[1-3]\b' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
 
           grep -Psi -- '^\h*password\h+(requisite|required|sufficient)\h+pam_pwquality\.so\h+([^#\n\r]+\h+)?maxsequence\h*=\h*(0|[4-9]|[1-9][0-9]+)\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_2_5
@@ -5052,10 +5390,12 @@
         msg: Ensure password dictionary check is enabled [5.3.2.2.6]
     - name: Execute audit commands for 5.3.2.2.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*dictcheck\h*=\h*0\b' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
 
           grep -Psi -- '^\h*password\h+(requisite|required|sufficient)\h+pam_pwquality\.so\h+([^#\n\r]+\h+)?dictcheck\h*=\h*0\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_2_6
@@ -5072,8 +5412,10 @@
         msg: Ensure password quality is enforced for the root user [5.3.2.2.7]
     - name: Execute audit commands for 5.3.2.2.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*enforce_for_root\b' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_2_7
@@ -5090,10 +5432,12 @@
         msg: Ensure password history remember is configured [5.3.2.3.1]
     - name: Execute audit commands for 5.3.2.3.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*remember\h*=\h*(2[4-9]|[3-9][0-9]|[1-9][0-9]{2,})\b' /etc/security/pwhistory.conf
 
           grep -Pi -- '^\h*password\h+(requisite|required|sufficient)\h+pam_pwhistory\.so\h+([^#\n\r]+\h+)?remember=(2[0-3]|1[0-9]|[0-9])\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_3_1
@@ -5110,8 +5454,10 @@
         msg: Ensure password history is enforced for the root user [5.3.2.3.2]
     - name: Execute audit commands for 5.3.2.3.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*enforce_for_root\b' /etc/security/pwhistory.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_3_2
@@ -5128,8 +5474,10 @@
         msg: Ensure pam_pwhistory includes use_authtok [5.3.2.3.3]
     - name: Execute audit commands for 5.3.2.3.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '^\h*password\h+([^#\n\r]+)\h+pam_pwhistory\.so\h+([^#\n\r]+\h+)?use_authtok\b' /etc/pam.d/{password,system}-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_3_3
@@ -5146,8 +5494,10 @@
         msg: Ensure pam_unix does not include nullok [5.3.2.4.1]
     - name: Execute audit commands for 5.3.2.4.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '^\h*(auth|account|password|session)\h+(requisite|required|sufficient)\h+pam_unix\.so\b' /etc/pam.d/{password,system}-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_4_1
@@ -5164,8 +5514,10 @@
         msg: Ensure pam_unix does not include remember [5.3.2.4.2]
     - name: Execute audit commands for 5.3.2.4.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi '^\h*password\h+([^#\n\r]+\h+)?pam_unix\.so\b' /etc/pam.d/{password,system}-auth | grep -Pv '\bremember=\d\b'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_4_2
@@ -5182,8 +5534,10 @@
         msg: Ensure pam_unix includes a strong password hashing algorithm [5.3.2.4.3]
     - name: Execute audit commands for 5.3.2.4.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '^\h*password\h+([^#\n\r]+)\h+pam_unix\.so\h+([^#\n\r]+\h+)?(sha512|yescrypt)\b' /etc/pam.d/{password,system}-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_4_3
@@ -5200,8 +5554,10 @@
         msg: Ensure pam_unix includes use_authtok [5.3.2.4.4]
     - name: Execute audit commands for 5.3.2.4.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '^\h*password\h+([^#\n\r]+)\h+pam_unix\.so\h+([^#\n\r]+\h+)?use_authtok\b' /etc/pam.d/{password,system}-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_4_4
@@ -5218,10 +5574,12 @@
         msg: Ensure password expiration is configured [5.4.1.1]
     - name: Execute audit commands for 5.4.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*PASS_MAX_DAYS\h+\d+\b' /etc/login.defs
 
           awk -F: '($2~/^\$.+\$/) {if($5 > 365 || $5 < 1)print "User: " $1 " PASS_MAX_DAYS: " $5}' /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_1_1
@@ -5238,10 +5596,12 @@
         msg: Ensure password expiration warning days is configured [5.4.1.3]
     - name: Execute audit commands for 5.4.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*PASS_WARN_AGE\h+\d+\b' /etc/login.defs
 
           awk -F: '($2~/^\$.+\$/) {if($6 < 7)print "User: " $1 " PASS_WARN_AGE: " $6}' /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_1_3
@@ -5258,8 +5618,10 @@
         msg: Ensure strong password hashing algorithm is configured [5.4.1.4]
     - name: Execute audit commands for 5.4.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*ENCRYPT_METHOD\h+(SHA512|YESCRYPT)\b' /etc/login.defs
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_1_4
@@ -5276,10 +5638,12 @@
         msg: Ensure inactive password lock is configured [5.4.1.5]
     - name: Execute audit commands for 5.4.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           useradd -D | grep INACTIVE
 
           awk -F: '($2~/^\$.+\$/) {if($7 > 45 || $7 < 0)print "User: " $1 " INACTIVE: " $7 "Days"}' /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_1_5
@@ -5296,7 +5660,8 @@
         msg: Ensure all users last password change date is in the past [5.4.1.6]
     - name: Execute audit commands for 5.4.1.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5307,6 +5672,7 @@
            fi
            done < <(awk -F: '$2~/^\$.+\$/{print $1}' /etc/shadow)
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_1_6
@@ -5323,8 +5689,10 @@
         msg: Ensure root is the only UID 0 account [5.4.2.1]
     - name: Execute audit commands for 5.4.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           awk -F: '($3 == 0) { print $1 }' /etc/passwd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_2_1
@@ -5341,8 +5709,10 @@
         msg: Ensure root is the only GID 0 account [5.4.2.2]
     - name: Execute audit commands for 5.4.2.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           awk -F: '($1 !~ /^(sync|shutdown|halt|operator)/ && $4=="0") {print $1":"$4}' /etc/passwd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_2_2
@@ -5359,8 +5729,10 @@
         msg: Ensure group root is the only GID 0 group [5.4.2.3]
     - name: Execute audit commands for 5.4.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           awk -F: '$3=="0"{print $1":"$3}' /etc/group
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_2_3
@@ -5377,8 +5749,10 @@
         msg: Ensure root account access is controlled [5.4.2.4]
     - name: Execute audit commands for 5.4.2.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           passwd -S root | awk '$2 ~ /^(P|L)/ {print "User: \"" $1 "\" Password is status: " $2}'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_2_4
@@ -5395,7 +5769,8 @@
         msg: Ensure root path integrity [5.4.2.5]
     - name: Execute audit commands for 5.4.2.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5423,6 +5798,7 @@
            echo -e "\n- Audit Result:\n ** FAIL **\n - * Reasons for audit failure * :\n$l_output2\n"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_2_5
@@ -5456,13 +5832,15 @@
         msg: Ensure system accounts do not have a valid login shell [5.4.2.7]
     - name: Execute audit commands for 5.4.2.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
            l_valid_shells="^($(awk -F\/ '$NF != "nologin" {print}' /etc/shells | sed -rn '/^\//{s,/,\\\\/,g;p}' | paste -s -d '|' - ))$"
            awk -v pat="$l_valid_shells" -F: '($1!~/^(root|halt|sync|shutdown|nfsnobody)$/ && ($3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' || $3 == 65534) && $(NF) ~ pat) {print "Service account: \"" $1 "\" has a valid shell: " $7}' /etc/passwd
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_2_7
@@ -5479,7 +5857,8 @@
         msg: Ensure accounts without a valid login shell are locked [5.4.2.8]
     - name: Execute audit commands for 5.4.2.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5488,6 +5867,7 @@
            passwd -S "$l_user" | awk '$2 !~ /^L/ {print "Account: \"" $1 "\" does not have a valid login shell and is not locked"}'
            done < <(awk -v pat="$l_valid_shells" -F: '($1 != "root" && $(NF) !~ pat) {print $1}' /etc/passwd)
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_2_8
@@ -5504,7 +5884,8 @@
         msg: Ensure default user shell timeout is configured [5.4.3.2]
     - name: Execute audit commands for 5.4.3.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5552,6 +5933,7 @@
            [ "${#a_output[@]}" -gt 0 ] && printf '%s\n' "- Correctly set:" "${a_output[@]}"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_3_2
@@ -5568,10 +5950,12 @@
         msg: Ensure default user umask is configured [5.4.3.3]
     - name: Execute audit commands for 5.4.3.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*umask\b' /etc/profile.d/*.sh
 
           grep -Psi -- '^\h*UMASK\b' /etc/login.defs
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_3_3
@@ -5588,8 +5972,10 @@
         msg: Ensure AIDE is installed [6.1.1]
     - name: Execute audit commands for 6.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q aide
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_1_1
@@ -5606,7 +5992,8 @@
         msg: Ensure filesystem integrity is regularly checked [6.1.2]
     - name: Execute audit commands for 6.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Prs -- '^([^#]+\s+)?(/usr/s?bin/|^\s*)aide(\.wrapper)?\s(--?\S+\s)*(--(check|update)|\$AIDEARGS)\b' /etc/cron.* /etc/crontab /var/spool/cron/
 
           systemctl is-enabled aidecheck.service
@@ -5614,6 +6001,7 @@
           systemctl is-enabled aidecheck.timer
 
           systemctl status aidecheck.timer
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_1_2
@@ -5630,7 +6018,8 @@
         msg: Ensure cryptographic mechanisms are used to protect the integrity of audit tools [6.1.3]
     - name: Execute audit commands for 6.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5706,6 +6095,7 @@
            [ "${#a_output[@]}" -gt 0 ] && printf '%s\n' "- Correctly set:" "${a_output[@]}"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_1_3
@@ -5722,8 +6112,10 @@
         msg: Ensure journald service is active [6.2.1.1]
     - name: Execute audit commands for 6.2.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           systemctl is-active systemd-journald.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_1_1
@@ -5740,7 +6132,8 @@
         msg: Ensure journald log file access is configured [6.2.1.2]
     - name: Execute audit commands for 6.2.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5772,6 +6165,7 @@
           fi
 
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_1_2
@@ -5788,8 +6182,10 @@
         msg: Ensure journald log file rotation is configured [6.2.1.3]
     - name: Execute audit commands for 6.2.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           systemd-analyze cat-config systemd/journald.conf | tac
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_1_3
@@ -5806,7 +6202,8 @@
         msg: Ensure only one logging system is in use [6.2.1.4]
     - name: Execute audit commands for 6.2.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5825,6 +6222,7 @@
            echo -e "\n- Audit Result:\n ** FAIL **\n - Reason(s) for audit failure:\n$l_output2"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_1_4
@@ -5841,7 +6239,8 @@
         msg: Ensure journald ForwardToSyslog is disabled [6.2.2.2]
     - name: Execute audit commands for 6.2.2.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5871,6 +6270,7 @@
            fi
            [ "${#a_output[@]}" -gt "0" ] && printf '%s\n' "" "${a_output[@]}" ""
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_2_2
@@ -5887,7 +6287,8 @@
         msg: Ensure journald Compress is configured [6.2.2.3]
     - name: Execute audit commands for 6.2.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5917,6 +6318,7 @@
            fi
            [ "${#a_output[@]}" -gt "0" ] && printf '%s\n' "" "${a_output[@]}" ""
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_2_3
@@ -5933,7 +6335,8 @@
         msg: Ensure journald Storage is configured [6.2.2.4]
     - name: Execute audit commands for 6.2.2.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5963,6 +6366,7 @@
            fi
            [ "${#a_output[@]}" -gt "0" ] && printf '%s\n' "" "${a_output[@]}" ""
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_2_4
@@ -5979,8 +6383,10 @@
         msg: Ensure systemd-journal-remote is installed [6.2.2.1.1]
     - name: Execute audit commands for 6.2.2.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q systemd-journal-remote
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_2_1_1
@@ -5997,7 +6403,8 @@
         msg: Ensure systemd-journal-upload authentication is configured [6.2.2.1.2]
     - name: Execute audit commands for 6.2.2.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6020,6 +6427,7 @@
           ServerCertificateFile=/etc/ssl/certs/journal-upload.pem
 
           TrustedCertificateFile=/etc/ssl/ca/trusted.pem
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_2_1_2
@@ -6036,10 +6444,12 @@
         msg: Ensure systemd-journal-upload is enabled and active [6.2.2.1.3]
     - name: Execute audit commands for 6.2.2.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           systemctl is-enabled systemd-journal-upload.service
 
           systemctl is-active systemd-journal-upload.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_2_1_3
@@ -6056,10 +6466,12 @@
         msg: Ensure systemd-journal-remote service is not in use [6.2.2.1.4]
     - name: Execute audit commands for 6.2.2.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           systemctl is-enabled systemd-journal-remote.socket systemd-journal-remote.service | grep -P -- '^enabled'
 
           systemctl is-active systemd-journal-remote.socket systemd-journal-remote.service | grep -P -- '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_2_1_4
@@ -6076,8 +6488,10 @@
         msg: Ensure rsyslog is installed [6.2.3.1]
     - name: Execute audit commands for 6.2.3.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q rsyslog
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_3_1
@@ -6094,10 +6508,12 @@
         msg: Ensure rsyslog service is enabled and active [6.2.3.2]
     - name: Execute audit commands for 6.2.3.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           systemctl is-enabled rsyslog
 
           systemctl is-active rsyslog.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_3_2
@@ -6114,7 +6530,8 @@
         msg: Ensure journald is configured to send logs to rsyslog [6.2.3.3]
     - name: Execute audit commands for 6.2.3.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6144,6 +6561,7 @@
            fi
            [ "${#a_output[@]}" -gt "0" ] && printf '%s\n' "" "${a_output[@]}" ""
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_3_3
@@ -6160,8 +6578,10 @@
         msg: Ensure rsyslog log file creation mode is configured [6.2.3.4]
     - name: Execute audit commands for 6.2.3.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Ps '^\h*\$FileCreateMode\h+0[0,2,4,6][0,2,4]0\b' /etc/rsyslog.conf /etc/rsyslog.d/*.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_3_4
@@ -6195,10 +6615,12 @@
         msg: Ensure rsyslog is configured to send logs to a remote log host [6.2.3.6]
     - name: Execute audit commands for 6.2.3.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep "^*.*[^I][^I]*@@" /etc/rsyslog.conf /etc/rsyslog.d/*.conf
 
           grep -Psi -- '^\s*([^#]+\s+)?action\(([^#]+\s+)?\btarget=\"?[^#"]+\"?\b' /etc/rsyslog.conf /etc/rsyslog.d/*.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_3_6
@@ -6215,7 +6637,8 @@
         msg: Ensure rsyslog is not configured to receive logs from a remote client [6.2.3.7]
     - name: Execute audit commands for 6.2.3.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Psi -- '^\h*module\(load=\"?imtcp\"?\)' /etc/rsyslog.conf /etc/rsyslog.d/*.conf
 
           grep -Psi -- '^\h*input\(type=\"?imtcp\"?\b' /etc/rsyslog.conf /etc/rsyslog.d/*.conf
@@ -6223,6 +6646,7 @@
           grep -Psi -- '^\h*\$ModLoad\h+imtcp\b' /etc/rsyslog.conf /etc/rsyslog.d/*.conf
 
           grep -Psi -- '^\h*\$InputTCPServerRun\b' /etc/rsyslog.conf /etc/rsyslog.d/*.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_3_7
@@ -6239,7 +6663,8 @@
         msg: Ensure rsyslog logrotate is configured [6.2.3.8]
     - name: Execute audit commands for 6.2.3.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           { 
@@ -6262,6 +6687,7 @@
            echo -e "\n- Audit Result:\n ** FAIL **\n - Reason(s) for audit failure:\n$l_output"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_3_8
@@ -6278,7 +6704,8 @@
         msg: Ensure access to all logfiles has been configured [6.2.4.1]
     - name: Execute audit commands for 6.2.4.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6337,6 +6764,7 @@
            printf '\n%s' "- Audit Result:" " ** FAIL **" " - Reason(s) for audit failure:" "${a_output2[@]}" ""
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_2_4_1
@@ -6353,8 +6781,10 @@
         msg: Ensure access to /etc/passwd is configured [7.1.1]
     - name: Execute audit commands for 7.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/passwd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_1
@@ -6371,8 +6801,10 @@
         msg: Ensure access to /etc/passwd- is configured [7.1.2]
     - name: Execute audit commands for 7.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: { %g/ %G)' /etc/passwd-
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_2
@@ -6389,8 +6821,10 @@
         msg: Ensure access to /etc/group is configured [7.1.3]
     - name: Execute audit commands for 7.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/group
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_3
@@ -6407,8 +6841,10 @@
         msg: Ensure access to /etc/group- is configured [7.1.4]
     - name: Execute audit commands for 7.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/group-
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_4
@@ -6425,8 +6861,10 @@
         msg: Ensure access to /etc/shadow is configured [7.1.5]
     - name: Execute audit commands for 7.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_5
@@ -6443,8 +6881,10 @@
         msg: Ensure access to /etc/shadow- is configured [7.1.6]
     - name: Execute audit commands for 7.1.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/shadow-
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_6
@@ -6461,8 +6901,10 @@
         msg: Ensure access to /etc/gshadow is configured [7.1.7]
     - name: Execute audit commands for 7.1.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/gshadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_7
@@ -6479,8 +6921,10 @@
         msg: Ensure access to /etc/gshadow- is configured [7.1.8]
     - name: Execute audit commands for 7.1.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/gshadow-
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_8
@@ -6497,8 +6941,10 @@
         msg: Ensure access to /etc/shells is configured [7.1.9]
     - name: Execute audit commands for 7.1.9
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           stat -Lc 'Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/shells
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_9
@@ -6515,10 +6961,12 @@
         msg: Ensure access to /etc/security/opasswd is configured [7.1.10]
     - name: Execute audit commands for 7.1.10
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           [ -e "/etc/security/opasswd" ] && stat -Lc '%n Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/security/opasswd
 
           [ -e "/etc/security/opasswd.old" ] && stat -Lc '%n Access: (%#a/%A) Uid: ( %u/ %U) Gid: ( %g/ %G)' /etc/security/opasswd.old
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_10
@@ -6535,7 +6983,8 @@
         msg: Ensure world writable files and directories are secured [7.1.11]
     - name: Execute audit commands for 7.1.11
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6574,6 +7023,7 @@
            [ "${#a_output[@]}" -gt 0 ] && printf '%s\n' "- Correctly set:" "${a_output[@]}"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_11
@@ -6590,7 +7040,8 @@
         msg: Ensure no files or directories without an owner and a group exist [7.1.12]
     - name: Execute audit commands for 7.1.12
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6625,6 +7076,7 @@
            [ "${#a_output[@]}" -gt 0 ] && printf '%s\n' "- Correctly set:" "${a_output[@]}"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_12
@@ -6641,7 +7093,8 @@
         msg: Ensure SUID and SGID files are reviewed [7.1.13]
     - name: Execute audit commands for 7.1.13
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6676,6 +7129,7 @@
            [ -n "$l_output" ] && echo -e "$l_output\n"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_1_13
@@ -6726,7 +7180,8 @@
         msg: Ensure all groups in /etc/passwd exist in /etc/group [7.2.3]
     - name: Execute audit commands for 7.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6738,6 +7193,7 @@
            done < <(printf '%s\n' "${a_passwd_group_gid[@]}" "${a_passwd_group_diff[@]}" | sort | uniq -D | uniq)
            unset a_passwd_group_gid; unset a_group_gid; unset a_passwd_group_diff
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_2_3
@@ -6754,7 +7210,8 @@
         msg: Ensure no duplicate UIDs exist [7.2.4]
     - name: Execute audit commands for 7.2.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6764,6 +7221,7 @@
            fi
            done < <(cut -f3 -d":" /etc/passwd | sort -n | uniq -c)
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_2_4
@@ -6780,7 +7238,8 @@
         msg: Ensure no duplicate GIDs exist [7.2.5]
     - name: Execute audit commands for 7.2.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6790,6 +7249,7 @@
            fi
            done < <(cut -f3 -d":" /etc/group | sort -n | uniq -c)
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_2_5
@@ -6806,7 +7266,8 @@
         msg: Ensure no duplicate user names exist [7.2.6]
     - name: Execute audit commands for 7.2.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6816,6 +7277,7 @@
            fi
            done < <(cut -f1 -d":" /etc/passwd | sort -n | uniq -c)
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_2_6
@@ -6832,7 +7294,8 @@
         msg: Ensure no duplicate group names exist [7.2.7]
     - name: Execute audit commands for 7.2.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6842,6 +7305,7 @@
            fi
            done < <(cut -f1 -d":" /etc/group | sort -n | uniq -c)
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_2_7
@@ -6858,7 +7322,8 @@
         msg: Ensure local interactive user home directories are configured [7.2.8]
     - name: Execute audit commands for 7.2.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6892,6 +7357,7 @@
            [ "${#a_output[@]}" -gt 0 ] && printf '%s\n' "- Correctly set:" "${a_output[@]}"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_2_8
@@ -6908,7 +7374,8 @@
         msg: Ensure local interactive user dot files access is configured [7.2.9]
     - name: Execute audit commands for 7.2.9
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6976,6 +7443,7 @@
            [ "${#a_output3[@]}" -gt 0 ] && printf '%s\n' " ** WARNING **" "${a_output3[@]}"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_7_2_9
@@ -6992,7 +7460,8 @@
         msg: Ensure overlay kernel module is not available [1.1.1.6]
     - name: Execute audit commands for 1.1.1.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -7019,6 +7488,7 @@
           # blacklist overlay
 
           # install overlay /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_6
@@ -7035,7 +7505,8 @@
         msg: Ensure squashfs kernel module is not available [1.1.1.7]
     - name: Execute audit commands for 1.1.1.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -7062,6 +7533,7 @@
           # blacklist squashfs
 
           # install squashfs /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_7
@@ -7078,7 +7550,8 @@
         msg: Ensure udf kernel module is not available [1.1.1.8]
     - name: Execute audit commands for 1.1.1.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -7105,6 +7578,7 @@
           # blacklist udf
 
           # install udf /bin/false
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_1_8
@@ -7121,8 +7595,10 @@
         msg: Ensure separate partition exists for /home [1.1.2.3.1]
     - name: Execute audit commands for 1.1.2.3.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /home
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_3_1
@@ -7139,8 +7615,10 @@
         msg: Ensure separate partition exists for /var [1.1.2.4.1]
     - name: Execute audit commands for 1.1.2.4.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_4_1
@@ -7157,8 +7635,10 @@
         msg: Ensure separate partition exists for /var/tmp [1.1.2.5.1]
     - name: Execute audit commands for 1.1.2.5.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/tmp
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_5_1
@@ -7175,8 +7655,10 @@
         msg: Ensure separate partition exists for /var/log [1.1.2.6.1]
     - name: Execute audit commands for 1.1.2.6.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/log
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_6_1
@@ -7193,8 +7675,10 @@
         msg: Ensure separate partition exists for /var/log/audit [1.1.2.7.1]
     - name: Execute audit commands for 1.1.2.7.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           findmnt -kn /var/log/audit
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_1_2_7_1
@@ -7211,7 +7695,8 @@
         msg: Ensure repo_gpgcheck is globally activated [1.2.1.3]
     - name: Execute audit commands for 1.2.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # grep ^repo_gpgcheck /etc/dnf/dnf.conf
 
           # REPO_URL="fedoraproject.org"
@@ -7221,6 +7706,7 @@
            echo "${repo}"
            fi
           done
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_2_1_3
@@ -7237,8 +7723,10 @@
         msg: Ensure weak dependencies are configured [1.2.1.5]
     - name: Execute audit commands for 1.2.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*install_weak_deps\h*=\h*(0|false|no)\b' /etc/dnf/dnf.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_2_1_5
@@ -7255,10 +7743,12 @@
         msg: Ensure the SELinux mode is enforcing [1.3.1.5]
     - name: Execute audit commands for 1.3.1.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*SELINUX=enforcing\b' /etc/selinux/config
 
           getenforce
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_3_1_5
@@ -7292,7 +7782,8 @@
         msg: Ensure fs.protected_symlinks is configured [1.5.3]
     - name: Execute audit commands for 1.5.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl fs.protected_symlinks
 
           #!/usr/bin/env bash
@@ -7323,6 +7814,7 @@
           }
 
           # - "fs.protected_symlinks = 1" is set in: "/etc/sysctl.d/60-fs_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_5_3
@@ -7339,8 +7831,10 @@
         msg: Ensure Xwayland is configured [1.8.6]
     - name: Execute audit commands for 1.8.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sed -n '/\[daemon\]/,/\[/p' /etc/gdm/custom.conf | grep -Psi '^\h*waylandenable\b'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_1_8_6
@@ -7357,12 +7851,14 @@
         msg: Ensure cockpit web services are not in use [2.1.3]
     - name: Execute audit commands for 2.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q cockpit-ws
 
           systemctl is-enabled cockpit.socket cockpit.service 2>/dev/null | grep 'enabled'
 
           systemctl is-active cockpit.socket cockpit.service 2>/dev/null | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_3
@@ -7379,8 +7875,10 @@
         msg: Ensure GNOME Display Manager is removed [2.1.19]
     - name: Execute audit commands for 2.1.19
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           dnf grouplist | sed -n '/Installed Environment Groups:/,/Installed Groups:/p'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_19
@@ -7397,8 +7895,10 @@
         msg: Ensure X window server services are not in use [2.1.20]
     - name: Execute audit commands for 2.1.20
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q xorg-x11-server-Xwayland
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_1_20
@@ -7415,8 +7915,10 @@
         msg: Ensure ldap client is not installed [2.2.2]
     - name: Execute audit commands for 2.2.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q openldap-clients
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_2_2_2
@@ -7433,7 +7935,8 @@
         msg: Ensure net.ipv4.ip_forward is configured [3.3.1.1]
     - name: Execute audit commands for 3.3.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # sysctl net.ipv4.ip_forward
 
           #!/usr/bin/env bash
@@ -7464,6 +7967,7 @@
           }
 
           # - "net.ipv4.ip_forward = 0" is set in: "/etc/sysctl.d/60-ipv4_sysctl.conf"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_3_3_1_1
@@ -7480,10 +7984,12 @@
         msg: Ensure sshd DisableForwarding is enabled [5.1.8]
     - name: Execute audit commands for 5.1.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep -i disableforwarding
 
           sshd -T -C user=sshuser | grep disableforwarding
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_8
@@ -7500,10 +8006,12 @@
         msg: Ensure sshd GSSAPIAuthentication is disabled [5.1.9]
     - name: Execute audit commands for 5.1.9
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           sshd -T | grep gssapiauthentication
 
           sshd -T -C user=sshuser | grep gssapiauthentication
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_1_9
@@ -7537,12 +8045,14 @@
         msg: Ensure password failed attempts lockout includes root account [5.3.2.1.3]
     - name: Execute audit commands for 5.3.2.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*(even_deny_root|root_unlock_time\h*=\h*\d+)\b' /etc/security/faillock.conf
 
           grep -Pi -- '^\h*root_unlock_time\h*=\h*([1-9]|[1-5][0-9])\b' /etc/security/faillock.conf
 
           grep -Pi -- '^\h*auth\h+([^#\n\r]+\h+)pam_faillock\.so\h+([^#\n\r]+\h+)?root_unlock_time\h*=\h*([1-9]|[1-5][0-9])\b' /etc/pam.d/system-auth /etc/pam.d/password-auth
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_3_2_1_3
@@ -7559,10 +8069,12 @@
         msg: Ensure minimum password days is configured [5.4.1.2]
     - name: Execute audit commands for 5.4.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Pi -- '^\h*PASS_MIN_DAYS\h+\d+\b' /etc/login.defs
 
           awk -F: '($2~/^\$.+\$/) {if($4 < 1)print "User: " $1 " PASS_MIN_DAYS: " $4}' /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_5_4_1_2
@@ -7596,8 +8108,10 @@
         msg: Ensure auditd packages are installed [6.3.1.1]
     - name: Execute audit commands for 6.3.1.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           rpm -q audit audit-libs
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_1_1
@@ -7614,10 +8128,12 @@
         msg: Ensure auditing for processes that start prior to auditd is enabled [6.3.1.2]
     - name: Execute audit commands for 6.3.1.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grubby --info=ALL | grep -Po '\baudit=1\b'
 
           grep -Psoi -- '^\h*GRUB_CMDLINE_LINUX=\"([^#\n\r]+\h+)?audit=1\b' /etc/default/grub
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_1_2
@@ -7634,10 +8150,12 @@
         msg: Ensure audit_backlog_limit is configured [6.3.1.3]
     - name: Execute audit commands for 6.3.1.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grubby --info=ALL | grep -Po "\baudit_backlog_limit=\d+\b"
 
           grep -Psoi -- '^\h*GRUB_CMDLINE_LINUX=\"([^#\n\r]+\h+)?\baudit_backlog_limit=\d+\b' /etc/default/grub
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_1_3
@@ -7654,10 +8172,12 @@
         msg: Ensure auditd service is enabled and active [6.3.1.4]
     - name: Execute audit commands for 6.3.1.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           systemctl is-enabled auditd | grep '^enabled'
 
           systemctl is-active auditd | grep '^active'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_1_4
@@ -7674,8 +8194,10 @@
         msg: Ensure audit log storage size is configured [6.3.2.1]
     - name: Execute audit commands for 6.3.2.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Po -- '^\h*max_log_file\h*=\h*\d+\b' /etc/audit/auditd.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_2_1
@@ -7692,8 +8214,10 @@
         msg: Ensure audit logs are not automatically deleted [6.3.2.2]
     - name: Execute audit commands for 6.3.2.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep max_log_file_action /etc/audit/auditd.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_2_2
@@ -7710,10 +8234,12 @@
         msg: Ensure system is disabled when audit logs are full [6.3.2.3]
     - name: Execute audit commands for 6.3.2.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -P -- '^\h*disk_full_action\h*=\h*(halt|single)\b' /etc/audit/auditd.conf
 
           grep -P -- '^\h*disk_error_action\h*=\h*(syslog|single|halt)\b' /etc/audit/auditd.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_2_3
@@ -7730,8 +8256,10 @@
         msg: Ensure system warns when audit logs are low on space [6.3.2.4]
     - name: Execute audit commands for 6.3.2.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_2_4
@@ -7748,10 +8276,12 @@
         msg: Ensure modification of the /etc/sudoers file is collected [6.3.3.1]
     - name: Execute audit commands for 6.3.3.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/sudoers'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/sudoers' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_1
@@ -7768,10 +8298,12 @@
         msg: Ensure actions as another user are always logged [6.3.3.2]
     - name: Execute audit commands for 6.3.3.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep execve
 
           grep -Ps -- 'execve' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_2
@@ -7788,12 +8320,14 @@
         msg: Ensure events that modify the sudo log file are collected [6.3.3.3]
     - name: Execute audit commands for 6.3.3.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -rPsi "^\h*Defaults\h+([^#]+,\h*)?logfile\h*=\h*(\"|\')?\H+(\"|\')?(,\h*\H+\h*)*\h*(#.*)?$" /etc/sudoers*
 
           auditctl -l | grep -Ps -- 'sudo.log'
 
           grep -Ps -- 'sudo.log' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_3
@@ -7810,7 +8344,8 @@
         msg: Ensure events that modify date and time information are collected [6.3.3.4]
     - name: Execute audit commands for 6.3.3.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '(adjtimex|settimeofday|clock_settime)'
 
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/localtime'
@@ -7818,6 +8353,7 @@
           grep -Ps -- '(adjtimex|settimeofday|clock_settime)' /etc/audit/rules.d/*.rules
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/localtime' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_4
@@ -7834,10 +8370,12 @@
         msg: Ensure events that modify sethostname and setdomainname are collected [6.3.3.5]
     - name: Execute audit commands for 6.3.3.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'sethostname|setdomainname'
 
           grep -Ps -- 'sethostname|setdomainname' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_5
@@ -7854,10 +8392,12 @@
         msg: Ensure events that modify /etc/issue and /etc/issue.net are collected [6.3.3.6]
     - name: Execute audit commands for 6.3.3.6
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/issue'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/issue' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_6
@@ -7874,10 +8414,12 @@
         msg: Ensure events that modify /etc/hosts and /etc/hostname are collected [6.3.3.7]
     - name: Execute audit commands for 6.3.3.7
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/host'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/host' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_7
@@ -7894,10 +8436,12 @@
         msg: Ensure events that modify /etc/sysconfig/network and /etc/NetworkManager/system-connections/ are collected [6.3.3.8]
     - name: Execute audit commands for 6.3.3.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '\/etc/(sysconfig/network|NetworkManager/system-connections)'
 
           grep -Ps -- '\/etc/(sysconfig/network|NetworkManager/system-connections)' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_8
@@ -7914,10 +8458,12 @@
         msg: Ensure events that modify /etc/NetworkManager directory are collected [6.3.3.9]
     - name: Execute audit commands for 6.3.3.9
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '\/etc/NetworkManager'
 
           grep -Ps -- '\/etc\/NetworkManager' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_9
@@ -7934,7 +8480,8 @@
         msg: Ensure use of privileged commands are collected [6.3.3.10]
     - name: Execute audit commands for 6.3.3.10
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -7956,6 +8503,7 @@
            done \
            || printf "ERROR: Variable 'RUNNING' is unset.\n"
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_10
@@ -7972,12 +8520,14 @@
         msg: Ensure unsuccessful file access attempts are collected [6.3.3.11]
     - name: Execute audit commands for 6.3.3.11
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           awk '/^\s*UID_MIN/{print $2}' /etc/login.defs
 
           auditctl -l | grep -Ps -- '(EACCES|EPERM)'
 
           grep -Ps -- '(EACCES|EPERM)' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_11
@@ -7994,10 +8544,12 @@
         msg: Ensure events that modify /etc/group information are collected [6.3.3.12]
     - name: Execute audit commands for 6.3.3.12
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/group'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/group' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_12
@@ -8014,10 +8566,12 @@
         msg: Ensure events that modify /etc/passwd information are collected [6.3.3.13]
     - name: Execute audit commands for 6.3.3.13
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/passwd'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/passwd' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_13
@@ -8034,10 +8588,12 @@
         msg: Ensure events that modify /etc/shadow and /etc/gshadow are collected [6.3.3.14]
     - name: Execute audit commands for 6.3.3.14
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*shadow'
 
           grep -Ps -- 'shadow' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_14
@@ -8054,10 +8610,12 @@
         msg: Ensure events that modify /etc/security/opasswd are collected [6.3.3.15]
     - name: Execute audit commands for 6.3.3.15
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/security\/opasswd'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/security\/opasswd' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_15
@@ -8074,10 +8632,12 @@
         msg: Ensure events that modify /etc/nsswitch.conf file are collected [6.3.3.16]
     - name: Execute audit commands for 6.3.3.16
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/nsswitch.conf'
 
           grep -Ps -- 'nsswitch.conf' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_16
@@ -8094,10 +8654,12 @@
         msg: Ensure events that modify /etc/pam.conf and /etc/pam.d/ information are collected [6.3.3.17]
     - name: Execute audit commands for 6.3.3.17
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/pam'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/etc\/pam' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_17
@@ -8114,10 +8676,12 @@
         msg: Ensure discretionary access control permission modification events chmod,fchmod,fchmodat,fchmodat2 are collected [6.3.3.18]
     - name: Execute audit commands for 6.3.3.18
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'chmod'
 
           grep -Ps -- 'chmod' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_18
@@ -8134,10 +8698,12 @@
         msg: Ensure discretionary access control permission modification events chown,fchown,lchown,fchownat are collected [6.3.3.19]
     - name: Execute audit commands for 6.3.3.19
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'chown'
 
           grep -Ps -- 'chown' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_19
@@ -8154,10 +8720,12 @@
         msg: Ensure discretionary access control permission modification events setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr collected [6.3.3.20]
     - name: Execute audit commands for 6.3.3.20
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'xattr'
 
           grep -Ps -- 'xattr' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_20
@@ -8174,10 +8742,12 @@
         msg: Ensure successful file system mounts are collected [6.3.3.21]
     - name: Execute audit commands for 6.3.3.21
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '\-S mount'
 
           grep -Ps -- '\-S mount' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_21
@@ -8194,10 +8764,12 @@
         msg: Ensure session initiation information is collected [6.3.3.22]
     - name: Execute audit commands for 6.3.3.22
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '(\/var\/run\/utmp|\/var\/log\/wtmp|\/var\/log\/btmp)'
 
           grep -Ps -- '(\/var\/run\/utmp|\/var\/log\/wtmp|\/var\/log\/btmp)' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_22
@@ -8214,10 +8786,12 @@
         msg: Ensure login and logout events are collected [6.3.3.23]
     - name: Execute audit commands for 6.3.3.23
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '(lastlog|faillock)'
 
           grep -Ps -- '(lastlog|faillock)' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_23
@@ -8234,10 +8808,12 @@
         msg: Ensure unlink file deletion events by users are collected [6.3.3.24]
     - name: Execute audit commands for 6.3.3.24
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'unlink'
 
           grep -Ps -- 'unlink' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_24
@@ -8254,10 +8830,12 @@
         msg: Ensure rename file deletion events by users are collected [6.3.3.25]
     - name: Execute audit commands for 6.3.3.25
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'rename'
 
           grep -Ps -- 'rename' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_25
@@ -8274,10 +8852,12 @@
         msg: Ensure events that modify the system's Mandatory Access Controls are collected [6.3.3.26]
     - name: Execute audit commands for 6.3.3.26
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'selinux'
 
           grep -Ps -- 'selinux' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_26
@@ -8294,10 +8874,12 @@
         msg: Ensure successful and unsuccessful attempts to use the chcon command are collected [6.3.3.27]
     - name: Execute audit commands for 6.3.3.27
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/usr\/bin\/chcon'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/usr\/bin\/chcon' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_27
@@ -8314,10 +8896,12 @@
         msg: Ensure successful and unsuccessful attempts to use the setfacl command are collected [6.3.3.28]
     - name: Execute audit commands for 6.3.3.28
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps '^\h*[^#\n\r]+\h*\/usr\/bin\/setfacl'
 
           grep -Ps '^\h*[^#\n\r]+\h*\/usr\/bin\/setfacl' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_28
@@ -8334,10 +8918,12 @@
         msg: Ensure successful and unsuccessful attempts to use the chacl command are collected [6.3.3.29]
     - name: Execute audit commands for 6.3.3.29
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/usr\/bin\/chacl'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/usr\/bin\/chacl' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_29
@@ -8354,10 +8940,12 @@
         msg: Ensure successful and unsuccessful attempts to use the usermod command are collected [6.3.3.30]
     - name: Execute audit commands for 6.3.3.30
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/usr\/sbin\/usermod'
 
           grep -Ps -- '^\h*[^#\n\r]+\h*\/usr\/sbin\/usermod' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_30
@@ -8374,7 +8962,8 @@
         msg: Ensure kernel module loading unloading and modification is collected [6.3.3.31]
     - name: Execute audit commands for 6.3.3.31
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           # auditctl -l | grep -Ps -- '^\h*[^#\n\r]+\h*\/usr\/bin\/kmod'
 
           # grep -Ps -- '^\h*[^#\n\r]+\h*\/usr\/bin\/kmod' /etc/audit/rules.d/*.rules
@@ -8391,6 +8980,7 @@
            fi
            done
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_31
@@ -8407,10 +8997,12 @@
         msg: Ensure kernel "init_module" and "finit_module" loading unloading and modification is collected [6.3.3.32]
     - name: Execute audit commands for 6.3.3.32
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'init_module'
 
           grep -Ps -- 'init_module' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_32
@@ -8427,10 +9019,12 @@
         msg: Ensure kernel "delete_module" loading unloading and modification is collected [6.3.3.33]
     - name: Execute audit commands for 6.3.3.33
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'delete_module'
 
           grep -Ps -- 'delete_module' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_33
@@ -8447,10 +9041,12 @@
         msg: Ensure kernel query_module loading unloading and modification is collected [6.3.3.34]
     - name: Execute audit commands for 6.3.3.34
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           auditctl -l | grep -Ps -- 'query_module'
 
           grep -Ps -- 'query_module' /etc/audit/rules.d/*.rules
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_34
@@ -8467,8 +9063,10 @@
         msg: Ensure the audit configuration is loaded regardless of errors [6.3.3.35]
     - name: Execute audit commands for 6.3.3.35
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Ph -- '^\h*-c\b' /etc/audit/rules.d/*.rules | tail -1
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_35
@@ -8485,8 +9083,10 @@
         msg: Ensure the audit configuration is immutable [6.3.3.36]
     - name: Execute audit commands for 6.3.3.36
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           grep -Ph -- '^\h*-e\h+2\b' /etc/audit/rules.d/*.rules | tail -1
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_36
@@ -8503,8 +9103,10 @@
         msg: Ensure the running and on disk configuration is the same [6.3.3.37]
     - name: Execute audit commands for 6.3.3.37
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           augenrules --check
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_3_37
@@ -8521,7 +9123,8 @@
         msg: Ensure the audit log file directory mode is configured [6.3.4.1]
     - name: Execute audit commands for 6.3.4.1
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -8543,6 +9146,7 @@
            echo -e "\n- Audit Result:\n ** FAIL **\n - File: \"/etc/audit/auditd.conf\" not found\n - ** Verify auditd is installed **"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_4_1
@@ -8559,7 +9163,8 @@
         msg: Ensure audit log files mode is configured [6.3.4.2]
     - name: Execute audit commands for 6.3.4.2
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -8587,6 +9192,7 @@
            echo -e "\n- Audit Result:\n ** FAIL **\n - * Reasons for audit failure * :$l_output2\n"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_4_2
@@ -8603,7 +9209,8 @@
         msg: Ensure audit log files owner is configured [6.3.4.3]
     - name: Execute audit commands for 6.3.4.3
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -8627,6 +9234,7 @@
            echo -e "\n- Audit Result:\n ** FAIL **\n - * Reasons for audit failure * :$l_output2\n"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_4_3
@@ -8643,7 +9251,8 @@
         msg: Ensure audit log files group owner is configured [6.3.4.4]
     - name: Execute audit commands for 6.3.4.4
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -8674,6 +9283,7 @@
            [ -n "$l_output" ] && echo -e " - * Correctly configured * :\n$l_output\n"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_4_4
@@ -8690,7 +9300,8 @@
         msg: Ensure audit configuration files mode is configured [6.3.4.5]
     - name: Execute audit commands for 6.3.4.5
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -8708,6 +9319,7 @@
            echo -e "\n- Audit Result:\n ** FAIL **\n$l_output2"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_4_5
@@ -8758,7 +9370,8 @@
         msg: Ensure audit tools mode is configured [6.3.4.8]
     - name: Execute audit commands for 6.3.4.8
       ansible.builtin.shell:
-        cmd: !unsafe |
+        cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -8781,6 +9394,7 @@
            fi
            unset a_audit_tools
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: audit_6_3_4_8
