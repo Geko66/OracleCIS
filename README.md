@@ -51,6 +51,19 @@ El flujo operativo queda asi:
 ansible-galaxy collection install -r collections/requirements.yml
 ```
 
+## Conexion al host Oracle remoto
+
+El inventario de ejemplo de este repositorio ya apunta al host `68.221.16.169` con el usuario `Oracle`.
+
+Para no guardar la contrasena en Git, exporta antes estas variables en la maquina de control:
+
+```bash
+export ORACLE_ANSIBLE_PASSWORD='Oracleansible@2026'
+export ORACLE_ANSIBLE_BECOME_PASSWORD="$ORACLE_ANSIBLE_PASSWORD"
+```
+
+Si prefieres otro destino, ajusta [`inventory/hosts.yml`](./inventory/hosts.yml).
+
 ## Endurecimiento base
 
 ```bash
@@ -98,6 +111,12 @@ Alias equivalente:
 
 ```bash
 ansible-playbook playbooks/oscap-remediate.yml
+```
+
+Alias en ingles:
+
+```bash
+ansible-playbook playbooks/remediation.yml
 ```
 
 Los artefactos locales quedan en:
