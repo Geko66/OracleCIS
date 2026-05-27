@@ -9484,6 +9484,10 @@
     delegate_to: localhost
     become: false
 
+  - name: Initialize audit control metadata map
+    ansible.builtin.set_fact:
+      audit_control_metadata: {}
+      
   - name: Build audit control metadata map
     ansible.builtin.set_fact:
       audit_control_metadata: "{{ audit_control_metadata | default({}) | combine({ parts[0]: {'control_id': parts[1], 'title': parts[2]} }) }}"
