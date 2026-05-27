@@ -9539,7 +9539,7 @@
         start: "{{ item.value.start | default('') }}"
         end: "{{ item.value.end | default('') }}"
         delta: "{{ item.value.delta | default('') }}"
-    loop: "{{ ansible_play_vars | dict2items | selectattr('key', 'match', '^audit_[0-9_]+$') | sort(attribute='key') }}"
+    loop: "{{ hostvars[inventory_hostname] | dict2items | selectattr('key', 'match', '^audit_[0-9_]+$') | sort(attribute='key') }}"
 
   - name: Build audit report summary
     ansible.builtin.set_fact:
