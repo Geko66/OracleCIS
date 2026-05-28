@@ -174,6 +174,7 @@
     - name: Execute remediation commands for 1.1.1.11
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -214,6 +215,7 @@
            [ "${#a_output2[@]}" -gt 0 ] && printf '%s\n' "" "${a_output2[@]}" || printf '%s\n' "" " - No changes needed"
            printf '%s\n' "" " - remediation of kernel module: \"$l_mod_name\" complete" ""
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_11
