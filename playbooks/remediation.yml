@@ -19,6 +19,7 @@
     - name: Execute remediation commands for 1.1.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r cramfs 2>/dev/null
 
           rmmod cramfs 2>/dev/null
@@ -26,10 +27,12 @@
           printf '%s\n' "" "install cramfs /bin/false" >> /etc/modprobe.d/60-cramfs.conf
 
           printf '%s\n' "" "blacklist cramfs" >> /etc/modprobe.d/60-cramfs.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.2 - Ensure freevxfs kernel module is not available
     tags:
     - Level1
@@ -42,6 +45,7 @@
     - name: Execute remediation commands for 1.1.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r freevxfs 2>/dev/null
 
           rmmod freevxfs 2>/dev/null
@@ -49,10 +53,12 @@
           printf '%s\n' "" "install freevxfs /bin/false" >> /etc/modprobe.d/60-freevxfs.conf
 
           printf '%s\n' "" "blacklist freevxfs" >> /etc/modprobe.d/60-freevxfs.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.3 - Ensure hfs kernel module is not available
     tags:
     - Level1
@@ -65,11 +71,14 @@
     - name: Execute remediation commands for 1.1.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "" "install hfs /bin/false" >> /etc/modprobe.d/60-hfs.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.4 - Ensure hfsplus kernel module is not available
     tags:
     - Level1
@@ -82,6 +91,7 @@
     - name: Execute remediation commands for 1.1.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r hfsplus 2>/dev/null
 
           rmmod hfsplus 2>/dev/null
@@ -89,10 +99,12 @@
           printf '%s\n' "" "install hfsplus /bin/false" >> /etc/modprobe.d/60-hfsplus.conf
 
           printf '%s\n' "" "blacklist hfsplus" >> /etc/modprobe.d/60-hfsplus.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.5 - Ensure jffs2 kernel module is not available
     tags:
     - Level1
@@ -105,6 +117,7 @@
     - name: Execute remediation commands for 1.1.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r jffs2 2>/dev/null
 
           rmmod jffs2 2>/dev/null
@@ -112,10 +125,12 @@
           printf '%s\n' "" "install jffs2 /bin/false" >> /etc/modprobe.d/60-jffs2.conf
 
           printf '%s\n' "" "blacklist jffs2" >> /etc/modprobe.d/60-jffs2.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.9 - Ensure firewire-core kernel module is not available
     tags:
     - Level1
@@ -128,6 +143,7 @@
     - name: Execute remediation commands for 1.1.1.9
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r firewire-core 2>/dev/null
 
           rmmod firewire-core 2>/dev/null
@@ -135,10 +151,12 @@
           printf '%s\n' "" "install firewire-core /bin/false" >> /etc/modprobe.d/60-firewire-core.conf
 
           printf '%s\n' "" "blacklist firewire-core" >> /etc/modprobe.d/60-firewire-core.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_9
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.10 - Ensure usb-storage kernel module is not available
     tags:
     - Level1
@@ -151,6 +169,7 @@
     - name: Execute remediation commands for 1.1.1.10
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r usb-storage 2>/dev/null
 
           rmmod usb-storage 2>/dev/null
@@ -158,10 +177,12 @@
           printf '%s\n' "" "install usb_storage /bin/false" >> /etc/modprobe.d/60-usb-storage.conf
 
           printf '%s\n' "" "blacklist usb_storage" >> /etc/modprobe.d/60-usb-storage.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_10
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.11 - Ensure unused filesystems kernel modules are not available
     tags:
     - Level1
@@ -220,6 +241,7 @@
         executable: /bin/bash
       register: remediate_1_1_1_11
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.1.1 - Ensure /tmp is tmpfs or a separate partition
     tags:
     - Level1
@@ -232,11 +254,14 @@
     - name: Execute remediation commands for 1.1.2.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl unmask tmp.mount
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.1.2 - Ensure nodev option set on /tmp partition
     tags:
     - Level1
@@ -249,11 +274,14 @@
     - name: Execute remediation commands for 1.1.2.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /tmp
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.1.3 - Ensure nosuid option set on /tmp partition
     tags:
     - Level1
@@ -266,11 +294,14 @@
     - name: Execute remediation commands for 1.1.2.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /tmp
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.1.4 - Ensure noexec option set on /tmp partition
     tags:
     - Level1
@@ -283,11 +314,14 @@
     - name: Execute remediation commands for 1.1.2.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /tmp
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.2.1 - Ensure /dev/shm is tmpfs or a separate partition
     tags:
     - Level1
@@ -304,6 +338,7 @@
         executable: /bin/bash
       register: remediate_1_1_2_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.2.2 - Ensure nodev option set on /dev/shm partition
     tags:
     - Level1
@@ -316,11 +351,14 @@
     - name: Execute remediation commands for 1.1.2.2.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /dev/shm
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.2.3 - Ensure nosuid option set on /dev/shm partition
     tags:
     - Level1
@@ -333,11 +371,14 @@
     - name: Execute remediation commands for 1.1.2.2.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /dev/shm
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.2.4 - Ensure noexec option set on /dev/shm partition
     tags:
     - Level1
@@ -350,11 +391,14 @@
     - name: Execute remediation commands for 1.1.2.2.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /dev/shm
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.3.2 - Ensure nodev option set on /home partition
     tags:
     - Level1
@@ -367,11 +411,14 @@
     - name: Execute remediation commands for 1.1.2.3.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /home
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_3_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.3.3 - Ensure nosuid option set on /home partition
     tags:
     - Level1
@@ -384,11 +431,14 @@
     - name: Execute remediation commands for 1.1.2.3.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /home
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_3_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.4.2 - Ensure nodev option set on /var partition
     tags:
     - Level1
@@ -401,11 +451,14 @@
     - name: Execute remediation commands for 1.1.2.4.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_4_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.4.3 - Ensure nosuid option set on /var partition
     tags:
     - Level1
@@ -418,11 +471,14 @@
     - name: Execute remediation commands for 1.1.2.4.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_4_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.5.2 - Ensure nodev option set on /var/tmp partition
     tags:
     - Level1
@@ -435,11 +491,14 @@
     - name: Execute remediation commands for 1.1.2.5.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var/tmp
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_5_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.5.3 - Ensure nosuid option set on /var/tmp partition
     tags:
     - Level1
@@ -452,11 +511,14 @@
     - name: Execute remediation commands for 1.1.2.5.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var/tmp
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_5_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.5.4 - Ensure noexec option set on /var/tmp partition
     tags:
     - Level1
@@ -469,11 +531,14 @@
     - name: Execute remediation commands for 1.1.2.5.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var/tmp
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_5_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.6.2 - Ensure nodev option set on /var/log partition
     tags:
     - Level1
@@ -486,11 +551,14 @@
     - name: Execute remediation commands for 1.1.2.6.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var/log
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_6_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.6.3 - Ensure nosuid option set on /var/log partition
     tags:
     - Level1
@@ -503,11 +571,14 @@
     - name: Execute remediation commands for 1.1.2.6.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var/log
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_6_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.6.4 - Ensure noexec option set on /var/log partition
     tags:
     - Level1
@@ -520,11 +591,14 @@
     - name: Execute remediation commands for 1.1.2.6.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var/log
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_6_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.7.2 - Ensure nodev option set on /var/log/audit partition
     tags:
     - Level1
@@ -537,11 +611,14 @@
     - name: Execute remediation commands for 1.1.2.7.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var/log/audit
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_7_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.7.3 - Ensure nosuid option set on /var/log/audit partition
     tags:
     - Level1
@@ -554,11 +631,14 @@
     - name: Execute remediation commands for 1.1.2.7.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var/log/audit
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_7_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.7.4 - Ensure noexec option set on /var/log/audit partition
     tags:
     - Level1
@@ -571,11 +651,14 @@
     - name: Execute remediation commands for 1.1.2.7.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           mount -o remount /var/log/audit
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_7_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.2.1.1 - Ensure GPG keys are configured
     tags:
     - Level1
@@ -592,6 +675,7 @@
         executable: /bin/bash
       register: remediate_1_2_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.2.1.2 - Ensure gpgcheck is configured
     tags:
     - Level1
@@ -604,11 +688,14 @@
     - name: Execute remediation commands for 1.2.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           find /etc/yum.repos.d/ -name "*.repo" -exec echo "Checking:" {} \; -exec sed -i 's/^gpgcheck\s*=\s*.*/gpgcheck=1/' {} \;
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_2_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.2.1.4 - Ensure package manager repositories are configured
     tags:
     - Level1
@@ -625,6 +712,7 @@
         executable: /bin/bash
       register: remediate_1_2_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.2.2.1 - Ensure updates, patches, and additional security software are installed
     tags:
     - Level1
@@ -637,11 +725,14 @@
     - name: Execute remediation commands for 1.2.2.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           dnf update
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_2_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.3.1.1 - Ensure SELinux is installed
     tags:
     - Level1
@@ -658,6 +749,7 @@
         executable: /bin/bash
       register: remediate_1_3_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.3.1.2 - Ensure SELinux is not disabled in bootloader configuration
     tags:
     - Level1
@@ -670,11 +762,14 @@
     - name: Execute remediation commands for 1.3.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           grep -Prsq -- '^\h*([^#\n\r]+\h+)?kernelopts=([^#\n\r]+\h+)?(selinux|enforcing)=0\b' /boot/grub2 /boot/efi && grub2-mkconfig -o "$(grep -Prl -- '\h*([^#\n\r]+\h+)?kernelopts=([^#\n\r]+\h+)?(selinux|enforcing)=0\b' /boot/grub2 /boot/efi)"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_3_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.3.1.3 - Ensure SELinux policy is configured
     tags:
     - Level1
@@ -691,6 +786,7 @@
         executable: /bin/bash
       register: remediate_1_3_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.3.1.4 - Ensure the SELinux mode is not disabled
     tags:
     - Level1
@@ -703,6 +799,7 @@
     - name: Execute remediation commands for 1.3.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           touch /.autorelabel
 
           reboot
@@ -710,10 +807,12 @@
           setenforce 1
 
           setenforce 0
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_3_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.3.1.7 - Ensure the MCS Translation Service (mcstrans) is not installed
     tags:
     - Level1
@@ -730,6 +829,7 @@
         executable: /bin/bash
       register: remediate_1_3_1_7
       changed_when: true
+      failed_when: false
   - name: Remediate 1.3.1.8 - Ensure SETroubleshoot is not installed
     tags:
     - Level1
@@ -746,6 +846,7 @@
         executable: /bin/bash
       register: remediate_1_3_1_8
       changed_when: true
+      failed_when: false
   - name: Remediate 1.4.1 - Ensure bootloader password is set
     tags:
     - Level1
@@ -758,11 +859,14 @@
     - name: Execute remediation commands for 1.4.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           grub2-setpassword
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_4_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.4.2 - Ensure access to bootloader config is configured
     tags:
     - Level1
@@ -775,13 +879,16 @@
     - name: Execute remediation commands for 1.4.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           find -L /boot/grub2/ -mindepth 1 -maxdepth 1 \
 
           find -L /boot/grub2/ -mindepth 1 -maxdepth 1 -type f \
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_4_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.1 - Ensure core file size is configured
     tags:
     - Level1
@@ -794,13 +901,16 @@
     - name: Execute remediation commands for 1.5.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           sed -ri '/^\s*[^#\n\r]+\s+hard\s+core\s+([1-9][0-9]*)/s/^/# /' /etc/security/limits.conf /etc/security/limits.d/*
 
           printf '%s\n' "" "* hard core 0" >> /etc/security/limits.d/60-limits.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.2 - Ensure fs.protected_hardlinks is configured
     tags:
     - Level1
@@ -813,6 +923,7 @@
     - name: Execute remediation commands for 1.5.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -844,10 +955,12 @@
           # printf '%s\n' "" "fs.protected_hardlinks = 1" >> /etc/sysctl.d/60-fs_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.4 - Ensure fs.suid_dumpable is configured
     tags:
     - Level1
@@ -860,6 +973,7 @@
     - name: Execute remediation commands for 1.5.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -891,10 +1005,12 @@
           # printf '%s\n' "" "fs.suid_dumpable = 0" >> /etc/sysctl.d/60-fs_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.5 - Ensure kernel.dmesg_restrict is configured
     tags:
     - Level1
@@ -907,6 +1023,7 @@
     - name: Execute remediation commands for 1.5.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -938,10 +1055,12 @@
           # printf '%s\n' "" "kernel.dmesg_restrict = 1" >> /etc/sysctl.d/60-kernel_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_5
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.6 - Ensure kernel.kptr_restrict is configured
     tags:
     - Level1
@@ -954,6 +1073,7 @@
     - name: Execute remediation commands for 1.5.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -985,10 +1105,12 @@
           # printf '%s\n' "" "kernel.kptr_restrict = 2" >> /etc/sysctl.d/60-kernel_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_6
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.7 - Ensure kernel.yama.ptrace_scope is configured
     tags:
     - Level1
@@ -1001,6 +1123,7 @@
     - name: Execute remediation commands for 1.5.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1032,10 +1155,12 @@
           # printf '%s\n' "" "kernel.yama.ptrace_scope = 1" >> /etc/sysctl.d/60-kernel_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_7
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.8 - Ensure kernel.randomize_va_space is configured
     tags:
     - Level1
@@ -1048,6 +1173,7 @@
     - name: Execute remediation commands for 1.5.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1079,10 +1205,12 @@
           # printf '%s\n' "" "kernel.randomize_va_space = 2" >> /etc/sysctl.d/60-kernel_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_8
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.9 - Ensure systemd-coredump ProcessSizeMax is configured
     tags:
     - Level1
@@ -1095,6 +1223,7 @@
     - name: Execute remediation commands for 1.5.9
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1122,10 +1251,12 @@
           }
 
           # systemctl reload-or-restart systemd-coredump.socket
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_9
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.10 - Ensure systemd-coredump Storage is configured
     tags:
     - Level1
@@ -1138,6 +1269,7 @@
     - name: Execute remediation commands for 1.5.10
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1166,10 +1298,12 @@
           }
 
           # systemctl reload-or-restart systemd-coredump.socket
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_10
       changed_when: true
+      failed_when: false
   - name: Remediate 1.6.1 - Ensure system wide crypto policy is not set to legacy
     tags:
     - Level1
@@ -1182,15 +1316,18 @@
     - name: Execute remediation commands for 1.6.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           update-crypto-policies --set <CRYPTO POLICY>
 
           update-crypto-policies --set DEFAULT
 
           update-crypto-policies
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_6_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.6.2 - Ensure system wide crypto policy disables sha1 hash and signature support
     tags:
     - Level1
@@ -1203,15 +1340,18 @@
     - name: Execute remediation commands for 1.6.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "# This is a subpolicy dropping the SHA1 hash and signature support" "hash = -SHA1" "sign = -*-SHA1" "sha1_in_certs = 0" >> /etc/crypto-policies/policies/modules/NO-SHA1.pmod
 
           update-crypto-policies --set <CRYPTO_POLICY>:<CRYPTO_SUBPOLICY1>:<CRYPTO_SUBPOLICY2>:<CRYPTO_SUBPOLICY3>
 
           reboot
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_6_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.6.3 - Ensure system wide crypto policy macs are configured
     tags:
     - Level1
@@ -1224,15 +1364,18 @@
     - name: Execute remediation commands for 1.6.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "# This is a subpolicy to disable weak macs" "mac = -*-128" >> /etc/crypto-policies/policies/modules/NO-WEAKMAC.pmod
 
           update-crypto-policies --set <CRYPTO_POLICY>:<CRYPTO_SUBPOLICY1>:<CRYPTO_SUBPOLICY2>:<CRYPTO_SUBPOLICY3>
 
           reboot
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_6_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.6.4 - Ensure system wide crypto policy disables cbc for ssh
     tags:
     - Level1
@@ -1245,6 +1388,7 @@
     - name: Execute remediation commands for 1.6.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "# This is a subpolicy to disable all CBC mode ciphers" "# for the SSH protocol (libssh and OpenSSH)" "cipher@SSH = -*-CBC" >> /etc/crypto-policies/policies/modules/NO-SSHCBC.pmod
 
           update-crypto-policies --set <CRYPTO_POLICY>:<CRYPTO_SUBPOLICY1>:<CRYPTO_SUBPOLICY2>:<CRYPTO_SUBPOLICY3>
@@ -1252,10 +1396,12 @@
           update-crypto-policies --set DEFAULT:NO-SHA1:NO-WEAKMAC:NO-SSHCBC
 
           reboot
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_6_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.7.1 - Ensure /etc/motd is configured
     tags:
     - Level1
@@ -1268,6 +1414,7 @@
     - name: Execute remediation commands for 1.7.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # rm /etc/motd
 
           #!/usr/bin/env bash
@@ -1286,10 +1433,12 @@
            printf '%s\n' "${a_files[@]}"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_7_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.7.2 - Ensure /etc/issue is configured
     tags:
     - Level1
@@ -1306,6 +1455,7 @@
         executable: /bin/bash
       register: remediate_1_7_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.7.3 - Ensure /etc/issue.net is configured
     tags:
     - Level1
@@ -1322,6 +1472,7 @@
         executable: /bin/bash
       register: remediate_1_7_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.7.4 - Ensure access to /etc/motd is configured
     tags:
     - Level1
@@ -1334,15 +1485,18 @@
     - name: Execute remediation commands for 1.7.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root $(readlink -e /etc/motd)
 
           chmod u-x,go-wx $(readlink -e /etc/motd)
 
           rm /etc/motd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_7_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.7.5 - Ensure access to /etc/issue is configured
     tags:
     - Level1
@@ -1355,13 +1509,16 @@
     - name: Execute remediation commands for 1.7.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root $(readlink -e /etc/issue)
 
           chmod u-x,go-wx $(readlink -e /etc/issue)
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_7_5
       changed_when: true
+      failed_when: false
   - name: Remediate 1.7.6 - Ensure access to /etc/issue.net is configured
     tags:
     - Level1
@@ -1374,13 +1531,16 @@
     - name: Execute remediation commands for 1.7.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root $(readlink -e /etc/issue.net)
 
           chmod u-x,go-wx $(readlink -e /etc/issue.net)
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_7_6
       changed_when: true
+      failed_when: false
   - name: Remediate 1.8.1 - Ensure GDM login banner is configured
     tags:
     - Level1
@@ -1393,6 +1553,7 @@
     - name: Execute remediation commands for 1.8.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1452,10 +1613,12 @@
           }
 
           # dconf update
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_8_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.8.2 - Ensure GDM disable-user-list is configured
     tags:
     - Level1
@@ -1468,6 +1631,7 @@
     - name: Execute remediation commands for 1.8.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1515,10 +1679,12 @@
           }
 
           # dconf update
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_8_2
       changed_when: true
+      failed_when: false
   - name: Remediate 1.8.3 - Ensure GDM screen lock is configured
     tags:
     - Level1
@@ -1531,6 +1697,7 @@
     - name: Execute remediation commands for 1.8.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1599,10 +1766,12 @@
           }
 
           # dconf update
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_8_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.8.4 - Ensure GDM automount is configured
     tags:
     - Level1
@@ -1615,6 +1784,7 @@
     - name: Execute remediation commands for 1.8.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1678,10 +1848,12 @@
           }
 
           # dconf update
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_8_4
       changed_when: true
+      failed_when: false
   - name: Remediate 1.8.5 - Ensure GDM autorun-never is configured
     tags:
     - Level1
@@ -1694,6 +1866,7 @@
     - name: Execute remediation commands for 1.8.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -1743,10 +1916,12 @@
           }
 
           # dconf update
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_8_5
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.1 - Ensure autofs services are not in use
     tags:
     - Level1
@@ -1759,6 +1934,7 @@
     - name: Execute remediation commands for 2.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop autofs.service
 
           dnf remove autofs
@@ -1766,10 +1942,12 @@
           systemctl stop autofs.service
 
           systemctl mask autofs.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.2 - Ensure avahi daemon services are not in use
     tags:
     - Level1
@@ -1782,6 +1960,7 @@
     - name: Execute remediation commands for 2.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop avahi-daemon.socket avahi-daemon.service
 
           dnf remove avahi
@@ -1789,10 +1968,12 @@
           systemctl stop avahi-daemon.socket avahi-daemon.service
 
           systemctl mask avahi-daemon.socket avahi-daemon.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.4 - Ensure dhcp server services are not in use
     tags:
     - Level1
@@ -1805,6 +1986,7 @@
     - name: Execute remediation commands for 2.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop kea-dhcp-ddns.service kea-dhcp4.service kea-dhcp6.service
 
           dnf remove kea
@@ -1812,10 +1994,12 @@
           systemctl stop kea-dhcp-ddns.service kea-dhcp4.service kea-dhcp6.service
 
           systemctl mask kea-dhcp-ddns.service kea-dhcp4.service kea-dhcp6.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.5 - Ensure dns server services are not in use
     tags:
     - Level1
@@ -1828,6 +2012,7 @@
     - name: Execute remediation commands for 2.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop named.service
 
           dnf remove bind
@@ -1835,10 +2020,12 @@
           systemctl stop named.service
 
           systemctl mask named.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.6 - Ensure dnsmasq services are not in use
     tags:
     - Level1
@@ -1851,6 +2038,7 @@
     - name: Execute remediation commands for 2.1.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop dnsmasq.service
 
           dnf remove dnsmasq
@@ -1858,10 +2046,12 @@
           systemctl stop dnsmasq.service
 
           systemctl mask dnsmasq.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_6
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.7 - Ensure ftp server services are not in use
     tags:
     - Level1
@@ -1874,6 +2064,7 @@
     - name: Execute remediation commands for 2.1.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop vsftpd.service
 
           dnf remove vsftpd
@@ -1881,10 +2072,12 @@
           systemctl stop vsftpd.service
 
           systemctl mask vsftpd.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_7
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.8 - Ensure message access server services are not in use
     tags:
     - Level1
@@ -1897,6 +2090,7 @@
     - name: Execute remediation commands for 2.1.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop dovecot.socket dovecot.service cyrus-imapd.service
 
           dnf remove dovecot cyrus-imapd
@@ -1904,10 +2098,12 @@
           systemctl stop dovecot.socket dovecot.service cyrus-imapd.service
 
           systemctl mask dovecot.socket dovecot.service cyrus-imapd.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_8
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.9 - Ensure network file system services are not in use
     tags:
     - Level1
@@ -1920,6 +2116,7 @@
     - name: Execute remediation commands for 2.1.9
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop nfs-server.service
 
           dnf remove nfs-utils
@@ -1927,10 +2124,12 @@
           systemctl stop nfs-server.service
 
           systemctl mask nfs-server.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_9
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.10 - Ensure print server services are not in use
     tags:
     - Level1
@@ -1943,6 +2142,7 @@
     - name: Execute remediation commands for 2.1.10
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop cups.socket cups.service
 
           dnf remove cups
@@ -1950,10 +2150,12 @@
           systemctl stop cups.socket cups.service
 
           systemctl mask cups.socket cups.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_10
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.11 - Ensure rpcbind services are not in use
     tags:
     - Level1
@@ -1966,6 +2168,7 @@
     - name: Execute remediation commands for 2.1.11
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop rpcbind.socket rpcbind.service
 
           dnf remove rpcbind
@@ -1973,10 +2176,12 @@
           systemctl stop rpcbind.socket rpcbind.service
 
           systemctl mask rpcbind.socket rpcbind.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_11
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.12 - Ensure rsync services are not in use
     tags:
     - Level1
@@ -1989,6 +2194,7 @@
     - name: Execute remediation commands for 2.1.12
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop rsyncd.socket rsyncd.service
 
           dnf remove rsync-daemon
@@ -1996,10 +2202,12 @@
           systemctl stop rsyncd.socket rsyncd.service
 
           systemctl mask rsyncd.socket rsyncd.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_12
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.13 - Ensure samba file server services are not in use
     tags:
     - Level1
@@ -2012,6 +2220,7 @@
     - name: Execute remediation commands for 2.1.13
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop smb.service
 
           dnf remove samba
@@ -2019,10 +2228,12 @@
           systemctl stop smb.service
 
           systemctl mask smb.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_13
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.14 - Ensure snmp services are not in use
     tags:
     - Level1
@@ -2035,6 +2246,7 @@
     - name: Execute remediation commands for 2.1.14
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop snmpd.service
 
           dnf remove net-snmp
@@ -2042,10 +2254,12 @@
           systemctl stop snmpd.service
 
           systemctl mask snmpd.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_14
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.15 - Ensure telnet server services are not in use
     tags:
     - Level1
@@ -2058,6 +2272,7 @@
     - name: Execute remediation commands for 2.1.15
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop telnet.socket
 
           dnf remove telnet-server
@@ -2065,10 +2280,12 @@
           systemctl stop telnet.socket
 
           systemctl mask telnet.socket
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_15
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.16 - Ensure tftp server services are not in use
     tags:
     - Level1
@@ -2081,6 +2298,7 @@
     - name: Execute remediation commands for 2.1.16
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop tftp.socket tftp.service
 
           dnf remove tftp-server
@@ -2088,10 +2306,12 @@
           systemctl stop tftp.socket tftp.service
 
           systemctl mask tftp.socket tftp.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_16
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.17 - Ensure web proxy server services are not in use
     tags:
     - Level1
@@ -2104,6 +2324,7 @@
     - name: Execute remediation commands for 2.1.17
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop squid.service
 
           dnf remove squid
@@ -2111,10 +2332,12 @@
           systemctl stop squid.service
 
           systemctl mask squid.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_17
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.18 - Ensure web server services are not in use
     tags:
     - Level1
@@ -2127,6 +2350,7 @@
     - name: Execute remediation commands for 2.1.18
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop httpd.socket httpd.service
 
           dnf remove httpd
@@ -2142,10 +2366,12 @@
           systemctl stop nginx.service
 
           systemctl mask nginx.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_18
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.21 - Ensure mail transfer agents are configured for local-only mode
     tags:
     - Level1
@@ -2158,11 +2384,14 @@
     - name: Execute remediation commands for 2.1.21
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl restart postfix
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_21
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.22 - Ensure only approved services are listening on a network interface
     tags:
     - Level1
@@ -2175,6 +2404,7 @@
     - name: Execute remediation commands for 2.1.22
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop <service_name>.socket <service_name>.service
 
           dnf remove <package_name>
@@ -2182,10 +2412,12 @@
           systemctl stop <service_name>.socket <service_name>.service
 
           systemctl mask <service_name>.socket <service_name>.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_22
       changed_when: true
+      failed_when: false
   - name: Remediate 2.2.1 - Ensure ftp client is not installed
     tags:
     - Level1
@@ -2202,6 +2434,7 @@
         executable: /bin/bash
       register: remediate_2_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 2.2.3 - Ensure telnet client is not installed
     tags:
     - Level1
@@ -2218,6 +2451,7 @@
         executable: /bin/bash
       register: remediate_2_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 2.2.4 - Ensure tftp client is not installed
     tags:
     - Level1
@@ -2234,6 +2468,7 @@
         executable: /bin/bash
       register: remediate_2_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 2.3.1 - Ensure time synchronization is in use
     tags:
     - Level1
@@ -2250,6 +2485,7 @@
         executable: /bin/bash
       register: remediate_2_3_1
       changed_when: true
+      failed_when: false
   - name: Remediate 2.3.2 - Ensure chrony is configured
     tags:
     - Level1
@@ -2262,6 +2498,7 @@
     - name: Execute remediation commands for 2.3.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2281,10 +2518,12 @@
           }
 
           # systemctl reload-or-restart chronyd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_3_2
       changed_when: true
+      failed_when: false
   - name: Remediate 2.3.3 - Ensure chrony is not run as the root user
     tags:
     - Level1
@@ -2297,11 +2536,14 @@
     - name: Execute remediation commands for 2.3.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl reload-or-restart chronyd.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_3_3
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.1.1 - Ensure cron daemon is enabled and active
     tags:
     - Level1
@@ -2314,13 +2556,16 @@
     - name: Execute remediation commands for 2.4.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl unmask "$(systemctl list-unit-files | awk '$1~/^crond?\.service/{print $1}')"
 
           systemctl --now enable "$(systemctl list-unit-files | awk '$1~/^crond?\.service/{print $1}')"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.1.2 - Ensure access to /etc/crontab is configured
     tags:
     - Level1
@@ -2333,13 +2578,16 @@
     - name: Execute remediation commands for 2.4.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/crontab
 
           chmod og-rwx /etc/crontab
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.1.3 - Ensure access to /etc/cron.hourly is configured
     tags:
     - Level1
@@ -2352,13 +2600,16 @@
     - name: Execute remediation commands for 2.4.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/cron.hourly/
 
           chmod og-rwx /etc/cron.hourly/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.1.4 - Ensure access to /etc/cron.daily is configured
     tags:
     - Level1
@@ -2371,13 +2622,16 @@
     - name: Execute remediation commands for 2.4.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/cron.daily/
 
           chmod og-rwx /etc/cron.daily/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.1.5 - Ensure access to /etc/cron.weekly is configured
     tags:
     - Level1
@@ -2390,13 +2644,16 @@
     - name: Execute remediation commands for 2.4.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/cron.weekly/
 
           chmod og-rwx /etc/cron.weekly/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.1.6 - Ensure access to /etc/cron.monthly is configured
     tags:
     - Level1
@@ -2409,13 +2666,16 @@
     - name: Execute remediation commands for 2.4.1.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/cron.monthly/
 
           chmod og-rwx /etc/cron.monthly/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_1_6
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.1.7 - Ensure access to /etc/cron.yearly is configured
     tags:
     - Level1
@@ -2428,13 +2688,16 @@
     - name: Execute remediation commands for 2.4.1.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/cron.yearly/
 
           chmod og-rwx /etc/cron.yearly/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_1_7
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.1.8 - Ensure access to /etc/cron.d is configured
     tags:
     - Level1
@@ -2447,13 +2710,16 @@
     - name: Execute remediation commands for 2.4.1.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/cron.d/
 
           chmod og-rwx /etc/cron.d/
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_1_8
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.1.9 - Ensure access to crontab is configured
     tags:
     - Level1
@@ -2466,6 +2732,7 @@
     - name: Execute remediation commands for 2.4.1.9
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2494,10 +2761,12 @@
           You (<USERNAME>) are not allowed to use this program (crontab)
 
           See crontab(1) for more information
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_1_9
       changed_when: true
+      failed_when: false
   - name: Remediate 2.4.2.1 - Ensure access to at is configured
     tags:
     - Level1
@@ -2510,6 +2779,7 @@
     - name: Execute remediation commands for 2.4.2.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2520,10 +2790,12 @@
            [ -e "/etc/at.deny" ] && chown root:"$l_group" /etc/at.deny
            [ -e "/etc/at.deny" ] && chmod u-x,g-wx,o-rwx /etc/at.deny
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_4_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 3.1.1 - Ensure IPv6 status is identified
     tags:
     - Level1
@@ -2540,6 +2812,7 @@
         executable: /bin/bash
       register: remediate_3_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 3.1.2 - Ensure wireless interfaces are not available
     tags:
     - Level1
@@ -2552,6 +2825,7 @@
     - name: Execute remediation commands for 3.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2577,10 +2851,12 @@
            done
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 3.1.3 - Ensure bluetooth services are not in use
     tags:
     - Level1
@@ -2593,6 +2869,7 @@
     - name: Execute remediation commands for 3.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop bluetooth.service
 
           dnf remove bluez
@@ -2600,10 +2877,12 @@
           systemctl stop bluetooth.service
 
           systemctl mask bluetooth.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 3.2.1 - Ensure atm kernel module is not available
     tags:
     - Level1
@@ -2616,6 +2895,7 @@
     - name: Execute remediation commands for 3.2.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r atm 2>/dev/null
 
           rmmod can 2>/dev/null
@@ -2623,10 +2903,12 @@
           printf '\n%s\n' "install atm /bin/false" >> /etc/modprobe.d/60-atm.conf
 
           printf '\n%s\n' "blacklist atm" >> /etc/modprobe.d/60-atm.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 3.2.2 - Ensure can kernel module is not available
     tags:
     - Level1
@@ -2639,6 +2921,7 @@
     - name: Execute remediation commands for 3.2.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r can 2>/dev/null
 
           rmmod can 2>/dev/null
@@ -2646,10 +2929,12 @@
           printf '\n%s\n' "install can /bin/false" >> /etc/modprobe.d/60-can.conf
 
           printf '\n%s\n' "blacklist can" >> /etc/modprobe.d/60-can.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 3.2.3 - Ensure dccp kernel module is not available
     tags:
     - Level1
@@ -2662,6 +2947,7 @@
     - name: Execute remediation commands for 3.2.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r dccp 2>/dev/null
 
           rmmod dccp 2>/dev/null
@@ -2669,10 +2955,12 @@
           printf '\n%s\n' "install dccp /bin/false" >> /etc/modprobe.d/60-dccp.conf
 
           printf '\n%s\n' "blacklist dccp" >> /etc/modprobe.d/60-dccp.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 3.2.4 - Ensure tipc kernel module is not available
     tags:
     - Level1
@@ -2685,6 +2973,7 @@
     - name: Execute remediation commands for 3.2.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r tipc 2>/dev/null
 
           rmmod tipc 2>/dev/null
@@ -2692,10 +2981,12 @@
           printf '\n%s\n' "install tipc /bin/false" >> /etc/modprobe.d/60-tipc.conf
 
           printf '\n%s\n' "blacklist tipc" >> /etc/modprobe.d/60-tipc.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 3.2.5 - Ensure rds kernel module is not available
     tags:
     - Level1
@@ -2708,6 +2999,7 @@
     - name: Execute remediation commands for 3.2.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r rds 2>/dev/null
 
           rmmod rds 2>/dev/null
@@ -2715,10 +3007,12 @@
           printf '\n%s\n' "install rds /bin/false" >> /etc/modprobe.d/60-rds.conf
 
           printf '\n%s\n' "blacklist rds" >> /etc/modprobe.d/60-rds.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_2_5
       changed_when: true
+      failed_when: false
   - name: Remediate 3.2.6 - Ensure sctp kernel module is not available
     tags:
     - Level1
@@ -2731,6 +3025,7 @@
     - name: Execute remediation commands for 3.2.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r sctp 2>/dev/null
 
           rmmod sctp 2>/dev/null
@@ -2738,10 +3033,12 @@
           printf '\n%s\n' "install sctp /bin/false" >> /etc/modprobe.d/60-sctp.conf
 
           printf '\n%s\n' "blacklist sctp" >> /etc/modprobe.d/60-sctp.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_2_6
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.2 - Ensure net.ipv4.conf.all.forwarding is configured
     tags:
     - Level1
@@ -2754,6 +3051,7 @@
     - name: Execute remediation commands for 3.3.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2787,10 +3085,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.3 - Ensure net.ipv4.conf.default.forwarding is configured
     tags:
     - Level1
@@ -2803,6 +3103,7 @@
     - name: Execute remediation commands for 3.3.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2836,10 +3137,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.4 - Ensure net.ipv4.conf.all.send_redirects is configured
     tags:
     - Level1
@@ -2852,6 +3155,7 @@
     - name: Execute remediation commands for 3.3.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2885,10 +3189,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.5 - Ensure net.ipv4.conf.default.send_redirects is configured
     tags:
     - Level1
@@ -2901,6 +3207,7 @@
     - name: Execute remediation commands for 3.3.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2934,10 +3241,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.6 - Ensure net.ipv4.icmp_ignore_bogus_error_responses is configured
     tags:
     - Level1
@@ -2950,6 +3259,7 @@
     - name: Execute remediation commands for 3.3.1.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -2983,10 +3293,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_6
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.7 - Ensure net.ipv4.icmp_echo_ignore_broadcasts is configured
     tags:
     - Level1
@@ -2999,6 +3311,7 @@
     - name: Execute remediation commands for 3.3.1.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3032,10 +3345,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_7
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.8 - Ensure net.ipv4.conf.all.accept_redirects is configured
     tags:
     - Level1
@@ -3048,6 +3363,7 @@
     - name: Execute remediation commands for 3.3.1.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3081,10 +3397,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_8
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.9 - Ensure net.ipv4.conf.default.accept_redirects is configured
     tags:
     - Level1
@@ -3097,6 +3415,7 @@
     - name: Execute remediation commands for 3.3.1.9
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3130,10 +3449,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_9
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.10 - Ensure net.ipv4.conf.all.secure_redirects is configured
     tags:
     - Level1
@@ -3146,6 +3467,7 @@
     - name: Execute remediation commands for 3.3.1.10
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3179,10 +3501,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_10
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.11 - Ensure net.ipv4.conf.default.secure_redirects is configured
     tags:
     - Level1
@@ -3195,6 +3519,7 @@
     - name: Execute remediation commands for 3.3.1.11
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3228,10 +3553,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_11
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.12 - Ensure net.ipv4.conf.all.rp_filter is configured
     tags:
     - Level1
@@ -3244,6 +3571,7 @@
     - name: Execute remediation commands for 3.3.1.12
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3277,10 +3605,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_12
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.13 - Ensure net.ipv4.conf.default.rp_filter is configured
     tags:
     - Level1
@@ -3293,6 +3623,7 @@
     - name: Execute remediation commands for 3.3.1.13
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3326,10 +3657,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_13
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.14 - Ensure net.ipv4.conf.all.accept_source_route is configured
     tags:
     - Level1
@@ -3342,6 +3675,7 @@
     - name: Execute remediation commands for 3.3.1.14
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3375,10 +3709,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_14
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.15 - Ensure net.ipv4.conf.default.accept_source_route is configured
     tags:
     - Level1
@@ -3391,6 +3727,7 @@
     - name: Execute remediation commands for 3.3.1.15
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3424,10 +3761,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_15
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.16 - Ensure net.ipv4.conf.all.log_martians is configured
     tags:
     - Level1
@@ -3440,6 +3779,7 @@
     - name: Execute remediation commands for 3.3.1.16
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3473,10 +3813,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_16
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.17 - Ensure net.ipv4.conf.default.log_martians is configured
     tags:
     - Level1
@@ -3489,6 +3831,7 @@
     - name: Execute remediation commands for 3.3.1.17
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3522,10 +3865,12 @@
           >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_17
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.18 - Ensure net.ipv4.tcp_syncookies is configured
     tags:
     - Level1
@@ -3538,6 +3883,7 @@
     - name: Execute remediation commands for 3.3.1.18
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3569,10 +3915,12 @@
           # printf '%s\n' "" "net.ipv4.tcp_syncookies = 1" >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_18
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.2.1 - Ensure  net.ipv6.conf.all.forwarding is configured
     tags:
     - Level1
@@ -3585,6 +3933,7 @@
     - name: Execute remediation commands for 3.3.2.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3616,10 +3965,12 @@
           # printf '%s\n' "" "net.ipv6.conf.all.forwarding = 0" >> /etc/sysctl.d/60-ipv6_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.2.2 - Ensure  net.ipv6.conf.default.forwarding is configured
     tags:
     - Level1
@@ -3632,6 +3983,7 @@
     - name: Execute remediation commands for 3.3.2.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3663,10 +4015,12 @@
           # printf '%s\n' "" "net.ipv6.conf.default.forwarding = 0" >> /etc/sysctl.d/60-ipv6_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.2.3 - Ensure net.ipv6.conf.all.accept_redirects is configured
     tags:
     - Level1
@@ -3679,6 +4033,7 @@
     - name: Execute remediation commands for 3.3.2.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3712,10 +4067,12 @@
           >> /etc/sysctl.d/60-ipv6_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.2.4 - Ensure net.ipv6.conf.default.accept_redirects is configured
     tags:
     - Level1
@@ -3728,6 +4085,7 @@
     - name: Execute remediation commands for 3.3.2.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3761,10 +4119,12 @@
           >> /etc/sysctl.d/60-ipv6_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.2.5 - Ensure net.ipv6.conf.all.accept_source_route is configured
     tags:
     - Level1
@@ -3777,6 +4137,7 @@
     - name: Execute remediation commands for 3.3.2.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3810,10 +4171,12 @@
           >> /etc/sysctl.d/60-ipv6_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_2_5
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.2.6 - Ensure net.ipv6.conf.default.accept_source_route is configured
     tags:
     - Level1
@@ -3826,6 +4189,7 @@
     - name: Execute remediation commands for 3.3.2.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3859,10 +4223,12 @@
           >> /etc/sysctl.d/60-ipv6_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_2_6
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.2.7 - Ensure net.ipv6.conf.all.accept_ra is configured
     tags:
     - Level1
@@ -3875,6 +4241,7 @@
     - name: Execute remediation commands for 3.3.2.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3906,10 +4273,12 @@
           # printf '%s\n' "" "net.ipv6.conf.all.accept_ra = 0" >> /etc/sysctl.d/60-ipv6_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_2_7
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.2.8 - Ensure net.ipv6.conf.default.accept_ra is configured
     tags:
     - Level1
@@ -3922,6 +4291,7 @@
     - name: Execute remediation commands for 3.3.2.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -3953,10 +4323,12 @@
           # printf '%s\n' "" "net.ipv6.conf.default.accept_ra = 0" >> /etc/sysctl.d/60-ipv6_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_2_8
       changed_when: true
+      failed_when: false
   - name: Remediate 4.1.1 - Ensure firewalld is installed
     tags:
     - Level1
@@ -3973,6 +4345,7 @@
         executable: /bin/bash
       register: remediate_4_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 4.1.2 - Ensure firewalld backend is configured
     tags:
     - Level1
@@ -3989,6 +4362,7 @@
         executable: /bin/bash
       register: remediate_4_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 4.1.3 - Ensure firewalld.service is configured
     tags:
     - Level1
@@ -4001,13 +4375,16 @@
     - name: Execute remediation commands for 4.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl unmask firewalld.service
 
           systemctl --now enable firewalld.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_4_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 4.1.4 - Ensure firewalld active zone target is configured
     tags:
     - Level1
@@ -4020,13 +4397,16 @@
     - name: Execute remediation commands for 4.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           firewall-cmd --zone={ACTIVE_ZONE} --set-target={TARGET} --permanent
 
           firewall-cmd --zone=public --set-target=DROP --permanent
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_4_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 4.1.5 - Ensure firewalld loopback traffic is configured
     tags:
     - Level1
@@ -4039,15 +4419,18 @@
     - name: Execute remediation commands for 4.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           firewall-cmd --permanent --zone=trusted --add-interface=lo
 
           firewall-cmd --zone=public --change-interface=lo
 
           firewall-cmd --reload
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_4_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 4.1.6 - Ensure firewalld loopback source address traffic is configured
     tags:
     - Level1
@@ -4060,6 +4443,7 @@
     - name: Execute remediation commands for 4.1.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # firewall-cmd --permanent --zone={ZONE_NAME} --add-rich-rule='rule family=ipv4 source address="127.0.0.1" destination not address="127.0.0.1" drop'
 
           # firewall-cmd --permanent --zone={ZONE_NAME} --add-rich-rule='rule family=ipv6 source address="::1" destination not address="::1" drop'
@@ -4074,10 +4458,12 @@
           }
 
           # firewall-cmd --reload
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_4_1_6
       changed_when: true
+      failed_when: false
   - name: Remediate 4.1.7 - Ensure firewalld services and ports are configured
     tags:
     - Level1
@@ -4090,6 +4476,7 @@
     - name: Execute remediation commands for 4.1.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           firewall-cmd --remove-service=<service>
 
           firewall-cmd --remove-service=cockpit
@@ -4099,10 +4486,12 @@
           firewall-cmd --remove-port=25/tcp
 
           firewall-cmd --runtime-to-permanent
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_4_1_7
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.1 - Ensure access to /etc/ssh/sshd_config is configured
     tags:
     - Level1
@@ -4115,6 +4504,7 @@
     - name: Execute remediation commands for 5.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4127,10 +4517,12 @@
            fi
            done < <(find /etc/ssh/sshd_config.d -type f -print0 2>/dev/null)
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.2 - Ensure access to SSH private host key files is configured
     tags:
     - Level1
@@ -4143,6 +4535,7 @@
     - name: Execute remediation commands for 5.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4198,10 +4591,12 @@
            printf '%s\n' "" " - Remediation results:" "${a_output2[@]}" ""
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.3 - Ensure access to SSH public host key files is configured
     tags:
     - Level1
@@ -4214,6 +4609,7 @@
     - name: Execute remediation commands for 5.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4251,10 +4647,12 @@
            printf '%s\n' " - Remediation results:" "${a_output2[@]}" ""
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.4 - Ensure sshd access is configured
     tags:
     - Level1
@@ -4267,11 +4665,14 @@
     - name: Execute remediation commands for 5.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.5 - Ensure sshd Banner is configured
     tags:
     - Level1
@@ -4284,11 +4685,14 @@
     - name: Execute remediation commands for 5.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "Authorized users only. All activity may be monitored and reported." > "$(sshd -T | awk '$1 == "banner" {print $2}')"
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.6 - Ensure sshd Ciphers are configured
     tags:
     - Level1
@@ -4301,6 +4705,7 @@
     - name: Execute remediation commands for 5.1.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "# This is a subpolicy to disable weak ciphers" "# for the SSH protocol (libssh and OpenSSH)" "cipher@SSH = -3DES-CBC -AES-128-CBC -AES-192-CBC -AES-256-CBC" >> /etc/crypto-policies/policies/modules/NO-SSHWEAKCIPHERS.pmod
 
           update-crypto-policies --set <CRYPTO_POLICY>:<CRYPTO_SUBPOLICY1>:<CRYPTO_SUBPOLICY2>:<CRYPTO_SUBPOLICY3>
@@ -4308,10 +4713,12 @@
           update-crypto-policies --set DEFAULT:NO-SHA1:NO-WEAKMAC:NO-SSHCBC:NO-SSHWEAKCIPHERS
 
           systemctl reload-or-restart sshd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_6
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.7 - Ensure sshd ClientAliveInterval and ClientAliveCountMax are configured
     tags:
     - Level1
@@ -4324,11 +4731,14 @@
     - name: Execute remediation commands for 5.1.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_7
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.10 - Ensure sshd HostbasedAuthentication is disabled
     tags:
     - Level1
@@ -4345,6 +4755,7 @@
         executable: /bin/bash
       register: remediate_5_1_10
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.11 - Ensure sshd IgnoreRhosts is enabled
     tags:
     - Level1
@@ -4361,6 +4772,7 @@
         executable: /bin/bash
       register: remediate_5_1_11
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.12 - Ensure sshd KexAlgorithms is configured
     tags:
     - Level1
@@ -4373,6 +4785,7 @@
     - name: Execute remediation commands for 5.1.12
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "# This is a subpolicy dropping the SHA1 hash and signature support" "hash = -SHA1" "sign = -*-SHA1" "sha1_in_certs = 0" >> /etc/crypto-policies/policies/modules/NO-SHA1.pmod
 
           update-crypto-policies --set <CRYPTO_POLICY>:<CRYPTO_SUBPOLICY1>:<CRYPTO_SUBPOLICY2>:<CRYPTO_SUBPOLICY3>
@@ -4380,10 +4793,12 @@
           update-crypto-policies --set DEFAULT:NO-SHA1:NO-WEAKMAC:NO-SSHCBC:NO-SSHCHACHA20:NO-SSHETM:NO-SSHWEAKCIPHERS
 
           systemctl reload-or-restart sshd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_12
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.13 - Ensure sshd LoginGraceTime is configured
     tags:
     - Level1
@@ -4400,6 +4815,7 @@
         executable: /bin/bash
       register: remediate_5_1_13
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.14 - Ensure sshd LogLevel is configured
     tags:
     - Level1
@@ -4412,11 +4828,14 @@
     - name: Execute remediation commands for 5.1.14
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_14
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.15 - Ensure sshd MACs are configured
     tags:
     - Level1
@@ -4429,6 +4848,7 @@
     - name: Execute remediation commands for 5.1.15
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "# This is a subpolicy to disable weak MACs" "# for the SSH protocol (libssh and OpenSSH)" "mac@SSH = -HMAC-MD5* -UMAC-64* -UMAC-128* -HMAC-SHA1*" >> /etc/crypto-policies/policies/modules/NO-SSHWEAKMACS.pmod
 
           update-crypto-policies --set <CRYPTO_POLICY>:<CRYPTO_SUBPOLICY1>:<CRYPTO_SUBPOLICY2>:<CRYPTO_SUBPOLICY3>
@@ -4436,10 +4856,12 @@
           update-crypto-policies --set DEFAULT:NO-SHA1:NO-WEAKMAC:NO-SSHCBC:NO-SSHCHACHA20:NO-SSHETM:NO-SSHWEAKCIPHERS:NO-SSHWEAKMACS
 
           systemctl reload-or-restart sshd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_15
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.16 - Ensure sshd MaxAuthTries is configured
     tags:
     - Level1
@@ -4456,6 +4878,7 @@
         executable: /bin/bash
       register: remediate_5_1_16
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.17 - Ensure sshd MaxStartups is configured
     tags:
     - Level1
@@ -4472,6 +4895,7 @@
         executable: /bin/bash
       register: remediate_5_1_17
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.18 - Ensure sshd MaxSessions is configured
     tags:
     - Level1
@@ -4488,6 +4912,7 @@
         executable: /bin/bash
       register: remediate_5_1_18
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.19 - Ensure sshd PermitEmptyPasswords is disabled
     tags:
     - Level1
@@ -4500,11 +4925,14 @@
     - name: Execute remediation commands for 5.1.19
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl reload-or-restart sshd.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_1_19
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.20 - Ensure sshd PermitRootLogin is disabled
     tags:
     - Level1
@@ -4521,6 +4949,7 @@
         executable: /bin/bash
       register: remediate_5_1_20
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.21 - Ensure sshd PermitUserEnvironment is disabled
     tags:
     - Level1
@@ -4537,6 +4966,7 @@
         executable: /bin/bash
       register: remediate_5_1_21
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.22 - Ensure sshd UsePAM is enabled
     tags:
     - Level1
@@ -4553,6 +4983,7 @@
         executable: /bin/bash
       register: remediate_5_1_22
       changed_when: true
+      failed_when: false
   - name: Remediate 5.2.1 - Ensure sudo is installed
     tags:
     - Level1
@@ -4569,6 +5000,7 @@
         executable: /bin/bash
       register: remediate_5_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.2.2 - Ensure sudo commands use pty
     tags:
     - Level1
@@ -4585,6 +5017,7 @@
         executable: /bin/bash
       register: remediate_5_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.2.3 - Ensure sudo log file exists
     tags:
     - Level1
@@ -4597,11 +5030,14 @@
     - name: Execute remediation commands for 5.2.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 5.2.5 - Ensure re-authentication for privilege escalation is not disabled globally
     tags:
     - Level1
@@ -4614,11 +5050,14 @@
     - name: Execute remediation commands for 5.2.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_2_5
       changed_when: true
+      failed_when: false
   - name: Remediate 5.2.6 - Ensure sudo timestamp_timeout is configured
     tags:
     - Level1
@@ -4631,11 +5070,14 @@
     - name: Execute remediation commands for 5.2.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_2_6
       changed_when: true
+      failed_when: false
   - name: Remediate 5.2.7 - Ensure access to the su command is restricted
     tags:
     - Level1
@@ -4648,11 +5090,14 @@
     - name: Execute remediation commands for 5.2.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           groupadd sugroup
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_2_7
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.1.1 - Ensure active authselect profile includes pam modules
     tags:
     - Level1
@@ -4665,6 +5110,7 @@
     - name: Execute remediation commands for 5.3.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           authselect create-profile <custom-profile name> <options>
 
           authselect create-profile custom-profile -b local
@@ -4672,10 +5118,12 @@
           authselect select custom/<CUSTOM PROFILE NAME> {with-<OPTIONS>} {--force}
 
           authselect select custom/custom-profile --backup=PAM_CONFIG_BACKUP --force
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.1.2 - Ensure pam_faillock module is enabled
     tags:
     - Level1
@@ -4688,6 +5136,7 @@
     - name: Execute remediation commands for 5.3.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4716,10 +5165,12 @@
           # authselect enable-feature with-faillock
 
           # authselect apply-changes
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.1.3 - Ensure pam_pwquality module is enabled
     tags:
     - Level1
@@ -4732,6 +5183,7 @@
     - name: Execute remediation commands for 5.3.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4752,10 +5204,12 @@
           # authselect enable-feature with-pwquality
 
           # authselect apply-changes
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.1.4 - Ensure pam_pwhistory module is enabled
     tags:
     - Level1
@@ -4768,6 +5222,7 @@
     - name: Execute remediation commands for 5.3.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4788,10 +5243,12 @@
           # authselect enable-feature with-pwhistory
 
           # authselect apply-changes
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.1.5 - Ensure pam_unix module is enabled
     tags:
     - Level1
@@ -4804,6 +5261,7 @@
     - name: Execute remediation commands for 5.3.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4832,10 +5290,12 @@
           # /etc/authselect/custom/custom-profile/system-auth:password sufficient pam_unix.so sha512 shadow {if not "without-nullok":nullok} use_authtok
 
           # /etc/authselect/custom/custom-profile/system-auth:session required pam_unix.so
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.1.1 - Ensure password failed attempts lockout is configured
     tags:
     - Level1
@@ -4848,6 +5308,7 @@
     - name: Execute remediation commands for 5.3.2.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4857,10 +5318,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.1.2 - Ensure password unlock time is configured
     tags:
     - Level1
@@ -4873,6 +5336,7 @@
     - name: Execute remediation commands for 5.3.2.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -4882,10 +5346,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.2.1 - Ensure password number of changed characters is configured
     tags:
     - Level1
@@ -4898,6 +5364,7 @@
     - name: Execute remediation commands for 5.3.2.2.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # sed -ri 's/^\s*difok\s*=/# &/' /etc/security/pwquality.conf
 
           # printf '%s\n' "" "difok = 2" >> /etc/security/pwquality.conf.d/50-pwdifok.conf
@@ -4911,10 +5378,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.2.2 - Ensure password length is configured
     tags:
     - Level1
@@ -4927,6 +5396,7 @@
     - name: Execute remediation commands for 5.3.2.2.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # sed -ri 's/^\s*minlen\s*=/# &/' /etc/security/pwquality.conf
 
           # printf '%s\n' "" "minlen = 14" >> /etc/security/pwquality.conf.d/50-pwlength.conf
@@ -4940,10 +5410,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.2.3 - Ensure password complexity is configured
     tags:
     - Level1
@@ -4956,6 +5428,7 @@
     - name: Execute remediation commands for 5.3.2.2.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # sed -ri 's/^\s*minclass\s*=/# &/' /etc/security/pwquality.conf
 
           # printf '\n%s' "minclass = 4" >> /etc/security/pwquality.conf.d/50-pwcomplexity.conf
@@ -4977,10 +5450,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.2.4 - Ensure password same consecutive characters is configured
     tags:
     - Level1
@@ -4993,6 +5468,7 @@
     - name: Execute remediation commands for 5.3.2.2.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # sed -ri 's/^\s*maxrepeat\s*=/# &/' /etc/security/pwquality.conf
 
           # printf '%s\n' "" "maxrepeat = 3" >> /etc/security/pwquality.conf.d/50-pwrepeat.conf
@@ -5006,10 +5482,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.2.5 - Ensure password maximum sequential characters is configured
     tags:
     - Level1
@@ -5022,6 +5500,7 @@
     - name: Execute remediation commands for 5.3.2.2.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # sed -ri 's/^\s*maxsequence\s*=/# &/' /etc/security/pwquality.conf
 
           # printf '%s\n' "" "maxsequence = 3" >> /etc/security/pwquality.conf.d/50-pwmaxsequence.conf
@@ -5035,10 +5514,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_2_5
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.2.6 - Ensure password dictionary check is enabled
     tags:
     - Level1
@@ -5051,6 +5532,7 @@
     - name: Execute remediation commands for 5.3.2.2.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # sed -ri 's/^\s*dictcheck\s*=/# &/' /etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
 
           #!/usr/bin/env bash
@@ -5062,10 +5544,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_2_6
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.2.7 - Ensure password quality is enforced for the root user
     tags:
     - Level1
@@ -5082,6 +5566,7 @@
         executable: /bin/bash
       register: remediate_5_3_2_2_7
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.3.1 - Ensure password history remember is configured
     tags:
     - Level1
@@ -5094,6 +5579,7 @@
     - name: Execute remediation commands for 5.3.2.3.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5103,10 +5589,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_3_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.3.2 - Ensure password history is enforced for the root user
     tags:
     - Level1
@@ -5123,6 +5611,7 @@
         executable: /bin/bash
       register: remediate_5_3_2_3_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.3.3 - Ensure pam_pwhistory includes use_authtok
     tags:
     - Level1
@@ -5135,6 +5624,7 @@
     - name: Execute remediation commands for 5.3.2.3.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5171,10 +5661,12 @@
           }
 
           # authselect apply-changes
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_3_3
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.4.1 - Ensure pam_unix does not include nullok
     tags:
     - Level1
@@ -5187,6 +5679,7 @@
     - name: Execute remediation commands for 5.3.2.4.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           {
            l_module_name="unix"
            l_profile_name="$(head -1 /etc/authselect/authselect.conf)"
@@ -5226,10 +5719,12 @@
           # authselect enable-feature without-nullok
 
           # authselect apply-changes
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_4_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.4.2 - Ensure pam_unix does not include remember
     tags:
     - Level1
@@ -5242,6 +5737,7 @@
     - name: Execute remediation commands for 5.3.2.4.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5273,10 +5769,12 @@
           }
 
           # authselect apply-changes
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_4_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.4.3 - Ensure pam_unix includes a strong password hashing algorithm
     tags:
     - Level1
@@ -5289,6 +5787,7 @@
     - name: Execute remediation commands for 5.3.2.4.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5328,10 +5827,12 @@
           }
 
           # authselect apply-changes
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_4_3
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.4.4 - Ensure pam_unix includes use_authtok
     tags:
     - Level1
@@ -5344,6 +5845,7 @@
     - name: Execute remediation commands for 5.3.2.4.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5380,10 +5882,12 @@
           }
 
           # authselect apply-changes
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_4_4
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.1.1 - Ensure password expiration is configured
     tags:
     - Level1
@@ -5396,15 +5900,18 @@
     - name: Execute remediation commands for 5.4.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chage --maxdays 365 <user>
 
           chage --maxdays <N> <user>
 
           awk -F: '($2~/^\$.+\$/) {if($5 > 365 || $5 < 1)system ("chage --maxdays 365 " $1)}' /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.1.3 - Ensure password expiration warning days is configured
     tags:
     - Level1
@@ -5417,13 +5924,16 @@
     - name: Execute remediation commands for 5.4.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chage --warndays <N> <user>
 
           awk -F: '($2~/^\$.+\$/) {if($6 < 7)system ("chage --warndays 7 " $1)}' /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.1.4 - Ensure strong password hashing algorithm is configured
     tags:
     - Level1
@@ -5436,11 +5946,14 @@
     - name: Execute remediation commands for 5.4.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.1.5 - Ensure inactive password lock is configured
     tags:
     - Level1
@@ -5453,6 +5966,7 @@
     - name: Execute remediation commands for 5.4.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           useradd -D -f <N>
 
           useradd -D -f 45
@@ -5460,10 +5974,12 @@
           chage --inactive <N> <user>
 
           awk -F: '($2~/^\$.+\$/) {if($7 > 45 || $7 < 0)system ("chage --inactive 45 " $1)}' /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.1.6 - Ensure all users last password change date is in the past
     tags:
     - Level1
@@ -5480,6 +5996,7 @@
         executable: /bin/bash
       register: remediate_5_4_1_6
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.2.1 - Ensure root is the only UID 0 account
     tags:
     - Level1
@@ -5496,6 +6013,7 @@
         executable: /bin/bash
       register: remediate_5_4_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.2.2 - Ensure root is the only GID 0 account
     tags:
     - Level1
@@ -5508,13 +6026,16 @@
     - name: Execute remediation commands for 5.4.2.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           usermod -g 0 root
 
           groupmod -g 0 root
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.2.3 - Ensure group root is the only GID 0 group
     tags:
     - Level1
@@ -5531,6 +6052,7 @@
         executable: /bin/bash
       register: remediate_5_4_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.2.4 - Ensure root account access is controlled
     tags:
     - Level1
@@ -5543,13 +6065,16 @@
     - name: Execute remediation commands for 5.4.2.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           passwd root
 
           usermod -L root
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.2.5 - Ensure root path integrity
     tags:
     - Level1
@@ -5562,11 +6087,14 @@
     - name: Execute remediation commands for 5.4.2.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_2_5
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.2.6 - Ensure root user umask is configured
     tags:
     - Level1
@@ -5583,6 +6111,7 @@
         executable: /bin/bash
       register: remediate_5_4_2_6
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.2.7 - Ensure system accounts do not have a valid login shell
     tags:
     - Level1
@@ -5595,6 +6124,7 @@
     - name: Execute remediation commands for 5.4.2.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # usermod -s $(command -v nologin) <user>
 
           #!/usr/bin/env bash
@@ -5603,10 +6133,12 @@
            l_valid_shells="^($( awk -F\/ '$NF != "nologin" {print}' /etc/shells | sed -rn '/^\//{s,/,\\\\/,g;p}' | paste -s -d '|' - ))$"
            awk -v pat="$l_valid_shells" -F: '($1!~/^(root|halt|sync|shutdown|nfsnobody)$/ && ($3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' || $3 == 65534) && $(NF) ~ pat) {system ("usermod -s '"$(command -v nologin)"' " $1)}' /etc/passwd
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_2_7
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.2.8 - Ensure accounts without a valid login shell are locked
     tags:
     - Level1
@@ -5619,6 +6151,7 @@
     - name: Execute remediation commands for 5.4.2.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # usermod -L <user>
 
           #!/usr/bin/env bash
@@ -5629,10 +6162,12 @@
            passwd -S "$l_user" | awk '$2 !~ /^L/ {system ("usermod -L " $1)}'
            done < <(awk -v pat="$l_valid_shells" -F: '($1 != "root" && $(NF) !~ pat) {print $1}' /etc/passwd)
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_2_8
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.3.2 - Ensure default user shell timeout is configured
     tags:
     - Level1
@@ -5645,11 +6180,14 @@
     - name: Execute remediation commands for 5.4.3.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "# Set TMOUT to 900 seconds" "typeset -xr TMOUT=900" > /etc/profile.d/50-tmout.sh
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_3_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.3.3 - Ensure default user umask is configured
     tags:
     - Level1
@@ -5662,6 +6200,7 @@
     - name: Execute remediation commands for 5.4.3.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5675,10 +6214,12 @@
           # printf '%s\n' "" "umask 027" >> /etc/profile.d/60-default_umask.sh
 
           UMASK 027
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_3_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.1.1 - Ensure AIDE is installed
     tags:
     - Level1
@@ -5691,15 +6232,18 @@
     - name: Execute remediation commands for 6.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           dnf install aide
 
           aide --init
 
           mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 6.1.2 - Ensure filesystem integrity is regularly checked
     tags:
     - Level1
@@ -5712,6 +6256,7 @@
     - name: Execute remediation commands for 6.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           crontab -u root -e
 
           chown root:root /etc/systemd/system/aidecheck.*
@@ -5723,10 +6268,12 @@
           systemctl enable aidecheck.service
 
           systemctl --now enable aidecheck.timer
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 6.1.3 - Ensure cryptographic mechanisms are used to protect the integrity of audit tools
     tags:
     - Level1
@@ -5739,15 +6286,18 @@
     - name: Execute remediation commands for 6.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           readlink -f /sbin
 
           Audit Tools
 
           printf '\n%s' "# Audit Tools" "$(readlink -f /sbin/auditctl) p+i+n+u+g+s+b+acl+xattrs+sha512" "$(readlink -f /sbin/auditd) p+i+n+u+g+s+b+acl+xattrs+sha512" "$(readlink -f /sbin/ausearch) p+i+n+u+g+s+b+acl+xattrs+sha512" "$(readlink -f /sbin/aureport) p+i+n+u+g+s+b+acl+xattrs+sha512" "$(readlink -f /sbin/autrace) p+i+n+u+g+s+b+acl+xattrs+sha512" "$(readlink -f /sbin/augenrules) p+i+n+u+g+s+b+acl+xattrs+sha512" >> /etc/aide.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.1.1 - Ensure journald service is active
     tags:
     - Level1
@@ -5760,13 +6310,16 @@
     - name: Execute remediation commands for 6.2.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl unmask systemd-journald.service
 
           systemctl --now enable systemd-journald.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.1.2 - Ensure journald log file access is configured
     tags:
     - Level1
@@ -5783,6 +6336,7 @@
         executable: /bin/bash
       register: remediate_6_2_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.1.3 - Ensure journald log file rotation is configured
     tags:
     - Level1
@@ -5795,11 +6349,14 @@
     - name: Execute remediation commands for 6.2.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.1.4 - Ensure only one logging system is in use
     tags:
     - Level1
@@ -5812,11 +6369,14 @@
     - name: Execute remediation commands for 6.2.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.2.2 - Ensure journald ForwardToSyslog is disabled
     tags:
     - Level1
@@ -5829,6 +6389,7 @@
     - name: Execute remediation commands for 6.2.2.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5841,10 +6402,12 @@
           }
 
           # systemctl reload-or-restart systemd-journald
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.2.3 - Ensure journald Compress is configured
     tags:
     - Level1
@@ -5857,6 +6420,7 @@
     - name: Execute remediation commands for 6.2.2.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5869,10 +6433,12 @@
           }
 
           # systemctl reload-or-restart systemd-journald
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.2.4 - Ensure journald Storage is configured
     tags:
     - Level1
@@ -5885,6 +6451,7 @@
     - name: Execute remediation commands for 6.2.2.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5897,10 +6464,12 @@
           }
 
           # systemctl reload-or-restart systemd-journald
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.2.1.1 - Ensure systemd-journal-remote is installed
     tags:
     - Level1
@@ -5917,6 +6486,7 @@
         executable: /bin/bash
       register: remediate_6_2_2_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.2.1.2 - Ensure systemd-journal-upload authentication is configured
     tags:
     - Level1
@@ -5929,6 +6499,7 @@
     - name: Execute remediation commands for 6.2.2.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -5942,10 +6513,12 @@
           }
 
           # systemctl reload-or-restart systemd-journal-upload
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_2_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.2.1.3 - Ensure systemd-journal-upload is enabled and active
     tags:
     - Level1
@@ -5958,13 +6531,16 @@
     - name: Execute remediation commands for 6.2.2.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl unmask systemd-journal-upload.service
 
           systemctl --now enable systemd-journal-upload.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_2_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.2.1.4 - Ensure systemd-journal-remote service is not in use
     tags:
     - Level1
@@ -5977,13 +6553,16 @@
     - name: Execute remediation commands for 6.2.2.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop systemd-journal-remote.socket systemd-journal-remote.service
 
           systemctl mask systemd-journal-remote.socket systemd-journal-remote.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_2_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.3.1 - Ensure rsyslog is installed
     tags:
     - Level1
@@ -6000,6 +6579,7 @@
         executable: /bin/bash
       register: remediate_6_2_3_1
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.3.2 - Ensure rsyslog service is enabled and active
     tags:
     - Level1
@@ -6012,15 +6592,18 @@
     - name: Execute remediation commands for 6.2.3.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl unmask rsyslog.service
 
           systemctl enable rsyslog.service
 
           systemctl start rsyslog.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_3_2
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.3.3 - Ensure journald is configured to send logs to rsyslog
     tags:
     - Level1
@@ -6033,6 +6616,7 @@
     - name: Execute remediation commands for 6.2.3.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6045,10 +6629,12 @@
           }
 
           # systemctl reload-or-restart systemd-journald.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_3_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.3.4 - Ensure rsyslog log file creation mode is configured
     tags:
     - Level1
@@ -6061,11 +6647,14 @@
     - name: Execute remediation commands for 6.2.3.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl restart rsyslog
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_3_4
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.3.5 - Ensure rsyslog logging is configured
     tags:
     - Level1
@@ -6078,11 +6667,14 @@
     - name: Execute remediation commands for 6.2.3.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl restart rsyslog
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_3_5
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.3.6 - Ensure rsyslog is configured to send logs to a remote log host
     tags:
     - Level1
@@ -6095,11 +6687,14 @@
     - name: Execute remediation commands for 6.2.3.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl reload-or-restart rsyslog.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_3_6
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.3.7 - Ensure rsyslog is not configured to receive logs from a remote client
     tags:
     - Level1
@@ -6112,11 +6707,14 @@
     - name: Execute remediation commands for 6.2.3.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl restart rsyslog
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_3_7
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.3.8 - Ensure rsyslog logrotate is configured
     tags:
     - Level1
@@ -6129,11 +6727,14 @@
     - name: Execute remediation commands for 6.2.3.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_3_8
       changed_when: true
+      failed_when: false
   - name: Remediate 6.2.4.1 - Ensure access to all logfiles has been configured
     tags:
     - Level1
@@ -6146,6 +6747,7 @@
     - name: Execute remediation commands for 6.2.4.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6211,10 +6813,12 @@
            printf '\n%s' "${a_output2[@]}" ""
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_2_4_1
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.1 - Ensure access to /etc/passwd is configured
     tags:
     - Level1
@@ -6227,13 +6831,16 @@
     - name: Execute remediation commands for 7.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chmod u-x,go-wx /etc/passwd
 
           chown root:root /etc/passwd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.2 - Ensure access to /etc/passwd- is configured
     tags:
     - Level1
@@ -6246,13 +6853,16 @@
     - name: Execute remediation commands for 7.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chmod u-x,go-wx /etc/passwd-
 
           chown root:root /etc/passwd-
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.3 - Ensure access to /etc/group is configured
     tags:
     - Level1
@@ -6265,13 +6875,16 @@
     - name: Execute remediation commands for 7.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chmod u-x,go-wx /etc/group
 
           chown root:root /etc/group
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.4 - Ensure access to /etc/group- is configured
     tags:
     - Level1
@@ -6284,13 +6897,16 @@
     - name: Execute remediation commands for 7.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chmod u-x,go-wx /etc/group-
 
           chown root:root /etc/group-
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.5 - Ensure access to /etc/shadow is configured
     tags:
     - Level1
@@ -6303,13 +6919,16 @@
     - name: Execute remediation commands for 7.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/shadow
 
           chmod 0000 /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.6 - Ensure access to /etc/shadow- is configured
     tags:
     - Level1
@@ -6322,13 +6941,16 @@
     - name: Execute remediation commands for 7.1.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/shadow-
 
           chmod 0000 /etc/shadow-
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_6
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.7 - Ensure access to /etc/gshadow is configured
     tags:
     - Level1
@@ -6341,13 +6963,16 @@
     - name: Execute remediation commands for 7.1.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/gshadow
 
           chmod 0000 /etc/gshadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_7
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.8 - Ensure access to /etc/gshadow- is configured
     tags:
     - Level1
@@ -6360,13 +6985,16 @@
     - name: Execute remediation commands for 7.1.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chown root:root /etc/gshadow-
 
           chmod 0000 /etc/gshadow-
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_8
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.9 - Ensure access to /etc/shells is configured
     tags:
     - Level1
@@ -6379,13 +7007,16 @@
     - name: Execute remediation commands for 7.1.9
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chmod u-x,go-wx /etc/shells
 
           chown root:root /etc/shells
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_9
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.10 - Ensure access to /etc/security/opasswd is configured
     tags:
     - Level1
@@ -6398,6 +7029,7 @@
     - name: Execute remediation commands for 7.1.10
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           [ -e "/etc/security/opasswd" ] && chmod u-x,go-rwx /etc/security/opasswd
 
           [ -e "/etc/security/opasswd" ] && chown root:root /etc/security/opasswd
@@ -6405,10 +7037,12 @@
           [ -e "/etc/security/opasswd.old" ] && chmod u-x,go-rwx /etc/security/opasswd.old
 
           [ -e "/etc/security/opasswd.old" ] && chown root:root /etc/security/opasswd.old
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_10
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.11 - Ensure world writable files and directories are secured
     tags:
     - Level1
@@ -6421,6 +7055,7 @@
     - name: Execute remediation commands for 7.1.11
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6444,10 +7079,12 @@
            done < <(find "$l_mount" -mount -xdev \( "${a_path[@]}" \) \( -type f -o -type d \) -perm -0002 -print0 2> /dev/null)
            done < <(findmnt -Dkerno fstype,target | awk '($1 !~ /^\s*(nfs|proc|cifs|smb|vfat|iso9660|efivarfs|selinuxfs|ncpfs)/ && $2 !~ /^(\/run|\/tmp|\/var\/tmp)(\/|$)/){print $2}') 
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_1_11
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.12 - Ensure no files or directories without an owner and a group exist
     tags:
     - Level1
@@ -6464,6 +7101,7 @@
         executable: /bin/bash
       register: remediate_7_1_12
       changed_when: true
+      failed_when: false
   - name: Remediate 7.1.13 - Ensure SUID and SGID files are reviewed
     tags:
     - Level1
@@ -6480,6 +7118,7 @@
         executable: /bin/bash
       register: remediate_7_1_13
       changed_when: true
+      failed_when: false
   - name: Remediate 7.2.1 - Ensure accounts in /etc/passwd use shadowed passwords
     tags:
     - Level1
@@ -6496,6 +7135,7 @@
         executable: /bin/bash
       register: remediate_7_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 7.2.2 - Ensure /etc/shadow password fields are not empty
     tags:
     - Level1
@@ -6512,6 +7152,7 @@
         executable: /bin/bash
       register: remediate_7_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 7.2.3 - Ensure all groups in /etc/passwd exist in /etc/group
     tags:
     - Level1
@@ -6528,6 +7169,7 @@
         executable: /bin/bash
       register: remediate_7_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 7.2.4 - Ensure no duplicate UIDs exist
     tags:
     - Level1
@@ -6544,6 +7186,7 @@
         executable: /bin/bash
       register: remediate_7_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 7.2.5 - Ensure no duplicate GIDs exist
     tags:
     - Level1
@@ -6560,6 +7203,7 @@
         executable: /bin/bash
       register: remediate_7_2_5
       changed_when: true
+      failed_when: false
   - name: Remediate 7.2.6 - Ensure no duplicate user names exist
     tags:
     - Level1
@@ -6576,6 +7220,7 @@
         executable: /bin/bash
       register: remediate_7_2_6
       changed_when: true
+      failed_when: false
   - name: Remediate 7.2.7 - Ensure no duplicate group names exist
     tags:
     - Level1
@@ -6592,6 +7237,7 @@
         executable: /bin/bash
       register: remediate_7_2_7
       changed_when: true
+      failed_when: false
   - name: Remediate 7.2.8 - Ensure local interactive user home directories are configured
     tags:
     - Level1
@@ -6604,6 +7250,7 @@
     - name: Execute remediation commands for 7.2.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6639,10 +7286,12 @@
            printf '%s\n' "" "- No changes required"
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_2_8
       changed_when: true
+      failed_when: false
   - name: Remediate 7.2.9 - Ensure local interactive user dot files access is configured
     tags:
     - Level1
@@ -6655,6 +7304,7 @@
     - name: Execute remediation commands for 7.2.9
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6715,10 +7365,12 @@
            [ "${#a_output3[@]}" -gt 0 ] && printf '%s\n' "" " ** WARNING **" "${a_output3[@]}" ""
            [ "${#a_output2[@]}" -gt 0 ] && printf '%s\n' "" "${a_output2[@]}"
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_7_2_9
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.6 - Ensure overlay kernel module is not available
     tags:
     - Level2
@@ -6731,6 +7383,7 @@
     - name: Execute remediation commands for 1.1.1.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r overlay 2>/dev/null
 
           rmmod overlay 2>/dev/null
@@ -6738,10 +7391,12 @@
           printf '%s\n' "" "install overlay /bin/false" >> /etc/modprobe.d/60-overlay.conf
 
           printf '%s\n' "" "blacklist overlay" >> /etc/modprobe.d/60-overlay.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_6
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.7 - Ensure squashfs kernel module is not available
     tags:
     - Level2
@@ -6754,6 +7409,7 @@
     - name: Execute remediation commands for 1.1.1.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r squashfs 2>/dev/null
 
           rmmod squashfs 2>/dev/null
@@ -6761,10 +7417,12 @@
           printf '%s\n' "" "install squashfs /bin/false" >> /etc/modprobe.d/60-squashfs.conf
 
           printf '%s\n' "" "blacklist squashfs" >> /etc/modprobe.d/60-squashfs.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_7
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.1.8 - Ensure udf kernel module is not available
     tags:
     - Level2
@@ -6777,6 +7435,7 @@
     - name: Execute remediation commands for 1.1.1.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           modprobe -r udf 2>/dev/null
 
           rmmod udf 2>/dev/null
@@ -6784,10 +7443,12 @@
           printf '%s\n' "" "install udf /bin/false" >> /etc/modprobe.d/60-udf.conf
 
           printf '%s\n' "" "blacklist udf" >> /etc/modprobe.d/60-udf.conf
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_1_8
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.3.1 - Ensure separate partition exists for /home
     tags:
     - Level2
@@ -6800,11 +7461,14 @@
     - name: Execute remediation commands for 1.1.2.3.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_3_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.4.1 - Ensure separate partition exists for /var
     tags:
     - Level2
@@ -6817,11 +7481,14 @@
     - name: Execute remediation commands for 1.1.2.4.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_4_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.5.1 - Ensure separate partition exists for /var/tmp
     tags:
     - Level2
@@ -6834,11 +7501,14 @@
     - name: Execute remediation commands for 1.1.2.5.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_5_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.6.1 - Ensure separate partition exists for /var/log
     tags:
     - Level2
@@ -6851,11 +7521,14 @@
     - name: Execute remediation commands for 1.1.2.6.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_6_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.1.2.7.1 - Ensure separate partition exists for /var/log/audit
     tags:
     - Level2
@@ -6868,11 +7541,14 @@
     - name: Execute remediation commands for 1.1.2.7.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_1_2_7_1
       changed_when: true
+      failed_when: false
   - name: Remediate 1.2.1.3 - Ensure repo_gpgcheck is globally activated
     tags:
     - Level2
@@ -6885,11 +7561,14 @@
     - name: Execute remediation commands for 1.2.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_2_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.2.1.5 - Ensure weak dependencies are configured
     tags:
     - Level2
@@ -6902,6 +7581,7 @@
     - name: Execute remediation commands for 1.2.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -6911,10 +7591,12 @@
            printf '%s\n' "" "install_weak_deps=0" >> /etc/dnf/dnf.conf
            fi
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_2_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 1.3.1.5 - Ensure the SELinux mode is enforcing
     tags:
     - Level2
@@ -6927,15 +7609,18 @@
     - name: Execute remediation commands for 1.3.1.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           touch /.autorelabel
 
           reboot
 
           setenforce 1
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_3_1_5
       changed_when: true
+      failed_when: false
   - name: Remediate 1.3.1.6 - Ensure no unconfined services exist
     tags:
     - Level2
@@ -6948,6 +7633,7 @@
     - name: Execute remediation commands for 1.3.1.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           Example SELinux policy configuration for allowing access to specific actions and resources for a service
 
           checkmodule -M -, -o service_allowlist_policy.mod service_allowlist_policy.te
@@ -6957,10 +7643,12 @@
           semodule -i service_allowlist_policy.pp
 
           chcon -t se service_allowlist_policy /path/to/service_binary
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_3_1_6
       changed_when: true
+      failed_when: false
   - name: Remediate 1.5.3 - Ensure fs.protected_symlinks is configured
     tags:
     - Level2
@@ -6973,6 +7661,7 @@
     - name: Execute remediation commands for 1.5.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -7004,10 +7693,12 @@
           # printf '%s\n' "" "fs.protected_symlinks = 1" >> /etc/sysctl.d/60-fs_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_5_3
       changed_when: true
+      failed_when: false
   - name: Remediate 1.8.6 - Ensure Xwayland is configured
     tags:
     - Level2
@@ -7020,15 +7711,18 @@
     - name: Execute remediation commands for 1.8.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           GDM configuration storage
 
           Uncomment the line below to turn on debugging
 
           Enable=true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_1_8_6
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.3 - Ensure cockpit web services are not in use
     tags:
     - Level2
@@ -7041,6 +7735,7 @@
     - name: Execute remediation commands for 2.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl stop cockpit.socket cockpit.service
 
           dnf remove cockpit-ws
@@ -7048,10 +7743,12 @@
           systemctl stop cockpit.socket cockpit.service
 
           systemctl mask cockpit.socket cockpit.service
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.19 - Ensure GNOME Display Manager is removed
     tags:
     - Level2
@@ -7064,6 +7761,7 @@
     - name: Execute remediation commands for 2.1.19
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           dnf groupinstall -y "Minimal Install"
 
           dnf groupremove -y "Server with GUI"
@@ -7071,10 +7769,12 @@
           dnf groupinstall -y "Server"
 
           reboot
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_2_1_19
       changed_when: true
+      failed_when: false
   - name: Remediate 2.1.20 - Ensure X window server services are not in use
     tags:
     - Level2
@@ -7091,6 +7791,7 @@
         executable: /bin/bash
       register: remediate_2_1_20
       changed_when: true
+      failed_when: false
   - name: Remediate 2.2.2 - Ensure ldap client is not installed
     tags:
     - Level2
@@ -7107,6 +7808,7 @@
         executable: /bin/bash
       register: remediate_2_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 3.3.1.1 - Ensure net.ipv4.ip_forward is configured
     tags:
     - Level2
@@ -7119,6 +7821,7 @@
     - name: Execute remediation commands for 3.3.1.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -7150,10 +7853,12 @@
           # printf '%s\n' "" "net.ipv4.ip_forward = 0" >> /etc/sysctl.d/60-ipv4_sysctl.conf
 
           # sysctl --system
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_3_3_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.8 - Ensure sshd DisableForwarding is enabled
     tags:
     - Level2
@@ -7170,6 +7875,7 @@
         executable: /bin/bash
       register: remediate_5_1_8
       changed_when: true
+      failed_when: false
   - name: Remediate 5.1.9 - Ensure sshd GSSAPIAuthentication is disabled
     tags:
     - Level2
@@ -7186,6 +7892,7 @@
         executable: /bin/bash
       register: remediate_5_1_9
       changed_when: true
+      failed_when: false
   - name: Remediate 5.2.4 - Ensure users must provide password for escalation
     tags:
     - Level2
@@ -7198,11 +7905,14 @@
     - name: Execute remediation commands for 5.2.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 5.3.2.1.3 - Ensure password failed attempts lockout includes root account
     tags:
     - Level2
@@ -7215,6 +7925,7 @@
     - name: Execute remediation commands for 5.3.2.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -7225,10 +7936,12 @@
            done
            authselect apply-changes
           }
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_3_2_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.1.2 - Ensure minimum password days is configured
     tags:
     - Level2
@@ -7241,13 +7954,16 @@
     - name: Execute remediation commands for 5.4.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           chage --mindays <N> <user>
 
           awk -F: '($2~/^\$.+\$/) {if($4 < 1)system ("chage --mindays 1 " $1)}' /etc/shadow
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_5_4_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 5.4.3.1 - Ensure nologin is not listed in /etc/shells
     tags:
     - Level2
@@ -7264,6 +7980,7 @@
         executable: /bin/bash
       register: remediate_5_4_3_1
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.1.1 - Ensure auditd packages are installed
     tags:
     - Level2
@@ -7280,6 +7997,7 @@
         executable: /bin/bash
       register: remediate_6_3_1_1
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.1.2 - Ensure auditing for processes that start prior to auditd is enabled
     tags:
     - Level2
@@ -7292,11 +8010,14 @@
     - name: Execute remediation commands for 6.3.1.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           grubby --update-kernel ALL --args 'audit=1'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_1_2
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.1.3 - Ensure audit_backlog_limit is configured
     tags:
     - Level2
@@ -7309,13 +8030,16 @@
     - name: Execute remediation commands for 6.3.1.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           grubby --update-kernel ALL --args 'audit_backlog_limit=<BACKLOG SIZE>'
 
           grubby --update-kernel ALL --args 'audit_backlog_limit=8192'
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_1_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.1.4 - Ensure auditd service is enabled and active
     tags:
     - Level2
@@ -7328,15 +8052,18 @@
     - name: Execute remediation commands for 6.3.1.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           systemctl unmask auditd
 
           systemctl enable auditd
 
           systemctl start auditd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_1_4
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.2.1 - Ensure audit log storage size is configured
     tags:
     - Level2
@@ -7353,6 +8080,7 @@
         executable: /bin/bash
       register: remediate_6_3_2_1
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.2.2 - Ensure audit logs are not automatically deleted
     tags:
     - Level2
@@ -7369,6 +8097,7 @@
         executable: /bin/bash
       register: remediate_6_3_2_2
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.2.3 - Ensure system is disabled when audit logs are full
     tags:
     - Level2
@@ -7381,11 +8110,14 @@
     - name: Execute remediation commands for 6.3.2.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_2_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.2.4 - Ensure system warns when audit logs are low on space
     tags:
     - Level2
@@ -7398,11 +8130,14 @@
     - name: Execute remediation commands for 6.3.2.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           true
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_2_4
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.1 - Ensure modification of the /etc/sudoers file is collected
     tags:
     - Level2
@@ -7415,15 +8150,18 @@
     - name: Execute remediation commands for 6.3.3.1
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_1
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.2 - Ensure actions as another user are always logged
     tags:
     - Level2
@@ -7436,15 +8174,18 @@
     - name: Execute remediation commands for 6.3.3.2
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_2
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.3 - Ensure events that modify the sudo log file are collected
     tags:
     - Level2
@@ -7457,15 +8198,18 @@
     - name: Execute remediation commands for 6.3.3.3
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.4 - Ensure events that modify date and time information are collected
     tags:
     - Level2
@@ -7478,6 +8222,7 @@
     - name: Execute remediation commands for 6.3.3.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           printf "
@@ -7485,10 +8230,12 @@
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_4
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.5 - Ensure events that modify sethostname and setdomainname are collected
     tags:
     - Level2
@@ -7501,15 +8248,18 @@
     - name: Execute remediation commands for 6.3.3.5
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_5
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.6 - Ensure events that modify /etc/issue and /etc/issue.net are collected
     tags:
     - Level2
@@ -7522,15 +8272,18 @@
     - name: Execute remediation commands for 6.3.3.6
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_6
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.7 - Ensure events that modify /etc/hosts and /etc/hostname are collected
     tags:
     - Level2
@@ -7543,15 +8296,18 @@
     - name: Execute remediation commands for 6.3.3.7
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_7
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.8 - Ensure events that modify /etc/sysconfig/network and /etc/NetworkManager/system-connections/ are collected
     tags:
     - Level2
@@ -7564,15 +8320,18 @@
     - name: Execute remediation commands for 6.3.3.8
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_8
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.9 - Ensure events that modify /etc/NetworkManager directory are collected
     tags:
     - Level2
@@ -7585,15 +8344,18 @@
     - name: Execute remediation commands for 6.3.3.9
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_9
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.10 - Ensure use of privileged commands are collected
     tags:
     - Level2
@@ -7606,6 +8368,7 @@
     - name: Execute remediation commands for 6.3.3.10
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           #!/usr/bin/env bash
 
           {
@@ -7626,10 +8389,12 @@
           # augenrules --load
 
           # if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_10
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.11 - Ensure unsuccessful file access attempts are collected
     tags:
     - Level2
@@ -7642,15 +8407,18 @@
     - name: Execute remediation commands for 6.3.3.11
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_11
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.12 - Ensure events that modify /etc/group information are collected
     tags:
     - Level2
@@ -7663,15 +8431,18 @@
     - name: Execute remediation commands for 6.3.3.12
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_12
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.13 - Ensure events that modify /etc/passwd information are collected
     tags:
     - Level2
@@ -7684,15 +8455,18 @@
     - name: Execute remediation commands for 6.3.3.13
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_13
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.14 - Ensure events that modify /etc/shadow and /etc/gshadow are collected
     tags:
     - Level2
@@ -7705,15 +8479,18 @@
     - name: Execute remediation commands for 6.3.3.14
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_14
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.15 - Ensure events that modify /etc/security/opasswd are collected
     tags:
     - Level2
@@ -7726,15 +8503,18 @@
     - name: Execute remediation commands for 6.3.3.15
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_15
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.16 - Ensure events that modify /etc/nsswitch.conf file are collected
     tags:
     - Level2
@@ -7747,15 +8527,18 @@
     - name: Execute remediation commands for 6.3.3.16
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_16
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.17 - Ensure events that modify /etc/pam.conf and /etc/pam.d/ information are collected
     tags:
     - Level2
@@ -7768,15 +8551,18 @@
     - name: Execute remediation commands for 6.3.3.17
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_17
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.18 - Ensure discretionary access control permission modification events chmod,fchmod,fchmodat,fchmodat2 are collected
     tags:
     - Level2
@@ -7789,15 +8575,18 @@
     - name: Execute remediation commands for 6.3.3.18
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_18
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.19 - Ensure discretionary access control permission modification events chown,fchown,lchown,fchownat are collected
     tags:
     - Level2
@@ -7810,15 +8599,18 @@
     - name: Execute remediation commands for 6.3.3.19
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_19
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.20 - Ensure discretionary access control permission modification events setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr collected
     tags:
     - Level2
@@ -7831,15 +8623,18 @@
     - name: Execute remediation commands for 6.3.3.20
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_20
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.21 - Ensure successful file system mounts are collected
     tags:
     - Level2
@@ -7852,15 +8647,18 @@
     - name: Execute remediation commands for 6.3.3.21
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_21
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.22 - Ensure session initiation information is collected
     tags:
     - Level2
@@ -7873,15 +8671,18 @@
     - name: Execute remediation commands for 6.3.3.22
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_22
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.23 - Ensure login and logout events are collected
     tags:
     - Level2
@@ -7894,15 +8695,18 @@
     - name: Execute remediation commands for 6.3.3.23
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_23
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.24 - Ensure unlink file deletion events by users are collected
     tags:
     - Level2
@@ -7915,15 +8719,18 @@
     - name: Execute remediation commands for 6.3.3.24
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_24
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.25 - Ensure rename file deletion events by users are collected
     tags:
     - Level2
@@ -7936,15 +8743,18 @@
     - name: Execute remediation commands for 6.3.3.25
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_25
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.26 - Ensure events that modify the system's Mandatory Access Controls are collected
     tags:
     - Level2
@@ -7957,15 +8767,18 @@
     - name: Execute remediation commands for 6.3.3.26
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_26
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.27 - Ensure successful and unsuccessful attempts to use the chcon command are collected
     tags:
     - Level2
@@ -7978,15 +8791,18 @@
     - name: Execute remediation commands for 6.3.3.27
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_27
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.28 - Ensure successful and unsuccessful attempts to use the setfacl command are collected
     tags:
     - Level2
@@ -7999,15 +8815,18 @@
     - name: Execute remediation commands for 6.3.3.28
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_28
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.29 - Ensure successful and unsuccessful attempts to use the chacl command are collected
     tags:
     - Level2
@@ -8020,15 +8839,18 @@
     - name: Execute remediation commands for 6.3.3.29
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_29
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.30 - Ensure successful and unsuccessful attempts to use the usermod command are collected
     tags:
     - Level2
@@ -8041,15 +8863,18 @@
     - name: Execute remediation commands for 6.3.3.30
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_30
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.31 - Ensure kernel module loading unloading and modification is collected
     tags:
     - Level2
@@ -8062,15 +8887,18 @@
     - name: Execute remediation commands for 6.3.3.31
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_31
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.32 - Ensure kernel "init_module" and "finit_module" loading unloading and modification is collected
     tags:
     - Level2
@@ -8083,15 +8911,18 @@
     - name: Execute remediation commands for 6.3.3.32
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_32
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.33 - Ensure kernel "delete_module" loading unloading and modification is collected
     tags:
     - Level2
@@ -8104,15 +8935,18 @@
     - name: Execute remediation commands for 6.3.3.33
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_33
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.34 - Ensure kernel query_module loading unloading and modification is collected
     tags:
     - Level2
@@ -8125,15 +8959,18 @@
     - name: Execute remediation commands for 6.3.3.34
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf "
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_34
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.35 - Ensure the audit configuration is loaded regardless of errors
     tags:
     - Level2
@@ -8146,15 +8983,18 @@
     - name: Execute remediation commands for 6.3.3.35
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "" "-c" >> /etc/audit/rules.d/01-initialize.rules
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_35
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.36 - Ensure the audit configuration is immutable
     tags:
     - Level2
@@ -8167,15 +9007,18 @@
     - name: Execute remediation commands for 6.3.3.36
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           printf '%s\n' "" "-e 2" >> /etc/audit/rules.d/99-finalize.rules
 
           augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then printf "Reboot required to load rules\n"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_36
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.3.37 - Ensure the running and on disk configuration is the same
     tags:
     - Level2
@@ -8188,13 +9031,16 @@
     - name: Execute remediation commands for 6.3.3.37
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           # augenrules --load
 
           if [[ $(auditctl -s | grep "enabled") =~ "2" ]]; then echo "Reboot required to load rules"; fi
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_3_37
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.1 - Ensure the audit log file directory mode is configured
     tags:
     - Level2
@@ -8211,6 +9057,7 @@
         executable: /bin/bash
       register: remediate_6_3_4_1
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.2 - Ensure audit log files mode is configured
     tags:
     - Level2
@@ -8227,6 +9074,7 @@
         executable: /bin/bash
       register: remediate_6_3_4_2
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.3 - Ensure audit log files owner is configured
     tags:
     - Level2
@@ -8243,6 +9091,7 @@
         executable: /bin/bash
       register: remediate_6_3_4_3
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.4 - Ensure audit log files group owner is configured
     tags:
     - Level2
@@ -8255,6 +9104,7 @@
     - name: Execute remediation commands for 6.3.4.4
       ansible.builtin.shell:
         cmd: |
+          {% raw %}
           find $(dirname $(awk -F"=" '/^\s*log_file\s*=\s*/ {print $2}' /etc/audit/auditd.conf | xargs)) -type f \( ! -group adm -a ! -group root \) -exec chgrp adm {} +
 
           chgrp adm /var/log/audit/
@@ -8262,10 +9112,12 @@
           sed -ri 's/^\s*#?\s*log_group\s*=\s*\S+(\s*#.*)?.*$/log_group = adm\1/' /etc/audit/auditd.conf
 
           systemctl restart auditd
+          {% endraw %}
       args:
         executable: /bin/bash
       register: remediate_6_3_4_4
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.5 - Ensure audit configuration files mode is configured
     tags:
     - Level2
@@ -8282,6 +9134,7 @@
         executable: /bin/bash
       register: remediate_6_3_4_5
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.6 - Ensure audit configuration files owner is configured
     tags:
     - Level2
@@ -8298,6 +9151,7 @@
         executable: /bin/bash
       register: remediate_6_3_4_6
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.7 - Ensure audit configuration files group owner is configured
     tags:
     - Level2
@@ -8314,6 +9168,7 @@
         executable: /bin/bash
       register: remediate_6_3_4_7
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.8 - Ensure audit tools mode is configured
     tags:
     - Level2
@@ -8330,6 +9185,7 @@
         executable: /bin/bash
       register: remediate_6_3_4_8
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.9 - Ensure audit tools owner is configured
     tags:
     - Level2
@@ -8346,6 +9202,7 @@
         executable: /bin/bash
       register: remediate_6_3_4_9
       changed_when: true
+      failed_when: false
   - name: Remediate 6.3.4.10 - Ensure audit tools group owner is configured
     tags:
     - Level2
@@ -8362,3 +9219,4 @@
         executable: /bin/bash
       register: remediate_6_3_4_10
       changed_when: true
+      failed_when: false
