@@ -6257,16 +6257,30 @@
       ansible.builtin.shell:
         cmd: |
           {% raw %}
-          crontab -u root -e
+          cat > /etc/systemd/system/aidecheck.service << 'SVCEOF'
+          [Unit]
+          Description=Aide Check
+          [Service]
+          Type=simple
+          ExecStart=/usr/sbin/aide --check
+          [Install]
+          WantedBy=multi-user.target
+          SVCEOF
+
+          cat > /etc/systemd/system/aidecheck.timer << 'TIMEREOF'
+          [Unit]
+          Description=Aide check every day at 5AM
+          [Timer]
+          OnCalendar=*-*-* 05:00:00
+          Unit=aidecheck.service
+          [Install]
+          WantedBy=multi-user.target
+          TIMEREOF
 
           chown root:root /etc/systemd/system/aidecheck.*
-
           chmod 0644 /etc/systemd/system/aidecheck.*
-
           systemctl daemon-reload
-
           systemctl enable aidecheck.service
-
           systemctl --now enable aidecheck.timer
           {% endraw %}
       args:
