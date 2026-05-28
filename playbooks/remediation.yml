@@ -802,7 +802,7 @@
           {% raw %}
           touch /.autorelabel
 
-          reboot
+          # reboot  # disabled - manual reboot required after playbook completes
 
           setenforce 1
 
@@ -1345,7 +1345,7 @@
 
           update-crypto-policies --set <CRYPTO_POLICY>:<CRYPTO_SUBPOLICY1>:<CRYPTO_SUBPOLICY2>:<CRYPTO_SUBPOLICY3>
 
-          reboot
+          # reboot  # disabled - manual reboot required after playbook completes
           {% endraw %}
       args:
         executable: /bin/bash
@@ -1369,7 +1369,7 @@
 
           update-crypto-policies --set <CRYPTO_POLICY>:<CRYPTO_SUBPOLICY1>:<CRYPTO_SUBPOLICY2>:<CRYPTO_SUBPOLICY3>
 
-          reboot
+          # reboot  # disabled - manual reboot required after playbook completes
           {% endraw %}
       args:
         executable: /bin/bash
@@ -1395,7 +1395,7 @@
 
           update-crypto-policies --set DEFAULT:NO-SHA1:NO-WEAKMAC:NO-SSHCBC
 
-          reboot
+          # reboot  # disabled - manual reboot required after playbook completes
           {% endraw %}
       args:
         executable: /bin/bash
@@ -7612,7 +7612,7 @@
           {% raw %}
           touch /.autorelabel
 
-          reboot
+          # reboot  # disabled - manual reboot required after playbook completes
 
           setenforce 1
           {% endraw %}
@@ -7768,7 +7768,7 @@
 
           dnf groupinstall -y "Server"
 
-          reboot
+          # reboot  # disabled - manual reboot required after playbook completes
           {% endraw %}
       args:
         executable: /bin/bash
